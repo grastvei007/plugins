@@ -12,6 +12,11 @@ add_library(bms SHARED
     bms.cpp
     bms.h)
 
+add_custom_command(TARGET bms
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:bms> $ENV{DEV_LIBS} )
+
+
 
 target_link_libraries(bms Qt5::Core)
 
