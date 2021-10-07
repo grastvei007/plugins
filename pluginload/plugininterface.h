@@ -4,6 +4,18 @@
 #include <vector>
 #include <string>
 
+/**
+ * To create a plugin inherit the pluginInterface,
+ * and put the folowing in the new library
+ *
+ * extern "C" PluginInterface* createPlugin()
+ * {
+ *   return new MyNewPlugin(); // return pointer to the new plugin
+ * }
+ *
+ *
+ */
+
 class TagList;
 
 class PluginInterface
