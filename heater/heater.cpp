@@ -1,4 +1,5 @@
 #include "heater.h"
+#include "wiringpiwrapper.h"
 
 extern "C" PluginInterface* createPlugin()
 {
@@ -18,6 +19,8 @@ void Heater::setTagSystem(TagList *taglist)
 
 bool Heater::initialize()
 {
+    WiringPi::wiringPiSetup();
+
     powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool);
     heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt);
     fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt);
