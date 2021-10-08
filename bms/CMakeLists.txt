@@ -4,17 +4,21 @@ project(bms)
 include_directories($ENV{JUNE_ROOT})
 link_directories($ENV{DEV_LIBS})
 
+if(NOT CMAKE_DEBUG_POSTFIX)
+  set(CMAKE_DEBUG_POSTFIX d)
+endif()
+
 set(CMAKE_AUTOMOC ON)
 
 find_package(Qt5 COMPONENTS Core REQUIRED)
 find_package(Qt5 COMPONENTS Network REQUIRED)
 
 add_library(bms SHARED
-    bms.cpp
-    bmstags.cpp
-
     bms.h
-    bmstags.h)
+    bmstags.h
+
+    bms.cpp
+    bmstags.cpp)
 
 
 target_link_libraries(bms Qt5::Core)

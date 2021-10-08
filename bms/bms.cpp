@@ -53,6 +53,7 @@ void Bms::mainloop()
 {
 
     manager_.get(QNetworkRequest(QUrl("http://192.168.0.100/bcc.xml")));
+  //  qDebug() << __FUNCTION__;
 }
 
 void Bms::onReply(QNetworkReply *reply)
@@ -73,6 +74,7 @@ void Bms::onReply(QNetworkReply *reply)
             {
                 double value = stream.readElementText().toDouble();
                 voltageTag_->setValue(value);
+                //qDebug() << stream.name() << " - " << value;
             }
             else if(stream.name() == "ucell1") //>3.28</ucell1>
             {
