@@ -5,13 +5,14 @@
 class PreHeatUnit
 {
 public:
-    PreHeatUnit();
+    PreHeatUnit(int wireingPiPin);
 
     void setActive(bool active);
 
     bool isActive() const;
 private:
     bool isActive_ = false;
+    int wireingPiPin_ = 0;
 };
 
 #endif // PREHEATUNIT_H

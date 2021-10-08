@@ -5,7 +5,7 @@
 class Motor
 {
 public:
-    Motor();
+    Motor(int wireingPiPin);
 
     void turnOn();
     void turnOff();
@@ -20,6 +20,8 @@ private:
     int maxSpeed_ = 100;
 
     bool isOn_ = false;
+
+    int wireingPiPin_ = 0;
 };
 
 #endif // MOTOR_H

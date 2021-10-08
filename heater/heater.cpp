@@ -7,7 +7,8 @@ extern "C" PluginInterface* createPlugin()
 }
 
 
-Heater::Heater()
+Heater::Heater() :
+    pump_(1)
 {
 
 }

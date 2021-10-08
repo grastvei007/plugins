@@ -69,9 +69,9 @@ private:
     TagSocket *fanLevelTagSocket_ = nullptr;
 
     Pump pump_;
-    Motor motorFan_;
-    Motor motorHeat_;
-    PreHeatUnit preHeatUnit_;
+    Motor motorFan_ = Motor(3);
+    Motor motorHeat_ = Motor(4);
+    PreHeatUnit preHeatUnit_ = PreHeatUnit(0);
 
     double preHeatTime_ = 0;
     double stoppingTime_ = 0;
