@@ -12,14 +12,7 @@ PluginLoader::PluginLoader()
 
 PluginInterface *PluginLoader::load(const QString &pluginName)
 {
-    QString plugin(pluginName);
-#ifdef QT_DEBUG
-    plugin + "d";
-#endif
-    plugin + ".so";
-
-    QString path = QDir().absolutePath().append(QString("/%1").arg(plugin));
-    QLibrary lib(path);
+    QLibrary lib(pluginName);
 
     if(lib.load())
     {
@@ -27,7 +20,7 @@ PluginInterface *PluginLoader::load(const QString &pluginName)
         if(create_lib)
         {
             PluginInterface *pluginInterface = create_lib();
-            qDebug() << "Plugin loaded: " << plugin;
+            qDebug() << "Plugin loaded: " << pluginName;
             return pluginInterface;
         }
         else
