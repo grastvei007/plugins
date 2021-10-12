@@ -8,8 +8,9 @@ class Pump : public QObject
 {
     Q_OBJECT
 public:
-    Pump(){};
     Pump(int wireingPiPin);
+    Pump(const Pump &pump);
+    ~Pump();
 
     void setInterval(double intervalInSeconds);
     void setSpeed(int speed);
@@ -30,7 +31,7 @@ private:
 
     int wireingpiPin_ = 0;
 
-    QTimer *pumpTimer_ = nullptr;
+    QTimer pumpTimer_;
 };
 
 #endif // PUMP_H

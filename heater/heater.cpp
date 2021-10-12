@@ -1,14 +1,15 @@
 #include "heater.h"
 #include "wiringpiwrapper.h"
 
+#include <QDebug>
+
 extern "C" PluginInterface* createPlugin()
 {
   return new Heater();
 }
 
 
-Heater::Heater() :
-    pump_(1)
+Heater::Heater()
 {
 
 }
@@ -26,23 +27,29 @@ bool Heater::initialize()
     heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt);
     fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt);
     stateTag_ = tagList_->createTag("heater", "state", Tag::eString);
+    isBurningTag_ = tagList_->createTag("heater", "isBurning", Tag::eBool);
 
     stateTag_->setValue(stateToString(state_));
     powerOnTag_->setValue(powerOn_);
     heatLevelTag_->setValue(heatLevel_);
     fanLevelTag_->setValue(fanLevel_);
+    isBurningTag_->setValue(isBurning_);
 
     powerOnTagSocket_ = TagSocket::createTagSocket("heater", "powerOn", TagSocket::eBool);
     heatLevelTagSocket_ = TagSocket::createTagSocket("heater", "heatLevel", TagSocket::eInt);
     fanLevelTagSocket_ = TagSocket::createTagSocket("heater", "fanLevel", TagSocket::eInt);
+    isBurningTagSocket_ = TagSocket::createTagSocket("heater", "isBurning", TagSocket::eBool);
 
     powerOnTagSocket_->hookupTag(powerOnTag_);
     heatLevelTagSocket_->hookupTag(heatLevelTag_);
     fanLevelTagSocket_->hookupTag(fanLevelTag_);
+    isBurningTagSocket_->hookupTag(isBurningTag_);
 
     connect(powerOnTagSocket_, qOverload<bool>(&TagSocket::valueChanged), this, &Heater::onPowerOnValueChanged);
     connect(heatLevelTagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Heater::onHeatLevelValueChanged);
     connect(fanLevelTagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Heater::onFanLevelValueChanged);
+    connect(isBurningTagSocket_, qOverload<bool>(&TagSocket::valueChanged), this, &Heater::onIsBurningValueChanged);
+
     return true;
 }
 
@@ -74,6 +81,11 @@ void Heater::onFanLevelValueChanged(int value)
     fanLevel_ = value;
 }
 
+void Heater::onIsBurningValueChanged(bool value)
+{
+    isBurning_ = value;
+}
+
 void Heater::onHeatLevelValueChanged(int value)
 {
     heatLevel_ = value;
@@ -103,7 +115,9 @@ void Heater::mainloop()
     }
 
     if(currentState != state_)
+    {
         stateTag_->setValue(stateToString(state_));
+    }
 }
 
 QString Heater::stateToString(Heater::States state)
@@ -140,6 +154,7 @@ void Heater::statePreHeat()
     {
         pump_.setInterval(1);
         pump_.start();
+        pump_.setSpeed(100);
     }
 
     if(!preHeatUnit_.isActive() && preHeatTime_ > 10.0)
@@ -164,9 +179,10 @@ void Heater::statePreHeat()
 
 void Heater::stateStarting()
 {
-    preHeatUnit_.setActive(false);
+    if(preHeatUnit_.isActive())
+        preHeatUnit_.setActive(false);
 
-    if(true)
+    if(isBurning_)
     {
         motorFan_.turnOn();
         motorFan_.setSpeed(50);
@@ -200,7 +216,7 @@ void Heater::stateRunning()
 
     if(currentFanLevel_ != fanLevel_)
     {
-        motorFan_.setSpeed(heatLevel_);
+        motorFan_.setSpeed(fanLevel_);
         currentFanLevel_ = fanLevel_;
     }
 
@@ -223,6 +239,7 @@ void Heater::stateStopping()
         powerOn_ = false;
         powerOnTagSocket_->writeValue(powerOn_);
         state_ = eOff;
+        isBurning_ = false;
     }
 
 }

@@ -5,6 +5,7 @@
 #include <softPwm.h>
 #else
 #include <QDebug>
+#include <QString>
 #endif
 
 
@@ -26,9 +27,8 @@ void WiringPi::pinMode(int pin, PinDir dir)
     else if(aDir == eOutput)
         ::pinMode(aPin, 1);
 #else
-    Q_UNUSED(pin);
-    Q_UNUSED(dir);
-    qDebug() << __FUNCTION__;
+    QString value = (dir == eInput) ? "input" : "output";
+    qDebug() << __FUNCTION__ << " Pin=" << pin << " dir=" << value;
 #endif
 
 }
@@ -42,9 +42,8 @@ void WiringPi::digitalWrite(int pin, Value val)
     else if(aVal == eHigh)
         ::digitalWrite(aPin, 1);
 #else
-    Q_UNUSED(pin);
-    Q_UNUSED(val);
-    qDebug() << __FUNCTION__;
+    QString value = (val == eLow) ? "Low" : "High";
+    qDebug() << __FUNCTION__ << " Pin=" << pin << " " << value;
 #endif
 }
 
@@ -54,10 +53,7 @@ int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
 #ifdef RASPBERRY_PI
       return ::softPwmCreate(aPin, aInitVal, aPwmRange);
 #else
-    Q_UNUSED(pin);
-    Q_UNUSED(initVal);
-    Q_UNUSED(pwmRange);
-    qDebug() << __FUNCTION__;
+    qDebug() << __FUNCTION__ << " pin=" << pin << " initVal=" << initVal << " pwmRange=" << pwmRange;
     return 0;
 #endif
 }
@@ -68,9 +64,7 @@ void WiringPi::softPwmWrite(int pin, int value)
 #ifdef RASPBERRY_PI
     ::softPwmWrite(aPin, aValue);
 #else
-    Q_UNUSED(pin);
-    Q_UNUSED(value);
-    qDebug() << __FUNCTION__;
+    qDebug() << __FUNCTION__ << " pin=" << pin << " value=" << value;
 #endif
 }
 
@@ -80,8 +74,7 @@ void WiringPi::pwmSetClock(int clock)
 #ifdef RASPBERRY_PI
     ::pwmSetClock(aClock);
 #else
-    Q_UNUSED(clock);
-    qDebug() << __FUNCTION__;
+    qDebug() << __FUNCTION__ << " clock=" << clock;
 #endif
 }
 
@@ -91,8 +84,7 @@ void WiringPi::pwmSetRange(int range)
 #ifdef RASPBERRY_PI
     ::pwmSetRange(aRange);
 #else
-    Q_UNUSED(range);
-    qDebug() << __FUNCTION__;
+    qDebug() << __FUNCTION__ << " range=" << range;
 #endif
 }
 
@@ -102,7 +94,6 @@ void WiringPi::pwmSetMode(PwmMode pwmMode)
 #ifdef RASPBERRY_PI
     ::pwmSetMode(aPwmMode == ePwmModeMs ? 0 : 1);
 #else
-    Q_UNUSED(pwmMode);
-    qDebug() << __FUNCTION__;
+    qDebug() << __FUNCTION__ << " pwmMode=" << pwmMode;
 #endif
 }

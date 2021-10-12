@@ -37,6 +37,7 @@ private slots:
     void onPowerOnValueChanged(bool value);
     void onHeatLevelValueChanged(int value);
     void onFanLevelValueChanged(int value);
+    void onIsBurningValueChanged(bool value);
 
     void mainloop();
 
@@ -58,17 +59,20 @@ private:
     int currentFanLevel_ = 0;
     bool powerOn_ = false;
     int deltaMs_ = 0;
+    bool isBurning_ = false;
 
     Tag *powerOnTag_ = nullptr;
     Tag *heatLevelTag_ = nullptr;
     Tag *fanLevelTag_ = nullptr;
     Tag *stateTag_ = nullptr;
+    Tag *isBurningTag_ = nullptr;
 
     TagSocket *powerOnTagSocket_ = nullptr;
     TagSocket *heatLevelTagSocket_ = nullptr;
     TagSocket *fanLevelTagSocket_ = nullptr;
+    TagSocket *isBurningTagSocket_ = nullptr;
 
-    Pump pump_;
+    Pump pump_ = Pump(1);
     Motor motorFan_ = Motor(3);
     Motor motorHeat_ = Motor(4);
     PreHeatUnit preHeatUnit_ = PreHeatUnit(0);
