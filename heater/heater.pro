@@ -14,6 +14,7 @@ QT += core
 TEMPLATE = lib
 
 DEFINES += HEATER_LIBRARY
+DEFINES += RASPBERRY_PI
 
 
 if(debug){
