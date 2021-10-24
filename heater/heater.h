@@ -74,7 +74,7 @@ private:
 
     Pump pump_ = Pump(1);
     Motor motorFan_ = Motor(3);
-    Motor motorHeat_ = Motor(4);
+    Motor motorHeat_ = Motor(2);
     PreHeatUnit preHeatUnit_ = PreHeatUnit(0);
 
     double preHeatTime_ = 0;
