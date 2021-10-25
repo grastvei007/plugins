@@ -71,7 +71,7 @@ SOURCES += \
 
 HEADERS += \
 	heater.h \
-	motor.h
+	motor.h \
 	preheatunit.h \
 	pump.h \
 	wiringpiwrapper.h

@@ -28,7 +28,7 @@ public:
         ePwmModeBal
     };
 
-    static void wiringPiSetup();
+    static void setup();
     static void pinMode(int aPin, PinDir aDir);
     static void digitalWrite(int aPin, Value aVal);
     static int softPwmCreate(int aPin, int aInitVal, int aPwmRange);

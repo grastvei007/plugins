@@ -5,6 +5,7 @@
 
 extern "C" PluginInterface* createPlugin()
 {
+  WiringPi::setup();
   return new Heater();
 }
 
@@ -21,7 +22,8 @@ void Heater::setTagSystem(TagList *taglist)
 
 bool Heater::initialize()
 {
-    WiringPi::wiringPiSetup();
+	qDebug() << __FUNCTION__;
+//    WiringPi::setup();
 
     powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool);
     heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt);
@@ -231,7 +233,7 @@ void Heater::stateStopping()
 {
     stoppingTime_ += deltaMs_ / 1000.0;
     preHeatUnit_.setActive(false);
-    motorHeat_.turnOff();
+	pump_.stop();
 
     if(stoppingTime_ > 300)
     {

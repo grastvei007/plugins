@@ -3,6 +3,7 @@
 #ifdef RASPBERRY_PI
 #include <wiringPi.h>
 #include <softPwm.h>
+#include <iostream>
 #else
 #include <QDebug>
 #include <QString>
@@ -10,10 +11,11 @@
 
 
 
-void WiringPi::wiringPiSetup()
+void WiringPi::setup()
 {
 #ifdef RASPBERRY_PI
-    ::wiringPiSetup();
+	std::cerr << __FUNCTION__ << std::endl;
+    wiringPiSetup();
 #else
     qDebug() << __FUNCTION__;
 #endif
@@ -22,10 +24,10 @@ void WiringPi::wiringPiSetup()
 void WiringPi::pinMode(int pin, PinDir dir)
 {
 #ifdef RASPBERRY_PI
-    if(aDir == eInput)
-        ::pinMode(aPin, 0);
-    else if(aDir == eOutput)
-        ::pinMode(aPin, 1);
+    if(dir == eInput)
+        ::pinMode(pin, 0);
+    else if(dir == eOutput)
+        ::pinMode(pin, 1);
 #else
     QString value = (dir == eInput) ? "input" : "output";
     qDebug() << __FUNCTION__ << " Pin=" << pin << " dir=" << value;
@@ -37,10 +39,10 @@ void WiringPi::pinMode(int pin, PinDir dir)
 void WiringPi::digitalWrite(int pin, Value val)
 {
 #ifdef RASPBERRY_PI
-    if(aVal == eLow)
-        ::digitalWrite(aPin, 0);
-    else if(aVal == eHigh)
-        ::digitalWrite(aPin, 1);
+    if(val == eLow)
+        ::digitalWrite(pin, 0);
+    else if(val == eHigh)
+        ::digitalWrite(pin, 1);
 #else
     QString value = (val == eLow) ? "Low" : "High";
     qDebug() << __FUNCTION__ << " Pin=" << pin << " " << value;
@@ -51,7 +53,7 @@ void WiringPi::digitalWrite(int pin, Value val)
 int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
 {
 #ifdef RASPBERRY_PI
-      return ::softPwmCreate(aPin, aInitVal, aPwmRange);
+      return ::softPwmCreate(pin, initVal, pwmRange);
 #else
     qDebug() << __FUNCTION__ << " pin=" << pin << " initVal=" << initVal << " pwmRange=" << pwmRange;
     return 0;
@@ -62,7 +64,7 @@ int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
 void WiringPi::softPwmWrite(int pin, int value)
 {
 #ifdef RASPBERRY_PI
-    ::softPwmWrite(aPin, aValue);
+    ::softPwmWrite(pin, value);
 #else
     qDebug() << __FUNCTION__ << " pin=" << pin << " value=" << value;
 #endif
@@ -72,7 +74,7 @@ void WiringPi::softPwmWrite(int pin, int value)
 void WiringPi::pwmSetClock(int clock)
 {
 #ifdef RASPBERRY_PI
-    ::pwmSetClock(aClock);
+    ::pwmSetClock(clock);
 #else
     qDebug() << __FUNCTION__ << " clock=" << clock;
 #endif
@@ -82,7 +84,7 @@ void WiringPi::pwmSetClock(int clock)
 void WiringPi::pwmSetRange(int range)
 {
 #ifdef RASPBERRY_PI
-    ::pwmSetRange(aRange);
+    ::pwmSetRange(range);
 #else
     qDebug() << __FUNCTION__ << " range=" << range;
 #endif
@@ -92,7 +94,7 @@ void WiringPi::pwmSetRange(int range)
 void WiringPi::pwmSetMode(PwmMode pwmMode)
 {
 #ifdef RASPBERRY_PI
-    ::pwmSetMode(aPwmMode == ePwmModeMs ? 0 : 1);
+    ::pwmSetMode(pwmMode == ePwmModeMs ? 0 : 1);
 #else
     qDebug() << __FUNCTION__ << " pwmMode=" << pwmMode;
 #endif
