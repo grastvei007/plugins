@@ -181,11 +181,9 @@ void Heater::statePreHeat()
 
 void Heater::stateStarting()
 {
-    if(preHeatUnit_.isActive())
-        preHeatUnit_.setActive(false);
-
     if(isBurning_)
     {
+		preHeatUnit_.setActive(false);
         motorFan_.turnOn();
         motorFan_.setSpeed(50);
         heatLevel_ = 50;
@@ -238,6 +236,7 @@ void Heater::stateStopping()
     if(stoppingTime_ > 300)
     {
         motorFan_.turnOff();
+		motorHeat_.turnOff();
         powerOn_ = false;
         powerOnTagSocket_->writeValue(powerOn_);
         state_ = eOff;
