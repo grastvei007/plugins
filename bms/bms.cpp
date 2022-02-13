@@ -73,8 +73,12 @@ void Bms::onReply(QNetworkReply *reply)
             if(stream.name() == "utotal")
             {
                 double value = stream.readElementText().toDouble();
-                voltageTag_->setValue(value);
-                //qDebug() << stream.name() << " - " << value;
+                if(voltageTag_)
+                    voltageTag_->setValue(value);
+                else
+                {
+                    voltageTag_ = tagList_->createTag("bms", "voltage", Tag::eDouble, value);
+                }
             }
             else if(stream.name() == "ucell1") //>3.28</ucell1>
             {
@@ -83,7 +87,12 @@ void Bms::onReply(QNetworkReply *reply)
                     continue;
 
                 double v = value.toDouble();
-                cell1_->setValue(v);
+                if(cell1_)
+                    cell1_->setValue(v);
+                else
+                {
+                    cell1_ = tagList_->createTag("bms", "cell 1", Tag::eDouble, v);
+                }
             }
             else if(stream.name() == "ucell2") //>3.29</ucell2>
             {
@@ -91,7 +100,12 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                cell2_->setValue(v);
+                if(cell2_)
+                    cell2_->setValue(v);
+                else
+                {
+                    cell2_ = tagList_->createTag("bms", "cell 2", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell3") // >3.29</ucell3>
@@ -100,7 +114,12 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                cell3_->setValue(v);
+                if(cell3_)
+                    cell3_->setValue(v);
+                else
+                {
+                    cell3_ = tagList_->createTag("bms", "cell 3", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell4") // >3.28</ucell4>
@@ -109,7 +128,12 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                cell4_->setValue(v);
+                if(cell4_)
+                    cell4_->setValue(v);
+                else
+                {
+                    cell4_ = tagList_->createTag("bms", "cell 4", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell5") // >N/A</ucell5>
@@ -117,6 +141,13 @@ void Bms::onReply(QNetworkReply *reply)
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
+                double v = value.toDouble();
+                if(cell5_)
+                    cell5_->setValue(v);
+                else
+                {
+                    cell5_ = tagList_->createTag("bms", "cell 5", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell6") //>N/A</ucell6>
@@ -124,6 +155,13 @@ void Bms::onReply(QNetworkReply *reply)
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
+                double v = value.toDouble();
+                if(cell6_)
+                    cell6_->setValue(v);
+                else
+                {
+                    cell6_ = tagList_->createTag("bms", "cell 6", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell7") //>N/A</ucell7>
@@ -131,6 +169,13 @@ void Bms::onReply(QNetworkReply *reply)
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
+                double v = value.toDouble();
+                if(cell7_)
+                    cell7_->setValue(v);
+                else
+                {
+                    cell7_ = tagList_->createTag("bms", "cell 7", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell8") //>N/A</ucell8>
@@ -138,6 +183,13 @@ void Bms::onReply(QNetworkReply *reply)
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
+                double v = value.toDouble();
+                if(cell8_)
+                    cell8_->setValue(v);
+                else
+                {
+                    cell8_ = tagList_->createTag("bms", "cell 8", Tag::eDouble, v);
+                }
 
             }
             else if(stream.name() == "ucell9") //>N/A</ucell9>
@@ -202,7 +254,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                trimmer0_->setValue(v);
+                if(trimmer0_)
+                    trimmer0_->setValue(v);
+                else
+                    trimmer0_ = tagList_->createTag("bms", "trimmer 0", Tag::eDouble, v);
 
             }
             else if(stream.name() == "trimmer-1") // >3.60</trimmer-1>
@@ -211,7 +266,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                trimmer1_->setValue(v);
+                if(trimmer1_)
+                    trimmer1_->setValue(v);
+                else
+                    trimmer1_ = tagList_->createTag("bms", "trimmer 1", Tag::eDouble, v);
 
             }
             else if(stream.name() == "UMINset") //>2800</UMINset>
@@ -220,7 +278,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                uMinCell_->setValue(v);
+                if(uMinCell_)
+                    uMinCell_->setValue(v);
+                else
+                    uMinCell_ = tagList_->createTag("bms", "uMinCell", Tag::eDouble, v);
             }
             else if(stream.name() == "UMAXset") //>3600</UMAXset>
             {
@@ -228,7 +289,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                uMaxCell_->setValue(v);
+                if(uMaxCell_)
+                    uMaxCell_->setValue(v);
+                else
+                    uMaxCell_ = tagList_->createTag("bms", "uMaxCell", Tag::eDouble, v);
 
             }
             else if(stream.name() == "Umincell") //>3.28</Umincell>
@@ -247,7 +311,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 int v = value.toInt();
-                uMinCellId_->setValue(v);
+                if(uMinCellId_)
+                    uMinCellId_->setValue(v);
+                else
+                    uMinCellId_ = tagList_->createTag("bms", "min voltage cell id", Tag::eInt, v);
             }
             else if(stream.name() == "UmaxcellID") //>3</UmaxcellID>
             {
@@ -255,7 +322,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 int v = value.toInt();
-                uMaxCellId_->setValue(v);
+                if(uMaxCellId_)
+                    uMaxCellId_->setValue(v);
+                else
+                    uMaxCellId_ = tagList_->createTag("bms", "max voltage cell id", Tag::eInt);
             }
             else if(stream.name() == "Udiff") //>0.01</Udiff>
             {
@@ -263,7 +333,10 @@ void Bms::onReply(QNetworkReply *reply)
                 if(value == "N/A")
                     continue;
                 double v = value.toDouble();
-                uDiff_->setValue(v);
+                if(uDiff_)
+                    uDiff_->setValue(v);
+                else
+                    uDiff_ = tagList_->createTag("bms", "difference min max cell", Tag::eDouble, v);
             }
             else if(stream.name() == "lastcellevent") //>N/A</lastcellevent>
             {
@@ -309,24 +382,14 @@ void Bms::onReply(QNetworkReply *reply)
 
 void Bms::setupTags()
 {
-    voltageTag_ = tagList_->createTag("bms", "voltage", Tag::eDouble);
-    cell1_ = tagList_->createTag("bms", "cell 1", Tag::eDouble);
-    cell2_ = tagList_->createTag("bms", "cell 2", Tag::eDouble);
-    cell3_ = tagList_->createTag("bms", "cell 3", Tag::eDouble);
-    cell4_ = tagList_->createTag("bms", "cell 4", Tag::eDouble);
 
-    trimmer0_ = tagList_->createTag("bms", "trimmer 0", Tag::eDouble);
-    trimmer1_ = tagList_->createTag("bms", "trimmer 1", Tag::eDouble);
+
+
 
     cellMinSet_ = tagList_->createTag("bms", "configUMinCell", Tag::eDouble);
     cellMaxSet_ = tagList_->createTag("bms", "configUMaxCell", Tag::eDouble);
 
-    uMinCell_ = tagList_->createTag("bms", "uMinCell", Tag::eDouble);
-    uMaxCell_ = tagList_->createTag("bms", "uMaxCell", Tag::eDouble);
 
-    uMinCellId_ = tagList_->createTag("bms", "min voltage cell id", Tag::eInt);
-    uMaxCellId_ = tagList_->createTag("bms", "max voltage cell id", Tag::eInt);
-    uDiff_ = tagList_->createTag("bms", "difference min max cell", Tag::eDouble);
 }
 
 extern "C" PluginInterface* createPlugin()

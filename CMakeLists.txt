@@ -4,5 +4,6 @@ project(JunePlugins)
 add_subdirectory(pluginload)
 add_subdirectory(bms)
 add_subdirectory(heater)
+add_subdirectory(victronenergy)
 
 

@@ -40,6 +40,10 @@ private:
     Tag* cell2_ = nullptr;
     Tag* cell3_ = nullptr;
     Tag* cell4_ = nullptr;
+    Tag* cell5_ = nullptr;
+    Tag* cell6_ = nullptr;
+    Tag* cell7_ = nullptr;
+    Tag* cell8_ = nullptr;
 
     Tag* trimmer0_ = nullptr;
     Tag* trimmer1_ = nullptr;
