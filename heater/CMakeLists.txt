@@ -18,8 +18,8 @@ if(NOT CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX d)
 endif()
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt5 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS Core REQUIRED)
+find_package(Qt6 COMPONENTS Network REQUIRED)
 
 add_library(heater SHARED
     heater.h
@@ -34,7 +34,7 @@ add_library(heater SHARED
     preheatunit.cpp
     wiringpiwrapper.cpp)
 
-target_link_libraries(heater Qt5::Core)
+target_link_libraries(heater Qt6::Core)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")

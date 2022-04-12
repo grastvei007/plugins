@@ -68,9 +68,9 @@ void Bms::onReply(QNetworkReply *reply)
             continue;
         if(token == QXmlStreamReader::StartElement)
         {
-            if(stream.name() == "data")
+            if(stream.name() == QString("data"))
                 continue;
-            if(stream.name() == "utotal")
+            if(stream.name() == QString("utotal"))
             {
                 double value = stream.readElementText().toDouble();
                 if(voltageTag_)
@@ -80,10 +80,10 @@ void Bms::onReply(QNetworkReply *reply)
                     voltageTag_ = tagList_->createTag("bms", "voltage", Tag::eDouble, value);
                 }
             }
-            else if(stream.name() == "ucell1") //>3.28</ucell1>
+            else if(stream.name() == QString("ucell1")) //>3.28</ucell1>
             {
                 auto value = stream.readElementText();
-                if(value == "N/A")
+                if(value == QString("N/A"))
                     continue;
 
                 double v = value.toDouble();
@@ -94,7 +94,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell1_ = tagList_->createTag("bms", "cell 1", Tag::eDouble, v);
                 }
             }
-            else if(stream.name() == "ucell2") //>3.29</ucell2>
+            else if(stream.name() == QString("ucell2")) //>3.29</ucell2>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -108,7 +108,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell3") // >3.29</ucell3>
+            else if(stream.name() == QString("ucell3")) // >3.29</ucell3>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -122,7 +122,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell4") // >3.28</ucell4>
+            else if(stream.name() == QString("ucell4")) // >3.28</ucell4>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -136,7 +136,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell5") // >N/A</ucell5>
+            else if(stream.name() == QString("ucell5")) // >N/A</ucell5>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -150,7 +150,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell6") //>N/A</ucell6>
+            else if(stream.name() == QString("ucell6")) //>N/A</ucell6>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -164,7 +164,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell7") //>N/A</ucell7>
+            else if(stream.name() == QString("ucell7")) //>N/A</ucell7>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -178,7 +178,7 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell8") //>N/A</ucell8>
+            else if(stream.name() == QString("ucell8")) //>N/A</ucell8>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -192,63 +192,63 @@ void Bms::onReply(QNetworkReply *reply)
                 }
 
             }
-            else if(stream.name() == "ucell9") //>N/A</ucell9>
+            else if(stream.name() == QString("ucell9")) //>N/A</ucell9>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell10") //>N/A</ucell10>
+            else if(stream.name() == QString("ucell10")) //>N/A</ucell10>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell11") //>N/A</ucell11>
+            else if(stream.name() == QString("ucell11")) //>N/A</ucell11>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell12") //>N/A</ucell12>
+            else if(stream.name() == QString("ucell12")) //>N/A</ucell12>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell13") // >N/A</ucell13>
+            else if(stream.name() == QString("ucell13")) // >N/A</ucell13>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell14") //>N/A</ucell14>
+            else if(stream.name() == QString("ucell14")) //>N/A</ucell14>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell15") //>N/A</ucell15>
+            else if(stream.name() == QString("ucell15")) //>N/A</ucell15>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "ucell16") //>N/A</ucell16>
+            else if(stream.name() == QString("ucell16")) //>N/A</ucell16>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
                     continue;
 
             }
-            else if(stream.name() == "trimmer-0") //>2.80</trimmer-0>
+            else if(stream.name() == QString("trimmer-0")) //>2.80</trimmer-0>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -260,7 +260,7 @@ void Bms::onReply(QNetworkReply *reply)
                     trimmer0_ = tagList_->createTag("bms", "trimmer 0", Tag::eDouble, v);
 
             }
-            else if(stream.name() == "trimmer-1") // >3.60</trimmer-1>
+            else if(stream.name() == QString("trimmer-1")) // >3.60</trimmer-1>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -272,7 +272,7 @@ void Bms::onReply(QNetworkReply *reply)
                     trimmer1_ = tagList_->createTag("bms", "trimmer 1", Tag::eDouble, v);
 
             }
-            else if(stream.name() == "UMINset") //>2800</UMINset>
+            else if(stream.name() == QString("UMINset")) //>2800</UMINset>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -283,7 +283,7 @@ void Bms::onReply(QNetworkReply *reply)
                 else
                     uMinCell_ = tagList_->createTag("bms", "uMinCell", Tag::eDouble, v);
             }
-            else if(stream.name() == "UMAXset") //>3600</UMAXset>
+            else if(stream.name() == QString("UMAXset")) //>3600</UMAXset>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -295,17 +295,17 @@ void Bms::onReply(QNetworkReply *reply)
                     uMaxCell_ = tagList_->createTag("bms", "uMaxCell", Tag::eDouble, v);
 
             }
-            else if(stream.name() == "Umincell") //>3.28</Umincell>
+            else if(stream.name() == QString("Umincell")) //>3.28</Umincell>
             {
 
 
             }
-            else if(stream.name() == "Umaxcell") //>3.29</Umaxcell>
+            else if(stream.name() == QString("Umaxcell")) //>3.29</Umaxcell>
             {
 
 
             }
-            else if(stream.name() == "UmincellID") //>1</UmincellID>
+            else if(stream.name() == QString("UmincellID")) //>1</UmincellID>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -316,7 +316,7 @@ void Bms::onReply(QNetworkReply *reply)
                 else
                     uMinCellId_ = tagList_->createTag("bms", "min voltage cell id", Tag::eInt, v);
             }
-            else if(stream.name() == "UmaxcellID") //>3</UmaxcellID>
+            else if(stream.name() == QString("UmaxcellID")) //>3</UmaxcellID>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -327,7 +327,7 @@ void Bms::onReply(QNetworkReply *reply)
                 else
                     uMaxCellId_ = tagList_->createTag("bms", "max voltage cell id", Tag::eInt);
             }
-            else if(stream.name() == "Udiff") //>0.01</Udiff>
+            else if(stream.name() == QString("Udiff")) //>0.01</Udiff>
             {
                 auto value = stream.readElementText();
                 if(value == "N/A")
@@ -338,35 +338,35 @@ void Bms::onReply(QNetworkReply *reply)
                 else
                     uDiff_ = tagList_->createTag("bms", "difference min max cell", Tag::eDouble, v);
             }
-            else if(stream.name() == "lastcellevent") //>N/A</lastcellevent>
+            else if(stream.name() == QString("lastcellevent")) //>N/A</lastcellevent>
             {
 
             }
-            else if(stream.name() == "lastcellno") //>N/A</lastcellno>
+            else if(stream.name() == QString("lastcellno")) //>N/A</lastcellno>
             {
 
             }
-            else if(stream.name() == "lastcellU") // >N/A</lastcellU>
+            else if(stream.name() == QString("lastcellU")) // >N/A</lastcellU>
             {
 
             }
-            else if(stream.name() == "lastbattU") //>N/A</lastbattU>
+            else if(stream.name() == QString("lastbattU")) //>N/A</lastbattU>
             {
 
             }
-            else if(stream.name() == "connection") //>CONNECTED</connection>
+            else if(stream.name() == QString("connection")) //>CONNECTED</connection>
             {
 
             }
-            else if(stream.name() == "status") //>0xFFFF</status>
+            else if(stream.name() == QString("status")) //>0xFFFF</status>
             {
 
             }
-            else if(stream.name() == "relay1") //>NORMAL</relay1>
+            else if(stream.name() == QString("relay1")) //>NORMAL</relay1>
             {
 
             }
-            else if(stream.name() == "relay2") //>NORMAL</relay2>
+            else if(stream.name() == QString("relay2")) //>NORMAL</relay2>
             {
 
             }
