@@ -49,6 +49,16 @@ void WiringPi::digitalWrite(int pin, Value val)
 #endif
 }
 
+int WiringPi::digitalRead(int pin)
+{
+#ifdef RASPBERRY_PI
+        ::pinRead(pin);
+#else
+    qDebug() << __FUNCTION__;
+    return 0;
+#endif
+}
+
 
 int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
 {
@@ -97,5 +107,20 @@ void WiringPi::pwmSetMode(PwmMode pwmMode)
     ::pwmSetMode(pwmMode == ePwmModeMs ? 0 : 1);
 #else
     qDebug() << __FUNCTION__ << " pwmMode=" << pwmMode;
+#endif
+}
+
+int WiringPi::wiringPiISR(int pin, int edgeType, isrFunction function)
+{
+#ifdef RASPBERRY_PI
+    if(edgeType == eINT_EDGE_FALLING)
+        return ::wiringPiISR (pin, INT_EDGE_FALLING,  function);
+    else if( edgeType == eINT_EDGE_RISING)
+        return ::wiringPiISR (pin, INT_EDGE_RISING,  function);
+    else if(edgeType == eINT_EDGE_BOTH)
+        return ::wiringPiISR (pin, INT_EDGE_BOTH,  function);
+#else
+    qDebug() << __FUNCTION__;
+    return 0;
 #endif
 }

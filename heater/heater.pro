@@ -63,6 +63,7 @@ else{
 }
 
 SOURCES += \
+    button.cpp \
 	heater.cpp \
 	motor.cpp \
 	preheatunit.cpp \
@@ -70,6 +71,7 @@ SOURCES += \
 	wiringpiwrapper.cpp	
 
 HEADERS += \
+    button.h \
 	heater.h \
 	motor.h \
 	preheatunit.h \

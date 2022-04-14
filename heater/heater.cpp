@@ -22,9 +22,6 @@ void Heater::setTagSystem(TagList *taglist)
 
 bool Heater::initialize()
 {
-	qDebug() << __FUNCTION__;
-//    WiringPi::setup();
-
     powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool);
     heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt);
     fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt);
@@ -52,12 +49,17 @@ bool Heater::initialize()
     connect(fanLevelTagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Heater::onFanLevelValueChanged);
     connect(isBurningTagSocket_, qOverload<bool>(&TagSocket::valueChanged), this, &Heater::onIsBurningValueChanged);
 
+    //buttons
+    connect(&buttonHeatDown_, &Button::buttonToggled, this, &Heater::onButtonHeatDownPushed);
+    connect(&buttonHeatUp_, &Button::buttonToggled, this, &Heater::onButtonHeatUpPushed);
+    connect(&buttonPower_, &Button::buttonToggled, this, &Heater::onButtonPower);
+
     return true;
 }
 
 void Heater::run(int deltaMs)
 {
-    if(!mainLoopTimer_)
+    if(mainLoopTimer_)
         mainLoopTimer_->deleteLater();
     deltaMs_ = deltaMs;
 
@@ -86,6 +88,24 @@ void Heater::onFanLevelValueChanged(int value)
 void Heater::onIsBurningValueChanged(bool value)
 {
     isBurning_ = value;
+}
+
+void Heater::onButtonHeatDownPushed(int level)
+{
+    if(level == 0 && heatLevel_ > 35)
+        heatLevelTag_->setValue(heatLevel_-5);
+}
+
+void Heater::onButtonHeatUpPushed(int level)
+{
+    if(level == 0 && heatLevel_ < 100)
+        heatLevelTag_->setValue(heatLevel_+5);
+}
+
+void Heater::onButtonPower(int level)
+{
+    if(level == 0)
+        powerOnTag_->setValue(!powerOn_);
 }
 
 void Heater::onHeatLevelValueChanged(int value)

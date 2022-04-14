@@ -1,6 +1,8 @@
 #ifndef WIRINGPIWRAPPER_H
 #define WIRINGPIWRAPPER_H
 
+#include <functional>
+
 /**
  * Wrapper for wiringPi functions.
  * This is to prevent mistakes when develop.
@@ -11,6 +13,7 @@
 class WiringPi
 {
 public:
+    typedef std::function<void(void)> isrFunction;
     enum PinDir{
         eInput,
         eOutput
@@ -28,14 +31,23 @@ public:
         ePwmModeBal
     };
 
+    enum TriggerEdge
+    {
+        eINT_EDGE_FALLING,
+        eINT_EDGE_RISING,
+        eINT_EDGE_BOTH
+    };
+
     static void setup();
     static void pinMode(int aPin, PinDir aDir);
     static void digitalWrite(int aPin, Value aVal);
+    static int digitalRead(int pin);
     static int softPwmCreate(int aPin, int aInitVal, int aPwmRange);
     static void softPwmWrite(int aPin, int aValue);
     static void pwmSetClock(int aClock);
     static void pwmSetRange(int aRange);
     static void pwmSetMode(PwmMode aPwmMode);
+    static int wiringPiISR (int pin, int edgeType, isrFunction function);
 
 };
 

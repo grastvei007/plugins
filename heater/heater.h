@@ -13,6 +13,7 @@
 #include "motor.h"
 #include "preheatunit.h"
 #include "pump.h"
+#include "button.h"
 
 class Heater:  public QObject, public PluginInterface
 {
@@ -38,6 +39,10 @@ private slots:
     void onHeatLevelValueChanged(int value);
     void onFanLevelValueChanged(int value);
     void onIsBurningValueChanged(bool value);
+
+    void onButtonHeatDownPushed(int level);
+    void onButtonHeatUpPushed(int level);
+    void onButtonPower(int level);
 
     void mainloop();
 
@@ -76,6 +81,10 @@ private:
     Motor motorFan_ = Motor(3);
     Motor motorHeat_ = Motor(2);
     PreHeatUnit preHeatUnit_ = PreHeatUnit(0);
+
+    Button buttonHeatUp_ = Button(29, WiringPi::eINT_EDGE_BOTH);
+    Button buttonHeatDown_ = Button(28, WiringPi::eINT_EDGE_BOTH);
+    Button buttonPower_ = Button(25, WiringPi::eINT_EDGE_BOTH);
 
     double preHeatTime_ = 0;
     double stoppingTime_ = 0;

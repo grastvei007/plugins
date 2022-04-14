@@ -22,12 +22,14 @@ find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
 
 add_library(heater SHARED
+    button.h
     heater.h
     pump.h
     motor.h
     preheatunit.h
     wiringpiwrapper.h
 
+    button.cpp
     heater.cpp
     pump.cpp
     motor.cpp
