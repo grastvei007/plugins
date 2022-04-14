@@ -52,7 +52,7 @@ void WiringPi::digitalWrite(int pin, Value val)
 int WiringPi::digitalRead(int pin)
 {
 #ifdef RASPBERRY_PI
-        ::pinRead(pin);
+        return ::digitalRead(pin);
 #else
     qDebug() << __FUNCTION__;
     return 0;
