@@ -59,7 +59,7 @@ void Mcp3008::mainloop()
     for(int i=0; i<8; i++)
     {
         int adc = WiringPi::analogRead(lowestPin_ + i);
-        int voltage = constant * adc;
+        double voltage = constant * adc;
         channel_[i]->setValue(voltage);
     }
 }
