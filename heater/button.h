@@ -18,7 +18,7 @@ private:
     void setupCallback();
     int wiringPiPin_ = 0;
     WiringPi::TriggerEdge trigger_;
-
+    int state_ = 0;
 };
 
 

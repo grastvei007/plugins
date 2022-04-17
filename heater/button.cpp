@@ -2,6 +2,7 @@
 #include <functional>
 #include "wiringpiwrapper.h"
 #include <QDebug>
+#include <QThread>
 
 std::map<int,std::function<void(int)>> functions; // gpio, level
 
@@ -16,8 +17,12 @@ Button::Button(int wiringPiPin, WiringPi::TriggerEdge trigger, QObject *parent)
 
 void Button::onButtonPushed(int level)
 {
+    if(state_ == level)
+        return;
+    state_ = level;
     qDebug() << __FUNCTION__ << wiringPiPin_ << " " << level;
     emit buttonToggled(level);
+    QThread::msleep(50);
 }
 
 void Button::setupCallback()
