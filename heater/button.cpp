@@ -3,7 +3,7 @@
 #include "wiringpiwrapper.h"
 #include <QDebug>
 
-std::map<int,std::function<void(int, int)>> functions; // gpio, level
+std::map<int,std::function<void(int)>> functions; // gpio, level
 
 
 Button::Button(int wiringPiPin, WiringPi::TriggerEdge trigger, QObject *parent)
@@ -26,7 +26,7 @@ void Button::setupCallback()
     {
         auto isr29 = +[](){
             int level = WiringPi::digitalRead(29);
-            functions[29](29, level);
+            functions[29](level);
         };
         WiringPi::wiringPiISR(wiringPiPin_, trigger_, isr29);
     }
@@ -34,7 +34,7 @@ void Button::setupCallback()
     {
         auto isr28 = +[](){
             int level = WiringPi::digitalRead(28);
-            functions[28](28, level);
+            functions[28](level);
         };
         WiringPi::wiringPiISR(wiringPiPin_, trigger_, isr28);
     }
@@ -42,7 +42,7 @@ void Button::setupCallback()
     {
         auto isr27 = +[](){
             int level = WiringPi::digitalRead(27);
-            functions[27](27, level);
+            functions[27](level);
         };
         WiringPi::wiringPiISR(wiringPiPin_, trigger_, isr27);
     }
@@ -50,7 +50,7 @@ void Button::setupCallback()
     {
         auto isr26 = +[](){
             int level = WiringPi::digitalRead(26);
-            functions[26](26, level);
+            functions[26](level);
         };
         WiringPi::wiringPiISR(wiringPiPin_, trigger_, isr26);
     }
@@ -58,7 +58,7 @@ void Button::setupCallback()
     {
         auto isr25 = +[](){
             int level = WiringPi::digitalRead(25);
-            functions[25](25, level);
+            functions[25](level);
         };
         WiringPi::wiringPiISR(wiringPiPin_, trigger_, isr25);
     }
