@@ -110,7 +110,7 @@ void WiringPi::pwmSetMode(PwmMode pwmMode)
 #endif
 }
 
-int WiringPi::wiringPiISR(int pin, int edgeType, isrFunction function)
+int WiringPi::wiringPiISR(int pin, int edgeType, void (*function)())
 {
 #ifdef RASPBERRY_PI
     if(edgeType == eINT_EDGE_FALLING)

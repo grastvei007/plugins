@@ -13,7 +13,6 @@
 class WiringPi
 {
 public:
-    typedef std::function<void(void)> isrFunction;
     enum PinDir{
         eInput,
         eOutput
@@ -47,7 +46,7 @@ public:
     static void pwmSetClock(int aClock);
     static void pwmSetRange(int aRange);
     static void pwmSetMode(PwmMode aPwmMode);
-    static int wiringPiISR (int pin, int edgeType, isrFunction function);
+    static int wiringPiISR (int pin, int edgeType, void (*function)(void));
 
 };
 

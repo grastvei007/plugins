@@ -10,11 +10,14 @@ class Button : public QObject
 public:
     explicit Button(int wiringPiPin, WiringPi::TriggerEdge trigger, QObject *parent = nullptr);
 
+    static Button* instance();
 signals:
     void buttonToggled(int level);
 private:
     void onButtonPushed(int level);
+    void setupCallback();
     int wiringPiPin_ = 0;
+    WiringPi::TriggerEdge trigger_;
 
 };
 
