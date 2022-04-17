@@ -184,6 +184,7 @@ void Heater::statePreHeat()
         preHeatUnit_.setActive(true);
         motorHeat_.turnOn();
         motorHeat_.setSpeed(80);
+        heatLevelTagSocket_->writeValue(80);
     }
 
 
@@ -205,9 +206,9 @@ void Heater::stateStarting()
     {
 		preHeatUnit_.setActive(false);
         motorFan_.turnOn();
-        motorFan_.setSpeed(50);
-        heatLevel_ = 50;
-        fanLevel_ = 50;
+        motorFan_.setSpeed(70);
+        heatLevel_ = 70;
+        fanLevel_ = 70;
         currentHeatLevel_ = heatLevel_;
         currentFanLevel_ = fanLevel_;
         heatLevelTagSocket_->writeValue(heatLevel_);
@@ -261,6 +262,8 @@ void Heater::stateStopping()
         powerOnTagSocket_->writeValue(powerOn_);
         state_ = eOff;
         isBurning_ = false;
+        heatLevelTagSocket_->writeValue(0);
+        fanLevelTagSocket_->writeValue(0);
     }
 
 }
