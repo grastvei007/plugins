@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.16)
+project(ds18b20)
+
+include(CheckIncludeFile)
+CHECK_INCLUDE_FILE(/opt/vc/include/bcm_host.h BCMHOST)
+
+if(BCMHOST)
+    add_definitions(-DRASPBERRY_PI)
+endif()
+
+
+include_directories($ENV{JUNE_ROOT})
+link_directories($ENV{DEV_LIBS})
+
+set(CMAKE_AUTOMOC ON)
+
+if(NOT CMAKE_DEBUG_POSTFIX)
+  set(CMAKE_DEBUG_POSTFIX d)
+endif()
+
+find_package(Qt6 COMPONENTS Core REQUIRED)
+find_package(Qt6 COMPONENTS Network REQUIRED)
+
+add_library(ds18b20 SHARED
+    ds18b20.h
+    ds18b20.cpp)
+
+target_link_libraries(ds18b20 Qt6::Core)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message("Debug mode")
+    target_link_libraries(ds18b20 tagsystemd)
+    target_link_libraries(ds18b20 pluginLoadd)
+
+    if(BCMHOST)
+        target_link_libraries(ds18b20 wiringPi)
+    endif()
+else()
+    message("Release mode")
+    target_link_libraries(ds18b20 tagsystem)
+    target_link_libraries(ds18b20 pluginLoad)
+
+    if(BCMHOST)
+        target_link_libraries(ds18b20 wiringPi)
+    endif()
+endif()
+
+add_custom_command(TARGET ds18b20
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ds18b20> $ENV{DEV_LIBS} )
+
+
