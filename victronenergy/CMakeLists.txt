@@ -10,8 +10,8 @@ endif()
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
-find_package(Qt5 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS Core REQUIRED)
+find_package(Qt6 COMPONENTS Network REQUIRED)
 
 add_library(victronenergy SHARED
     victronenergy.h
@@ -19,8 +19,8 @@ add_library(victronenergy SHARED
     victronenergy.cpp)
 
 
-target_link_libraries(victronenergy Qt5::Core)
-target_link_libraries(victronenergy Qt5::Network)
+target_link_libraries(victronenergy Qt6::Core)
+target_link_libraries(victronenergy Qt6::Network)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
