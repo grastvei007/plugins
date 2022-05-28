@@ -13,7 +13,7 @@ extern "C" PluginInterface* createPlugin()
 
 Ds18b20::Ds18b20()
 {
-
+    folderToName_.emplace("28-01203c3bc31a", "indoor");
 }
 
 void Ds18b20::setTagSystem(TagList *taglist)
@@ -39,8 +39,10 @@ bool Ds18b20::initialize()
         str.append(folder);
         str.append(QDir::separator());
         str.append("w1_slave");
-
-        auto tag = tagList_->createTag("temperature", folder, Tag::eDouble);
+        auto name = folder;
+        if(folderToName_.contains(folder))
+            name = folderToName_[folder];
+        auto tag = tagList_->createTag("temperature", name, Tag::eDouble);
         temperatureSensors_.emplace(str, tag);
         qDebug() << folder;
     }

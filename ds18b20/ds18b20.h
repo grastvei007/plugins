@@ -28,6 +28,8 @@ private:
     TagList *tagList_ = nullptr;
     std::map<QString, Tag*> temperatureSensors_;
     Tag *indoor_ = nullptr;
+
+    std::map<QString, QString> folderToName_;
 };
 
 
