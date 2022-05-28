@@ -40,7 +40,7 @@ bool Ds18b20::initialize()
         str.append(QDir::separator());
         str.append("w1_slave");
         auto name = folder;
-        if(folderToName_.contains(folder))
+        if(folderToName_.count(folder))
             name = folderToName_[folder];
         auto tag = tagList_->createTag("temperature", name, Tag::eDouble);
         temperatureSensors_.emplace(str, tag);
