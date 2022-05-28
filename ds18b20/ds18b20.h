@@ -6,6 +6,8 @@
 #include <tagsystem/tag.h>
 #include <tagsystem/taglist.h>
 
+#include <map>
+
 
 class Ds18b20 : public QObject, public PluginInterface
 {
@@ -24,6 +26,8 @@ private slots:
 private:
     QTimer* mainLoopTimer_ = nullptr;
     TagList *tagList_ = nullptr;
+    std::map<QString, Tag*> temperatureSensors_;
+    Tag *indoor_ = nullptr;
 };
 
 

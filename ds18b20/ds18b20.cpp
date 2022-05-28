@@ -23,6 +23,9 @@ void Ds18b20::setTagSystem(TagList *taglist)
 
 bool Ds18b20::initialize()
 {
+    indoor_ = tagList_->createTag("temperature", "inside", Tag::eDouble, 10.0);
+
+
     const QString path = "/sys/bus/w1/devices";
     QDir dir(path);
     QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -34,8 +37,14 @@ bool Ds18b20::initialize()
         QString str(path);
         str.append(QDir::separator());
         str.append(folder);
+        str.append(QDir::separator());
+        str.append("w1_slave");
+
+        auto tag = tagList_->createTag("temperature", folder, Tag::eDouble);
+        temperatureSensors_.emplace(str, tag);
         qDebug() << folder;
     }
+
 
     return true;
 }
@@ -59,5 +68,24 @@ void Ds18b20::stop()
 
 void Ds18b20::mainloop()
 {
-
+    for(auto &[sensor, tag] : temperatureSensors_)
+    {
+        // read the file: sensor/w1_slave
+        QFile file(sensor);
+        if(file.open(QIODevice::ReadOnly))
+        {
+            auto data = QString(file.readAll());
+            auto tempeatureStr = data.split("t=").last();
+            bool ok = false;
+            int tempeature = tempeatureStr.toInt(&ok);
+            if(ok)
+            {
+                double value = tempeature / 1000.;
+                tag->setValue(value);
+            }
+            else
+                qDebug() << data;
+        }
+        file.close();
+    }
 }
