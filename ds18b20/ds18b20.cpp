@@ -71,7 +71,7 @@ void Ds18b20::stop()
 
 void Ds18b20::mainloop()
 {
-    if(!readSensor_)
+    if(readSensor_ < -1)
         return;
 
     auto iter = temperatureSensors_.begin();
