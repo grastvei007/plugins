@@ -24,10 +24,11 @@ private slots:
     void mainloop();
 
 private:
+    double readSensorValue(const QString &filePath);
     QTimer* mainLoopTimer_ = nullptr;
     TagList *tagList_ = nullptr;
     std::map<QString, Tag*> temperatureSensors_;
-    Tag *indoor_ = nullptr;
+    int readSensor_ = -1;
 
     std::map<QString, QString> folderToName_;
 };

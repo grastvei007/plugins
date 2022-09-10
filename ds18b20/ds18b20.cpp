@@ -14,6 +14,7 @@ extern "C" PluginInterface* createPlugin()
 Ds18b20::Ds18b20()
 {
     folderToName_.emplace("28-01203c3bc31a", "indoor");
+	folderToName_.emplace("28-01203c27b0a0", "outside");
 }
 
 void Ds18b20::setTagSystem(TagList *taglist)
@@ -23,9 +24,6 @@ void Ds18b20::setTagSystem(TagList *taglist)
 
 bool Ds18b20::initialize()
 {
-    indoor_ = tagList_->createTag("temperature", "inside", Tag::eDouble, 10.0);
-
-
     const QString path = "/sys/bus/w1/devices";
     QDir dir(path);
     QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -42,11 +40,14 @@ bool Ds18b20::initialize()
         auto name = folder;
         if(folderToName_.count(folder))
             name = folderToName_[folder];
-        auto tag = tagList_->createTag("temperature", name, Tag::eDouble);
+        auto initValue = readSensorValue(str);
+        auto tag = tagList_->createTag("temperature", name, Tag::eDouble, initValue);
         temperatureSensors_.emplace(str, tag);
         qDebug() << folder;
     }
 
+    if(!temperatureSensors_.empty())
+        readSensor_ = 0;
 
     return true;
 }
@@ -70,24 +71,44 @@ void Ds18b20::stop()
 
 void Ds18b20::mainloop()
 {
-    for(auto &[sensor, tag] : temperatureSensors_)
+    if(!readSensor_)
+        return;
+
+    auto iter = temperatureSensors_.begin();
+    std::advance(iter, readSensor_);
+    if(iter == temperatureSensors_.end())
     {
-        // read the file: sensor/w1_slave
-        QFile file(sensor);
-        if(file.open(QIODevice::ReadOnly))
-        {
-            auto data = QString(file.readAll());
-            auto tempeatureStr = data.split("t=").last();
-            bool ok = false;
-            int tempeature = tempeatureStr.toInt(&ok);
-            if(ok)
-            {
-                double value = tempeature / 1000.;
-                tag->setValue(value);
-            }
-            else
-                qDebug() << data;
-        }
-        file.close();
+        iter = temperatureSensors_.begin();
+        readSensor_ = 0;
     }
+    readSensor_++;
+
+    auto &[sensor, tag] = *iter;
+    auto temperature = readSensorValue(sensor);
+    tag->setValue(temperature);
+
+
+}
+
+double Ds18b20::readSensorValue(const QString &filePath)
+{
+    // read the file: sensor/w1_slave
+    double sensorValue = 0.0;
+    QFile file(filePath);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        auto data = QString(file.readAll());
+        auto tempeatureStr = data.split("t=").last();
+        bool ok = false;
+        int tempeature = tempeatureStr.toInt(&ok);
+        if(ok)
+        {
+            sensorValue = tempeature / 1000.;
+
+        }
+        else
+            qDebug() << data;
+    }
+    file.close();
+    return sensorValue;
 }
