@@ -25,13 +25,8 @@ void Motor::setSpeed(int speed)
     {
         currentSpeed_ = 0;
     }
-    if(speed < minSpeed_)
-        speed = minSpeed_;
-    else if(speed > maxSpeed_)
-        speed = maxSpeed_;
 
-    currentSpeed_ = speed;
-
+    currentSpeed_ = std::clamp(speed, minSpeed_, maxSpeed_);
     WiringPi::softPwmWrite(wireingPiPin_, currentSpeed_);
 }
 
