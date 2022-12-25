@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpio>
+    <pin pinnumber="17" mode="1" description="GPIO-0 out"/>
+    <pin pinnumber="18" mode="1" description="GPIO-1 out"/>
+    <pin pinnumber="27" mode="1" description="GPIO-2 out"/>
+    <pin pinnumber="22" mode="1" description="GPIO-3 out"/>
+    <pin pinnumber="23" mode="1" description="GPIO-4 out"/>
+    <pin pinnumber="24" mode="1" description="GPIO-5 out"/>
+    <pin pinnumber="25" mode="1" description="GPIO-6 out"/>
+    <pin pinnumber="4" mode="1" description="GPIO-7 out"/>
+    <pin pinnumber="5" mode="1" description="GPIO-21 out"/>
+    <pin pinnumber="6" mode="1" description="GPIO-22 out"/>
+    <pin pinnumber="13" mode="1" description="GPIO-23 out"/>
+    <pin pinnumber="19" mode="1" description="GPIO-24 out"/>
+    <pin pinnumber="26" mode="1" description="GPIO-25 out"/>
+    <pin pinnumber="12" mode="1" description="GPIO-26 out"/>
+    <pin pinnumber="16" mode="1" description="GPIO-27 out"/>
+    <pin pinnumber="20" mode="1" description="GPIO-28 out"/>
+    <pin pinnumber="21" mode="1" description="GPIO-29 out"/>
+</gpio>
