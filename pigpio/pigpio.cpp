@@ -55,8 +55,9 @@ bool PiGpio::initialize()
             {
                 int pinNumber = stream.attributes().value("pinnumber").toInt();
                 int pinMode = stream.attributes().value("mode").toInt();
+                QString description = stream.attributes().value("description").toString();
                 QString tagName = QString("pin_%1").arg(QString::number(pinNumber));
-                auto tag = tagList_->createTag("pigpio", tagName, Tag::eInt);
+                auto tag = tagList_->createTag("pigpio", tagName, Tag::eInt, 0, description);
 
                 auto tagSocket = TagSocket::createTagSocket("pigpio", tagName, TagSocket::eInt);
                 tagSocket->hookupTag(tag);
