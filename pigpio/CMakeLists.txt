@@ -26,7 +26,9 @@ add_library(pigpio SHARED
     pigpio.h
     pigpio.cpp
     pin.h
-    pin.cpp)
+    pin.cpp
+    wiringpiwrapper.h
+    wiringpiwrapper.cpp)
 
 target_link_libraries(pigpio Qt6::Core)
 
@@ -50,6 +52,6 @@ endif()
 
 add_custom_command(TARGET pigpio
                    POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ds18b20> $ENV{DEV_LIBS} )
+                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pigpio> $ENV{DEV_LIBS} )
 
 
