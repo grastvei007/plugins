@@ -22,9 +22,9 @@ void Heater::setTagSystem(TagList *taglist)
 
 bool Heater::initialize()
 {
-    powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool);
-    heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt);
-    fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt);
+    powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool, false);
+    heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt, 50, "Burner fan speed");
+    fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt, 50, "Air fan speed");
     stateTag_ = tagList_->createTag("heater", "state", Tag::eString);
     isBurningTag_ = tagList_->createTag("heater", "isBurning", Tag::eBool);
 
