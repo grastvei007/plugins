@@ -164,6 +164,10 @@ void Heater::stateOff()
     {
         preHeatTime_ = 0;
         state_ = ePreHeat;
+        // start motot a little bit before pumping fuel
+        motorHeat_.turnOn();
+        motorHeat_.setSpeed(80);
+        heatLevelTagSocket_->writeValue(80);
     }
 }
 
@@ -172,7 +176,7 @@ void Heater::statePreHeat()
     double deltaS = deltaMs_ / 1000.0;
     preHeatTime_ += deltaS;
 
-    if(!pump_.isRunning())
+    if(!pump_.isRunning() && preHeatTime_ > 3.0)
     {
         pump_.setInterval(1);
         pump_.start();
@@ -182,9 +186,6 @@ void Heater::statePreHeat()
     if(!preHeatUnit_.isActive() && preHeatTime_ > 10.0)
     {
         preHeatUnit_.setActive(true);
-        motorHeat_.turnOn();
-        motorHeat_.setSpeed(80);
-        heatLevelTagSocket_->writeValue(80);
     }
 
 
@@ -254,7 +255,7 @@ void Heater::stateStopping()
     preHeatUnit_.setActive(false);
 	pump_.stop();
 
-    if(stoppingTime_ > 300)
+    if(stoppingTime_ > 360)
     {
         motorFan_.turnOff();
 		motorHeat_.turnOff();
