@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 project(JunePlugins)
 
 set (CMAKE_CXX_STANDARD 20)
-include_directories($ENV{JUNE_ROOT})
+#include_directories($ENV{JUNE_ROOT})
 
+add_subdirectory(plugincore)
 add_subdirectory(runner)
 
 add_subdirectory(pluginload)

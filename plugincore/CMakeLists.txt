@@ -32,6 +32,7 @@ add_library(pluginCore SHARED
 target_link_libraries(pluginCore Qt6::Core)
 target_link_libraries(pluginCore Qt6::Network)
 
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
     target_link_libraries(pluginCore tagsystemd)
