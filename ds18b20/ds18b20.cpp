@@ -104,7 +104,6 @@ double Ds18b20::readSensorValue(const QString &filePath)
         if(ok)
         {
             sensorValue = tempeature / 1000.;
-
         }
         else
             qDebug() << data;
