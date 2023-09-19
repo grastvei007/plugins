@@ -284,6 +284,10 @@ void Heater::stateRunning()
     {
         stoppingTime_ = 0;
         state_ = eStoping;
+
+        // set maximum speed while heater burn out
+        fanLevelTagSocket_->writeValue(100);
+        heatLevelTagSocket_->writeValue(100);
     }
 }
 
