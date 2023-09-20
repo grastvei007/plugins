@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QDateTime>
 
 #include "motor.h"
 #include "preheatunit.h"
@@ -39,6 +40,9 @@ private slots:
     void onHeatLevelValueChanged(int value);
     void onFanLevelValueChanged(int value);
     void onIsBurningValueChanged(bool value);
+    void onWakeUpValueChanged(bool value);
+    void onWakeUpTimeValueChanged(QDateTime value);
+    void onConfigStartingTimeValueChanged(int value);
 
     void onButtonHeatDownPushed(int level);
     void onButtonHeatUpPushed(int level);
@@ -72,10 +76,20 @@ private:
     Tag *stateTag_ = nullptr;
     Tag *isBurningTag_ = nullptr;
 
+    Tag *configStartingTimeTag_ = nullptr;
+
+    Tag *wakeUpTag_ = nullptr;
+    Tag *wakeUpTimeTag_ = nullptr;
+
     TagSocket *powerOnTagSocket_ = nullptr;
     TagSocket *heatLevelTagSocket_ = nullptr;
     TagSocket *fanLevelTagSocket_ = nullptr;
     TagSocket *isBurningTagSocket_ = nullptr;
+
+    TagSocket *wakeUpTagSocket_ = nullptr;
+    TagSocket *wakeUpTimeTagSocket_ = nullptr;
+
+    TagSocket *configStartingTimeTagSocket_ = nullptr;
 
     Pump pump_ = Pump(1);
     Motor motorFan_ = Motor(3);
@@ -88,6 +102,12 @@ private:
 
     double preHeatTime_ = 0;
     double stoppingTime_ = 0;
+    double startingTime_ = 0;
+
+    bool wakeUp_ = false;
+    QDateTime wakeUpTime_ = QDateTime::currentDateTime();
+
+    int configStartingTimeSeconds_ = 120; // default 2 min.
 };
 
 #endif // HEATER_H
