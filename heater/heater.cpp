@@ -22,6 +22,11 @@ void Heater::setTagSystem(TagList *taglist)
 
 bool Heater::initialize()
 {
+    configStartingTimeTag_ = tagList_->createTag("config",
+                                                 "Heater_startingTime",
+                                                 Tag::eInt,
+                                                 "Maximum time in starting state");
+
     powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool, false);
     heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt, 50, "Burner fan speed");
     fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt, 50, "Air fan speed");
@@ -30,6 +35,7 @@ bool Heater::initialize()
     wakeUpTag_ = tagList_->createTag("heater", "wake up once", Tag::eBool);
     wakeUpTimeTag_ = tagList_->createTag("heater", "wake up time", Tag::eTime);
 
+    configStartingTimeTag_->setValue(configStartingTimeSeconds_);
     stateTag_->setValue(stateToString(state_));
     powerOnTag_->setValue(powerOn_);
     heatLevelTag_->setValue(heatLevel_);
@@ -44,6 +50,9 @@ bool Heater::initialize()
     isBurningTagSocket_ = TagSocket::createTagSocket("heater", "isBurning", TagSocket::eBool);
     wakeUpTagSocket_ = TagSocket::createTagSocket("heater", "wake up", TagSocket::eBool);
     wakeUpTimeTagSocket_ = TagSocket::createTagSocket("heater", "wake up time", TagSocket::eTime);
+    configStartingTimeTagSocket_ = TagSocket::createTagSocket("config",
+                                                              "heater_startingTime",
+                                                              TagSocket::eInt);
 
     powerOnTagSocket_->hookupTag(powerOnTag_);
     heatLevelTagSocket_->hookupTag(heatLevelTag_);
@@ -51,6 +60,7 @@ bool Heater::initialize()
     isBurningTagSocket_->hookupTag(isBurningTag_);
     wakeUpTagSocket_->hookupTag(wakeUpTag_);
     wakeUpTimeTagSocket_->hookupTag(wakeUpTimeTag_);
+    configStartingTimeTagSocket_->hookupTag(configStartingTimeTag_);
 
     connect(powerOnTagSocket_, qOverload<bool>(&TagSocket::valueChanged), this, &Heater::onPowerOnValueChanged);
     connect(heatLevelTagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Heater::onHeatLevelValueChanged);
@@ -64,6 +74,11 @@ bool Heater::initialize()
             qOverload<QDateTime>(&TagSocket::valueChanged),
             this,
             &Heater::onWakeUpTimeValueChanged);
+
+    connect(configStartingTimeTagSocket_,
+            qOverload<int>(&TagSocket::valueChanged),
+            this,
+            &Heater::onConfigStartingTimeValueChanged);
 
     //buttons
     connect(&buttonHeatDown_, &Button::buttonToggled, this, &Heater::onButtonHeatDownPushed);
@@ -114,6 +129,11 @@ void Heater::onWakeUpValueChanged(bool value)
 void Heater::onWakeUpTimeValueChanged(QDateTime value)
 {
     wakeUpTime_ = value;
+}
+
+void Heater::onConfigStartingTimeValueChanged(int value)
+{
+    configStartingTimeSeconds_ = value;
 }
 
 void Heater::onButtonHeatDownPushed(int level)
@@ -241,6 +261,9 @@ void Heater::statePreHeat()
 
 void Heater::stateStarting()
 {
+    double delta = deltaMs_ / 1000.0;
+    startingTime_ += delta;
+
     if(isBurning_)
     {
 		preHeatUnit_.setActive(false);
@@ -261,6 +284,10 @@ void Heater::stateStarting()
         stoppingTime_ = 0;
         state_ = eStoping;
     }
+
+    // automatic start after 3 min
+    if (startingTime_ > configStartingTimeSeconds_)
+        isBurningTagSocket_->writeValue(true);
 }
 
 void Heater::stateRunning()
