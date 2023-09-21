@@ -329,10 +329,9 @@ void Heater::stateStopping()
     {
         motorFan_.turnOff();
 		motorHeat_.turnOff();
-        powerOn_ = false;
-        powerOnTagSocket_->writeValue(powerOn_);
+        powerOnTagSocket_->writeValue(false);
         state_ = eOff;
-        isBurning_ = false;
+        isBurningTagSocket_->writeValue(false);
         heatLevelTagSocket_->writeValue(0);
         fanLevelTagSocket_->writeValue(0);
     }
