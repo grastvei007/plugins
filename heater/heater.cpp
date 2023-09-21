@@ -215,6 +215,7 @@ void Heater::stateOff()
         motorHeat_.turnOn();
         motorHeat_.setSpeed(80);
         heatLevelTagSocket_->writeValue(80);
+        isBurningTagSocket_->writeValue(false);
     }
 
     if (wakeUp_) {
