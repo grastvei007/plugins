@@ -1,7 +1,7 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include <plugins/pluginload/plugininterface.h>
+#include "plugins/pluginload/plugininterface.h"
 
 #include <QObject>
 #include <QTimer>

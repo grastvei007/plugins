@@ -27,6 +27,9 @@ add_library(pluginCore SHARED
     plugin.cpp
     telnet.h
     telnet.cpp
+    motor.h motor.cpp
+    wiringpiwrapper.h
+    wiringpiwrapper.cpp
 )
 
 target_link_libraries(pluginCore Qt6::Core)
