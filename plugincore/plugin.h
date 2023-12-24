@@ -8,7 +8,13 @@
 
 #include <memory>
 
-
+/**
+ * @brief The Plugin class
+ *
+ * Plugin base class. To implement a plugin override
+ * - initialize to setup the plugin tags
+ * - mainloop with the plugin logic
+ */
 class Plugin : public QObject, public PluginInterface
 {
     Q_OBJECT
@@ -18,7 +24,7 @@ public:
     void setTagSystem(TagList *taglist) override;
 
     virtual bool initialize() override;
-    void run(int deltaMs) override;
+    void run(int deltaMs = 1000) override;
     void stop() override;
 
 protected:

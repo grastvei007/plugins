@@ -9,7 +9,7 @@ void Plugin::setTagSystem(TagList *taglist)
 
 bool Plugin::initialize()
 {
-    // overide to setup the plugin
+    qDebug() << "overide to setup the plugin";
     return false;
 }
 
