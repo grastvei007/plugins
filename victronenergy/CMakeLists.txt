@@ -4,18 +4,19 @@ project(victronenergy)
 include_directories($ENV{JUNE_ROOT})
 link_directories($ENV{DEV_LIBS})
 
+set(CMAKE_AUTOMOC ON)
+
 if(NOT CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX d)
 endif()
-
-set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
 
 add_library(victronenergy SHARED
+    ../plugincore/plugin.h
+    ../pluginload/plugininterface.h
     victronenergy.h
-
     victronenergy.cpp)
 
 
@@ -27,11 +28,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(victronenergy tagsystemd)
     target_link_libraries(victronenergy deviced)
     target_link_libraries(victronenergy pluginLoadd)
+    target_link_libraries(victronenergy pluginCored)
 else()
     message("Release mode")
     target_link_libraries(victronenergy tagsystem)
     target_link_libraries(victronenergy device)
     target_link_libraries(victronenergy pluginLoad)
+    target_link_libraries(victronenergy pluginCore)
 endif()
 
 add_custom_command(TARGET victronenergy
