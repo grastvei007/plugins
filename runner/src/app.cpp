@@ -1,10 +1,10 @@
 #include "app.h"
-
+#include "tagsystem/tagsocketlist.h"
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
 #include <QProcessEnvironment>
-
+#include <QString>
 
 
 App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
@@ -20,8 +20,12 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     parser.process(*this);
 
+    TagSocketList::sGetInstance().setApplicationName("runner");
+    TagSocketList::sGetInstance().loadBindingList();
+
     tagList_.setClientName("runner");
-    tagList_.connectToServer(parser.value(serverIp), 5000);
+    if(!TagList::sGetInstance().tryToAutoConnect())
+        TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
 
     loadPlugin(parser.value(module));
 
@@ -29,10 +33,10 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
 void App::loadPlugin(const QString &name)
 {
-    QProcessEnvironment env;
-    QString value = env.value("DEV_LIBS");
-
-    plugin_ = pluginLoader_.load(QString("%1%2").arg(value, name));
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QString value = env.value("DEV_LIBS") + "/";
+    qDebug() << "DEV_LIBS " << value;
+    plugin_ = pluginLoader_.load(value, name);
     if(!plugin_)
     {
         qDebug() << "error loading plugine " << QString("%1%2").arg(value, name);

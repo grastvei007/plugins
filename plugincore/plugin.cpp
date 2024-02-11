@@ -18,7 +18,7 @@ void Plugin::run(int deltaMs)
     if(mainLoopTimer_)
         mainLoopTimer_.release();
 
-    mainLoopTimer_ = std::make_unique<QTimer>();
+    mainLoopTimer_ = std::make_unique<QTimer>(this);
     mainLoopTimer_->setInterval(deltaMs);
     QObject::connect(mainLoopTimer_.get(), &QTimer::timeout, this, &Plugin::mainloop);
 

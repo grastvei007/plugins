@@ -5,11 +5,11 @@ project(JunePluginLoader)
 include_directories($ENV{JUNE_ROOT})
 link_directories($ENV{DEV_LIBS})
 
-set(CMAKE_AUTOMOC ON)
-
 if(NOT CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX d)
 endif()
+
+set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 
@@ -31,10 +31,7 @@ else()
     target_link_libraries(pluginLoad tagsystem)
 endif()
 
+
 add_custom_command(TARGET pluginLoad
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pluginLoad> $ENV{DEV_LIBS} )
-
-#add_custom_command(TARGET pluginLoad
-#                   POST_BUILD
-                   #COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pluginLoad> $ENV{DEV_LIBS} )

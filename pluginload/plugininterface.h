@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-
+#include <QObject>
 /**
  * To create a plugin inherit the pluginInterface,
  * and put the folowing in the new library
@@ -18,8 +18,9 @@
 
 class TagList;
 
-class PluginInterface
+class PluginInterface : public QObject
 {
+    Q_OBJECT
 public:
     virtual void setTagSystem(TagList *taglist) = 0;
     virtual bool initialize() = 0;
