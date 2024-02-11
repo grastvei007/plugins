@@ -14,7 +14,7 @@
 class Pin;
 
 
-class PiGpio :  public QObject, public PluginInterface
+class PiGpio : public PluginInterface
 {
     Q_OBJECT
 public:

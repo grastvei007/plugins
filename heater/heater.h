@@ -16,7 +16,7 @@
 #include "pump.h"
 #include "button.h"
 
-class Heater:  public QObject, public PluginInterface
+class Heater: public PluginInterface
 {
     Q_OBJECT
 public:

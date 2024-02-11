@@ -13,7 +13,7 @@ class Tag;
 class QTimer;
 class TagList;
 
-class Bms :  public QObject, public PluginInterface
+class Bms : public PluginInterface
 {
     Q_OBJECT
 public:

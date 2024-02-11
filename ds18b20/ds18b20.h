@@ -9,7 +9,7 @@
 #include <map>
 
 
-class Ds18b20 : public QObject, public PluginInterface
+class Ds18b20 : public PluginInterface
 {
     Q_OBJECT
 public:
