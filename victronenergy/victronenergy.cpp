@@ -41,7 +41,7 @@ bool VictronEnergy::initialize()
     battery2ChargedEnergyTagSocket_->hookupTag("BMV702", "H18");
     battery2DischargedEnergyTagSocket_->hookupTag("BMV702", "H17");
 
-    currentDay_ = QDate::currentDate().day();
+    connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
 
     return true;
 }
@@ -53,20 +53,8 @@ void VictronEnergy::mainloop()
     if(currentDay == currentDay_)
         return;
 
-    // force update on next value
-    battery1TotalChargedEnergy_ = -1;
-    battery1TotalDischargedEnergy_ = -1;
-    battery2TotalChargedEnergy_ = -1;
-    battery2TotalDischargedEnergy_ = -1;
-
-    // reset dayly values
-    battery1ChargedEnergy_ = 0;
-    battery1DischargedEnergy_ = 0;
-    battery2ChargedEnergy_ = 0;
-    battery2DischargedEnergy_ = 0;
-
     currentDay_ = currentDay;
-
+    resetValues();
 }
 
 void VictronEnergy::onBattery1ChargedEnergyChanged(double value)
@@ -118,6 +106,23 @@ void VictronEnergy::updateDaylyDischarged()
     victronTotalDiscargedTodayTag_->setValue(battery1DischargedEnergy_ + battery2DischargedEnergy_);
     battery1DischargedTodayTag_->setValue(battery1DischargedEnergy_);
     battery2DischargedTodayTag_->setValue(battery2DischargedEnergy_);
+}
+
+void VictronEnergy::resetValues()
+{
+    // reset dayly values
+    battery1ChargedEnergy_ = 0;
+    battery1DischargedEnergy_ = 0;
+    battery2ChargedEnergy_ = 0;
+    battery2DischargedEnergy_ = 0;
+
+    battery1TotalChargedEnergy_ = -1;
+    battery1TotalDischargedEnergy_ = -1;
+    battery2TotalChargedEnergy_ = -1;
+    battery2TotalDischargedEnergy_ = -1;
+
+    updateDaylyChaged();
+    updateDaylyDischarged();
 }
 
 }//end namespace

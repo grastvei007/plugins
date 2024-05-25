@@ -1,6 +1,7 @@
 #ifndef PIGPIO_H
 #define PIGPIO_H
 
+#include <plugins/plugincore/plugin.h>
 #include <plugins/pluginload/plugininterface.h>
 
 #include <tagsystem/tag.h>
@@ -13,26 +14,23 @@
 
 class Pin;
 
+namespace plugin{
 
-class PiGpio : public PluginInterface
+class PiGpio : public Plugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "june.plugin.pigpio")
 public:
-    PiGpio();
+    PiGpio(QObject *parent = nullptr) : Plugin(){}
 
-    void setTagSystem(TagList *taglist) override;
-    bool initialize() override;
-    void run(int deltaMs) override;
-    void stop() override;
+    bool initialize() final;
 
 private slots:
-    void mainloop();
+    void mainloop() final;
 
 private:
-    QTimer* mainLoopTimer_ = nullptr;
-    int deltaMs_ = 0;
-    TagList *tagList_ = nullptr;
     QVector<Pin*> pins_;
 };
 
+} // end maespace plugin
 #endif // PIGPIO_H

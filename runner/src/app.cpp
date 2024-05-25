@@ -20,15 +20,22 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     parser.process(*this);
 
+    pluginName_ = parser.value(module);
+
+    connect(&tagList_, &TagList::connected, this, &App::loadPlugins);
+
     TagSocketList::sGetInstance().setApplicationName("runner");
     TagSocketList::sGetInstance().loadBindingList();
 
     tagList_.setClientName("runner");
     if(!TagList::sGetInstance().tryToAutoConnect())
         TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
+}
 
-    loadPlugin(parser.value(module));
-
+void App::loadPlugins()
+{
+    if(!pluginName_.isEmpty())
+        loadPlugin(pluginName_);
 }
 
 void App::loadPlugin(const QString &name)

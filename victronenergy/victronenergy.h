@@ -33,6 +33,7 @@ private slots:
 private:
     void updateDaylyChaged();
     void updateDaylyDischarged();
+    void resetValues();
 
     std::shared_ptr<TagSocket> battery1ChargedEnergyTagSocket_;
     std::shared_ptr<TagSocket> battery1DischargedEnergyTagSocket_;
@@ -61,7 +62,7 @@ private:
     int battery2ChargedEnergy_ = 0;
     int battery2DischargedEnergy_ = 0;
 
-    int currentDay_;
+    int currentDay_ = -1;
 };
 
 }

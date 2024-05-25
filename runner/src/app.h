@@ -12,8 +12,12 @@ class App : public QCoreApplication
 public:
     App(int argc, char *argv[]);
 
+private slots:
+    void loadPlugins();
+
 private:
     void loadPlugin(const QString &name);
+    QString pluginName_;
 
     TagList &tagList_ = TagList::sGetInstance();
 
