@@ -21,6 +21,7 @@ endif()
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Network)
 
 add_library(Numato SHARED
     numato.h
@@ -28,6 +29,7 @@ add_library(Numato SHARED
 )
 
 target_link_libraries(Numato Qt6::Core)
+target_link_libraries(Numato Qt6::Network)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
