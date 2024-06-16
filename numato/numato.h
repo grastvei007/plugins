@@ -7,6 +7,7 @@
 #include <QObject>
 
 #include <memory>
+#include <bitset>
 
 namespace plugin {
 
@@ -43,6 +44,11 @@ public:
     void read(Gpio gpio);
     void set(Gpio gpio);
     void clear(Gpio gpio);
+    void setIomask();
+    void setIodir();
+    void readAll();
+    void notifyOn(bool enable);
+    void adcRead(Gpio gpio); ///< gpio 0-9 can be analog input
 
 private slots:
     void mainloop() final;
@@ -50,7 +56,11 @@ private slots:
     void onDataReady(const char*, int);
 
 private:
+    QString bitsetToHex(const std::bitset<16> &bitset);
     std::unique_ptr<Telnet> telnet_;
+    std::bitset<16> iomask_ = {1111111111111111}; // default all on
+    std::bitset<16> iodir_ = {0000000000000000}; // 0-Output, 1-Input
+    std::bitset<16> adcEnabled_ = {0000000000000000}; // lookup if gpio is analog input
 };
 
 }// end namespace plugin
