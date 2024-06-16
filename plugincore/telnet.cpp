@@ -64,7 +64,8 @@ void Telnet::onSocketError(SocketError err)
 
 void Telnet::onReadyRead()
 {
-    while(int dataRead = read(incomingBuffer_, incomingBufferSize_ ) != 0)
+    int dataRead = 0;
+    while( (dataRead = read(incomingBuffer_, incomingBufferSize_)) != 0)
     {
         switch (dataRead) {
         case -1:
@@ -85,7 +86,7 @@ void Telnet::reply(unsigned char action, unsigned char reply)
     {
     case TelnetCodes::DO:
     {
-        if( (reply != sentWX_[(unsigned char)action]) || (receivedDX_[(unsigned char)action != TelnetCodes::DO]) )
+        if( (reply != sentWX_[(unsigned char)action]) || (receivedDX_[(unsigned char)action] != TelnetCodes::DO) )
         {
             write(TelnetCodes::IAC);
             write(reply);
