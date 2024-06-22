@@ -26,6 +26,7 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 add_library(Numato SHARED
     numato.h
     numato.cpp
+    config.cpp
 )
 
 target_link_libraries(Numato Qt6::Core)
