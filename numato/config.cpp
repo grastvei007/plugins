@@ -9,6 +9,8 @@
 
 #include <optional>
 
+#include <tagsystem/taglist.h>
+
 namespace plugin{
 
 std::optional<Gpio> intToGpio(int gpio)
@@ -48,6 +50,7 @@ std::optional<Gpio> intToGpio(int gpio)
 
     return {};
 }
+
 
 void Numato::loadSettings()
 {
@@ -113,6 +116,28 @@ void Numato::initGpioPin(Gpio gpio, QString iodir, bool value)
 
     iodir_.set(gpioNumberToInt(gpio), dir);
     iomask_.set(gpioNumberToInt(gpio), true);
+
+    if(dir)
+    {
+        auto tag = tagList()->createTag(deviceName_, QString("gpio_%1").arg(gpioToString(gpio)), Tag::eBool, 0, "Gpio input");
+        gpioInput_[gpio] = tag;
+    }
+    else
+    {
+        auto tag = tagList()->createTag(deviceName_, gpioToString(gpio), Tag::eBool, 0, "Gpio output");
+        auto *tagSocket = TagSocket::createTagSocket(deviceName_, QString("gpio_%1").arg(gpioToString(gpio)), TagSocket::eBool);
+        tagSocket->hookupTag(tag);
+
+        // Update device when tagsocket change
+        connect(tagSocket, qOverload<bool>(&TagSocket::valueChanged), this, [this, gpio](bool value){
+            if(value)
+                set(gpio);
+            else
+                clear(gpio);
+        });
+
+        gpioOutput_[gpio] = std::unique_ptr<TagSocket>(std::move(tagSocket));
+    }
 }
 
 

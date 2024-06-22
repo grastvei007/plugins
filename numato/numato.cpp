@@ -13,8 +13,6 @@ bool Numato::initialize()
 
     telnet_->connectToHost(deviceAdress_, 23);
 
-    qDebug() << bitsetToHex(iomask_);
-
     return true;
 }
 

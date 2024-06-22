@@ -119,7 +119,8 @@ private:
     QString loginUserName_;
     QString loginPassword_;
 
-    std::map<Gpio, std::unique_ptr<TagSocket>> gpioOutput;
+    std::map<Gpio, std::unique_ptr<TagSocket>> gpioOutput_;
+    std::map<Gpio, Tag*> gpioInput_;
 };
 
 }// end namespace plugin
