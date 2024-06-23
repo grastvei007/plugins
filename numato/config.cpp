@@ -13,40 +13,40 @@
 
 namespace plugin{
 
-std::optional<Gpio> intToGpio(int gpio)
+std::optional<util::numato::Gpio> intToGpio(int gpio)
 {
     if(gpio == 0)
-        return Gpio::Gpio_0;
+        return util::numato::Gpio::Gpio_0;
     else if(gpio == 1)
-        return Gpio::Gpio_1;
+        return util::numato::Gpio::Gpio_1;
     else if(gpio == 2)
-        return Gpio::Gpio_2;
+        return util::numato::Gpio::Gpio_2;
     else if(gpio == 3)
-        return Gpio::Gpio_3;
+        return util::numato::Gpio::Gpio_3;
     else if(gpio == 4)
-        return Gpio::Gpio_4;
+        return util::numato::Gpio::Gpio_4;
     else if(gpio == 5)
-        return Gpio::Gpio_5;
+        return util::numato::Gpio::Gpio_5;
     else if(gpio == 6)
-        return Gpio::Gpio_6;
+        return util::numato::Gpio::Gpio_6;
     else if(gpio == 7)
-        return Gpio::Gpio_7;
+        return util::numato::Gpio::Gpio_7;
     else if(gpio == 8)
-        return Gpio::Gpio_8;
+        return util::numato::Gpio::Gpio_8;
     else if(gpio == 9)
-        return Gpio::Gpio_9;
+        return util::numato::Gpio::Gpio_9;
     else if(gpio == 10)
-        return Gpio::Gpio_10;
+        return util::numato::Gpio::Gpio_10;
     else if(gpio == 11)
-        return Gpio::Gpio_11;
+        return util::numato::Gpio::Gpio_11;
     else if(gpio == 12)
-        return Gpio::Gpio_12;
+        return util::numato::Gpio::Gpio_12;
     else if(gpio == 13)
-        return Gpio::Gpio_13;
+        return util::numato::Gpio::Gpio_13;
     else if(gpio == 14)
-        return Gpio::Gpio_14;
+        return util::numato::Gpio::Gpio_14;
     else if(gpio == 15)
-        return Gpio::Gpio_15;
+        return util::numato::Gpio::Gpio_15;
 
     return {};
 }
@@ -109,7 +109,7 @@ void Numato::loadSettings()
     }
 }
 
-void Numato::initGpioPin(Gpio gpio, QString iodir, bool value)
+void Numato::initGpioPin(util::numato::Gpio gpio, QString iodir, bool value)
 {
     Q_UNUSED(value); // skipped for now, maybe used in the future
     bool dir = iodir == "out" ? false : true;

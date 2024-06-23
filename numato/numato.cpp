@@ -16,7 +16,7 @@ bool Numato::initialize()
     return true;
 }
 
-void Numato::read(Gpio gpio)
+void Numato::read(util::numato::Gpio gpio)
 {
     QString str("gpio read ");
     str += gpioToString(gpio);
@@ -24,7 +24,7 @@ void Numato::read(Gpio gpio)
     telnet_->sendData("\n");
 }
 
-void Numato::set(Gpio gpio)
+void Numato::set(util::numato::Gpio gpio)
 {
     QString str("gpio set ");
     str += gpioToString(gpio);
@@ -32,7 +32,7 @@ void Numato::set(Gpio gpio)
     telnet_->sendData("\n");
 }
 
-void Numato::clear(Gpio gpio)
+void Numato::clear(util::numato::Gpio gpio)
 {
     QString str("gpio clear ");
     str += gpioToString(gpio);
@@ -73,11 +73,11 @@ void Numato::notifyOn(bool enable)
     telnet_->sendData("\n");
 }
 
-void Numato::adcRead(Gpio gpio)
+void Numato::adcRead(util::numato::Gpio gpio)
 {
     // Filter out invalid gpio
-    if(gpio == Gpio::Gpio_10 || gpio == Gpio::Gpio_11 || gpio == Gpio::Gpio_12
-        || gpio == Gpio::Gpio_13 || gpio == Gpio::Gpio_14 || gpio == Gpio::Gpio_15)
+    if(gpio == util::numato::Gpio::Gpio_10 || gpio == util::numato::Gpio::Gpio_11 || gpio == util::numato::Gpio::Gpio_12
+        || gpio == util::numato::Gpio::Gpio_13 || gpio == util::numato::Gpio::Gpio_14 || gpio == util::numato::Gpio::Gpio_15)
         return;
 
     QString str("adc read ");
@@ -113,6 +113,9 @@ void Numato::onDataReady(const char* buffer, int size)
         // set pin config.
         setIomask();
         setIodir();
+        // if there are set some input turn on notification on changes.
+        if(iodir_.any())
+            notifyOn(true);
         return;
     }
 
@@ -139,8 +142,31 @@ void Numato::onDataReady(const char* buffer, int size)
     }
     else if(data.size() == 48) // auto response for notify
     {
-
+        handleNotifyReply(data);
     }
+}
+
+void Numato::handleNotifyReply(const QByteArray &array)
+{
+    auto current = util::numato::hexToBitset(array.sliced(0, 4));
+    auto previous = util::numato::hexToBitset(array.sliced(4, 4));
+    auto iodir = util::numato::hexToBitset(array.sliced(8, 4));
+
+    for(int i = 0; i<iodir.size(); ++i)
+    {
+        if(iodir.test(i) == 0) // output
+            continue;
+
+        // gpio input changed
+        if(current.test(i) != previous.test(i))
+        {
+            bool value = current.test(1) == 1 ? true : false;
+            auto gpio = util::numato::intToGpio(i);
+            if(gpioInput_.contains(gpio))
+                gpioInput_[gpio]->setValue(value);
+        }
+    }
+
 }
 
 QString Numato::bitsetToHex(const std::bitset<16> &bitset)
@@ -198,40 +224,40 @@ QString Numato::bitsetToHex(const std::bitset<16> &bitset)
     return hexString;
 }
 
-int Numato::gpioNumberToInt(Gpio gpio)
+int Numato::gpioNumberToInt(util::numato::Gpio gpio)
 {
     switch (gpio) {
-    case plugin::Gpio::Gpio_0:
+    case util::numato::Gpio::Gpio_0:
         return 0;
-    case plugin::Gpio::Gpio_1:
+    case util::numato::Gpio::Gpio_1:
         return 1;
-    case plugin::Gpio::Gpio_2:
+    case util::numato::Gpio::Gpio_2:
         return 2;
-    case plugin::Gpio::Gpio_3:
+    case util::numato::Gpio::Gpio_3:
         return 3;
-    case plugin::Gpio::Gpio_4:
+    case util::numato::Gpio::Gpio_4:
         return 4;
-    case plugin::Gpio::Gpio_5:
+    case util::numato::Gpio::Gpio_5:
         return 5;
-    case plugin::Gpio::Gpio_6:
+    case util::numato::Gpio::Gpio_6:
         return 6;
-    case plugin::Gpio::Gpio_7:
+    case util::numato::Gpio::Gpio_7:
         return 7;
-    case plugin::Gpio::Gpio_8:
+    case util::numato::Gpio::Gpio_8:
         return 8;
-    case plugin::Gpio::Gpio_9:
+    case util::numato::Gpio::Gpio_9:
         return 9;
-    case plugin::Gpio::Gpio_10:
+    case util::numato::Gpio::Gpio_10:
         return 10;
-    case plugin::Gpio::Gpio_11:
+    case util::numato::Gpio::Gpio_11:
         return 11;
-    case plugin::Gpio::Gpio_12:
+    case util::numato::Gpio::Gpio_12:
         return 12;
-    case plugin::Gpio::Gpio_13:
+    case util::numato::Gpio::Gpio_13:
         return 13;
-    case plugin::Gpio::Gpio_14:
+    case util::numato::Gpio::Gpio_14:
         return 14;
-    case plugin::Gpio::Gpio_15:
+    case util::numato::Gpio::Gpio_15:
         return 15;
     }
     return 0;

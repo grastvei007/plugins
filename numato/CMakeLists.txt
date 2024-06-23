@@ -27,6 +27,8 @@ add_library(Numato SHARED
     numato.h
     numato.cpp
     config.cpp
+    util.h
+    util.cpp
 )
 
 target_link_libraries(Numato Qt6::Core)
