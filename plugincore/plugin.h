@@ -15,11 +15,11 @@
  * - initialize to setup the plugin tags
  * - mainloop with the plugin logic
  */
-class Plugin : public PluginInterface //, public QObject
+class Plugin : public PluginInterface
 {
     Q_OBJECT
 public:
-    Plugin() = default; //QObject *parent = nullptr) : QObject(parent){}
+    Plugin() = default;
 
     void setTagSystem(TagList *taglist) override;
 
