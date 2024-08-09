@@ -53,7 +53,8 @@ enum class Hex
 Gpio intToGpio(int gpio);
 QString hexToBinary(Hex hex); ///< [0-9] [A-E]
 std::bitset<16> hexToBitset(const QByteArray &data);
-
+int gpioNumberToInt(util::numato::Gpio gpio);
+QString bitsetToHex(const std::bitset<16> &bitset);
 
 } // end namespace
 

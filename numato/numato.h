@@ -43,8 +43,6 @@ private slots:
     void onDataReady(const char*, int);
 
 private:
-    QString bitsetToHex(const std::bitset<16> &bitset);
-    int gpioNumberToInt(util::numato::Gpio gpio);
     void loadSettings();
     void handleNotifyReply(const QByteArray &array);
 
