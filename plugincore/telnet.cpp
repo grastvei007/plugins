@@ -1,6 +1,7 @@
 #include "telnet.h"
 
 #include <QDebug>
+#include <QTimer>
 
 // https://github.com/silderan/QTelnet/blob/master/QTelnet.h
 // https://github.com/silderan/QTelnet/blob/master/QTelnet.cpp
@@ -15,6 +16,9 @@ Telnet::Telnet(QObject *parent) : QTcpSocket(parent)
 
 void Telnet::connectToHost(const QString &host, quint16 port)
 {
+    host_ = host;
+    port_ = port;
+
     if(isConnected())
         return;
 
@@ -60,11 +64,64 @@ void Telnet::onSocketError(SocketError err)
 {
     qDebug() << __FUNCTION__ << err;
     disconnectFromHost();
+
+    switch (err) {
+    case QAbstractSocket::ConnectionRefusedError:
+        break;
+    case QAbstractSocket::RemoteHostClosedError:
+    case QAbstractSocket::HostNotFoundError:
+        // reconnect
+        QTimer::singleShot(60*1000, this, [this](){connectToHost(host_, port_);});
+        break;
+    case QAbstractSocket::SocketAccessError:
+        break;
+    case QAbstractSocket::SocketResourceError:
+        break;
+    case QAbstractSocket::SocketTimeoutError:
+        break;
+    case QAbstractSocket::DatagramTooLargeError:
+        break;
+    case QAbstractSocket::NetworkError:
+        break;
+    case QAbstractSocket::AddressInUseError:
+        break;
+    case QAbstractSocket::SocketAddressNotAvailableError:
+        break;
+    case QAbstractSocket::UnsupportedSocketOperationError:
+        break;
+    case QAbstractSocket::UnfinishedSocketOperationError:
+        break;
+    case QAbstractSocket::ProxyAuthenticationRequiredError:
+        break;
+    case QAbstractSocket::SslHandshakeFailedError:
+        break;
+    case QAbstractSocket::ProxyConnectionRefusedError:
+        break;
+    case QAbstractSocket::ProxyConnectionClosedError:
+        break;
+    case QAbstractSocket::ProxyConnectionTimeoutError:
+        break;
+    case QAbstractSocket::ProxyNotFoundError:
+        break;
+    case QAbstractSocket::ProxyProtocolError:
+        break;
+    case QAbstractSocket::OperationError:
+        break;
+    case QAbstractSocket::SslInternalError:
+        break;
+    case QAbstractSocket::SslInvalidUserDataError:
+        break;
+    case QAbstractSocket::TemporaryError:
+        break;
+    case QAbstractSocket::UnknownSocketError:
+        break;
+    }
 }
 
 void Telnet::onReadyRead()
 {
-    while(int dataRead = read(incomingBuffer_, incomingBufferSize_ ) != 0)
+    int dataRead = 0;
+    while( (dataRead = read(incomingBuffer_, incomingBufferSize_)) != 0)
     {
         switch (dataRead) {
         case -1:
@@ -85,7 +142,7 @@ void Telnet::reply(unsigned char action, unsigned char reply)
     {
     case TelnetCodes::DO:
     {
-        if( (reply != sentWX_[(unsigned char)action]) || (receivedDX_[(unsigned char)action != TelnetCodes::DO]) )
+        if( (reply != sentWX_[(unsigned char)action]) || (receivedDX_[(unsigned char)action] != TelnetCodes::DO) )
         {
             write(TelnetCodes::IAC);
             write(reply);

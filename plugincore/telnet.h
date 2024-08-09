@@ -114,6 +114,9 @@ private:
     QByteArray bufferSB_;
     int actualSB_;
 
+    QString host_;
+    quint16 port_;
+
 };
 
 #endif // TELNET_H

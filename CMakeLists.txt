@@ -13,5 +13,4 @@ add_subdirectory(heater)
 add_subdirectory(victronenergy)
 add_subdirectory(ds18b20)
 add_subdirectory(pigpio)
-
-
+add_subdirectory(numato)

@@ -1,0 +1,22 @@
+{
+  "devices": [
+      {
+        "ip": "192.168.1.44",
+        "name": "numato",
+        "user": "admin",
+        "password": "admin",
+        "gpio": [
+            {
+                "gpio": "0",
+                "iodir": "out",
+                "value": "off"
+            },
+            {
+                "gpio": "1",
+                "iodir": "out",
+                "value": "off"
+            }
+        ]
+      }
+    ]
+}
