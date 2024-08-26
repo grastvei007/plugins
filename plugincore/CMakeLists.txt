@@ -30,6 +30,8 @@ add_library(pluginCore SHARED
     motor.h motor.cpp
     wiringpiwrapper.h
     wiringpiwrapper.cpp
+    path.h
+    path.cpp
 )
 
 target_link_libraries(pluginCore Qt6::Core)

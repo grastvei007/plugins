@@ -2,12 +2,12 @@
 
 
 
-Pin::Pin(TagSocket *tagSocket, int pinNumber, int mode) :
+Pin::Pin(TagSocket *tagSocket, int pinNumber, WiringPi::PinDir dir) :
     tagSocket_(tagSocket),
     pinNumber_(pinNumber),
-    mode_(mode)
+    direction_(dir)
 {
-    if(mode_ == WiringPi::eOutput)
+    /*if(mode_ == WiringPi::eOutput)
     {
         WiringPi::pinMode(pinNumber_, WiringPi::eOutput);
         connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
@@ -19,8 +19,9 @@ Pin::Pin(TagSocket *tagSocket, int pinNumber, int mode) :
         WiringPi::softPwmCreate(pinNumber_, 0, 100);
         connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onPwmValueChanged);
         WiringPi::softPwmWrite(pinNumber_, pwmValue_);
-    }
+    }*/
 }
+
 
 void Pin::onValueChanged(int value)
 {
