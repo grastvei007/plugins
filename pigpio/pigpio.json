@@ -1,0 +1,159 @@
+{
+  "gpio": {
+    "pins": [
+      {
+        "id": "1",
+        "enabled": true,
+        "dir": "out",
+        "wiringpi": 0,
+        "subsystem": "rpi",
+        "tag": "gpio_0",
+        "description": "Gpio 0 (11)"
+      },
+      {
+        "id": "2",
+        "enabled": true,
+        "dir": "out",
+        "wiringpi": 1,
+        "subsystem": "rpi",
+        "tag": "gpio_1",
+        "description": "Gpio 1 (12)"
+      },
+      {
+        "id": "3",
+        "enabled": true,
+        "dir": "out",
+        "wiringpi": 2,
+        "subsystem": "rpi",
+        "tag": "gpio_2",
+        "description": "Gpio 2 (13)"
+      },
+      {
+        "id": "4",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 3,
+        "subsystem": "rpi",
+        "tag": "gpio_3",
+        "description": "Gpio 3 (15)"
+      },
+      {
+        "id": "5",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 4,
+        "subsystem": "rpi",
+        "tag": "gpio_4",
+        "description": "Gpio 4 (16)"
+      },
+      {
+        "id": "6",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 5,
+        "subsystem": "rpi",
+        "tag": "gpio_5",
+        "description": "Gpio 5 (18)"
+      },
+      {
+        "id": "7",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 6,
+        "subsystem": "rpi",
+        "tag": "gpio_6",
+        "description": "Gpio 6 (22)"
+      },
+      {
+        "id": "8",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 7,
+        "subsystem": "rpi",
+        "tag": "gpio_7",
+        "description": "Gpio 7 (7)"
+      },
+      {
+        "id": "9",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 21,
+        "subsystem": "rpi",
+        "tag": "gpio_21",
+        "description": "Gpio 21 (29)"
+      },
+      {
+        "id": "10",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 22,
+        "subsystem": "rpi",
+        "tag": "gpio_22",
+        "description": "Gpio 22 (31)"
+      },
+      {
+        "id": "11",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 23,
+        "subsystem": "rpi",
+        "tag": "gpio_23",
+        "description": "Gpio 23 (33)"
+      },
+      {
+        "id": "12",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 24,
+        "subsystem": "rpi",
+        "tag": "gpio_24",
+        "description": "Gpio 24 (35)"
+      },
+      {
+        "id": "13",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 25,
+        "subsystem": "rpi",
+        "tag": "gpio_25",
+        "description": "Gpio 25 (37)"
+      },
+      {
+        "id": "14",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 26,
+        "subsystem": "rpi",
+        "tag": "gpio_26",
+        "description": "Gpio 26 (32)"
+      },
+      {
+        "id": "15",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 27,
+        "subsystem": "rpi",
+        "tag": "gpio_27",
+        "description": "Gpio 27 (36)"
+      },
+      {
+        "id": "16",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 28,
+        "subsystem": "rpi",
+        "tag": "gpio_28",
+        "description": "Gpio 28 (38)"
+      },
+      {
+        "id": "17",
+        "enabled": false,
+        "dir": "out",
+        "wiringpi": 29,
+        "subsystem": "rpi",
+        "tag": "gpio_29",
+        "description": "Gpio 29 (40)"
+      }
+    ]
+  }
+}

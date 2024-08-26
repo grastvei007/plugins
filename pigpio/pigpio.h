@@ -3,8 +3,10 @@
 
 #include <plugins/plugincore/plugin.h>
 
+#include <QObject>
+#include <QTimer>
+#include <vector>
 
-#include <QVector>
 
 class Pin;
 
@@ -24,7 +26,8 @@ private slots:
     void mainloop() final;
 
 private:
-    QVector<Pin*> pins_;
+    void readConfigFile(const QString &configFile);
+    std::vector<Pin*> pins_;
 };
 
 } // end maespace plugin

@@ -28,14 +28,15 @@ add_library(pigpio SHARED
     pin.h
     pin.cpp
     wiringpiwrapper.h
-    wiringpiwrapper.cpp)
+    wiringpiwrapper.cpp
+    pigpio.json)
 
 target_link_libraries(pigpio Qt6::Core)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
     target_link_libraries(pigpio tagsystemd)
-    target_link_libraries(pigpio pluginLoadd)
+    target_link_libraries(pigpio pluginCored)
 
     if(BCMHOST)
         target_link_libraries(pigpio wiringPi)
@@ -43,7 +44,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 else()
     message("Release mode")
     target_link_libraries(pigpio tagsystem)
-    target_link_libraries(pigpio pluginLoad)
+    target_link_libraries(pigpio pluginCore)
 
     if(BCMHOST)
         target_link_libraries(pigpio wiringPi)

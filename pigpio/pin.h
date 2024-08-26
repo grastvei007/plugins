@@ -11,7 +11,7 @@ class Pin : public QObject
 {
     Q_OBJECT
 public:
-    Pin(TagSocket *tagSocket, int pinNumber, int mode);
+    Pin(TagSocket *tagSocket, int pinNumber, WiringPi::PinDir dir);
 
 private slots:
     void onValueChanged(int value);
@@ -20,7 +20,7 @@ private slots:
 private:
     TagSocket *tagSocket_;
     int pinNumber_;
-    int mode_;
+    WiringPi::PinDir direction_ = WiringPi::PinDir::eOutput;
     WiringPi::Value value_ = WiringPi::eLow;
     int pwmValue_ = 0;
 };
