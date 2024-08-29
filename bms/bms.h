@@ -1,31 +1,30 @@
 #ifndef BMS_H
 #define BMS_H
 
-#include <plugins/pluginload/plugininterface.h>
+#include <plugins/plugincore/plugin.h>
 
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 
-#include <memory>
 
 class Tag;
 class QTimer;
 class TagList;
 
-class Bms : public PluginInterface
+namespace plugin {
+
+class Bms : public Plugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "june.plugin.bms")
 public:
-    Bms();
-    void setTagSystem(TagList *taglist) override;
+    Bms() = default;
 
     bool initialize() override;
-    void run(int deltaMs) override;
-    void stop() override;
 
-protected slots:
-    void mainloop();
+private slots:
+    void mainloop() final;
     void onReply(QNetworkReply *reply);
 
 private:
@@ -68,5 +67,5 @@ private:
     <relay2>NORMAL</relay2> */
 };
 
-
+}// end namespace
 #endif // BMS_H

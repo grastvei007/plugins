@@ -6,16 +6,8 @@
 #include <tagsystem/tag.h>
 #include <tagsystem/taglist.h>
 
+namespace plugin {
 
-Bms::Bms()
-{
-
-}
-
-void Bms::setTagSystem(TagList *taglist)
-{
-    tagList_ = taglist;
-}
 
 bool Bms::initialize()
 {
@@ -28,25 +20,7 @@ bool Bms::initialize()
         tagList_->setClientName("bms");
     }
     setupTags();
-    mainloop();
     return true;
-}
-
-void Bms::run(int deltaMs)
-{
-    if(!mainLoopTimer_)
-        mainLoopTimer_->deleteLater();
-
-    mainLoopTimer_ = new QTimer();
-    mainLoopTimer_->setInterval(deltaMs);
-    QObject::connect(mainLoopTimer_, &QTimer::timeout, this, &Bms::mainloop);
-
-    mainLoopTimer_->start();
-}
-
-void Bms::stop()
-{
-    mainLoopTimer_->stop();
 }
 
 void Bms::mainloop()
@@ -55,6 +29,7 @@ void Bms::mainloop()
     manager_.get(QNetworkRequest(QUrl("http://192.168.0.100/bcc.xml")));
   //  qDebug() << __FUNCTION__;
 }
+
 
 void Bms::onReply(QNetworkReply *reply)
 {
@@ -382,17 +357,9 @@ void Bms::onReply(QNetworkReply *reply)
 
 void Bms::setupTags()
 {
-
-
-
-
     cellMinSet_ = tagList_->createTag("bms", "configUMinCell", Tag::eDouble);
     cellMaxSet_ = tagList_->createTag("bms", "configUMaxCell", Tag::eDouble);
-
-
 }
 
-extern "C" PluginInterface* createPlugin()
-{
-    return new Bms();
-}
+
+} // end namespace
