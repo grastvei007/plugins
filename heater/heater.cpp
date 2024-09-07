@@ -24,7 +24,7 @@ bool Heater::initialize()
 {
     configStartingTimeTag_ = tagList_->createTag("config",
                                                  "Heater_startingTime",
-                                                 Tag::eInt,
+                                                 Tag::eInt, 0,
                                                  "Maximum time in starting state");
 
     powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool, false);
