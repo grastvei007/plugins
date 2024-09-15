@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <vector>
 
+#include <memory>
 
 class Pin;
 
@@ -27,7 +28,7 @@ private slots:
 
 private:
     void readConfigFile(const QString &configFile);
-    std::vector<Pin*> pins_;
+    std::vector<std::unique_ptr<Pin>> pins_;
 };
 
 } // end maespace plugin

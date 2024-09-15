@@ -61,10 +61,15 @@ void PiGpio::readConfigFile(const QString &configFile)
                                                         : WiringPi::PinDir::eInput;
 
         auto *tag = tagList()->createTag(subsystem, name, Tag::eInt, 0, description);
-        auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
-        tagsocket->hookupTag(tag);
-
-        pins_.emplace_back(new Pin(tagsocket, wiringPiPin, dir));
+        if(dir == WiringPi::PinDir::eOutput)
+        {
+            // only create tagsocket for output pins.
+            auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
+            tagsocket->hookupTag(tag);
+            pins_.emplace_back(new Pin(tagsocket, tag, wiringPiPin, dir));
+        }
+        else
+            pins_.emplace_back(new Pin(nullptr, tag, wiringPiPin, dir));
     }
 
 }
