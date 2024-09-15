@@ -57,10 +57,11 @@ void PiGpio::readConfigFile(const QString &configFile)
         auto name = pin.value("tag").toString();
         auto description = pin.value("description").toString();
         int wiringPiPin = pin.value("wiringpi").toInt();
+        auto dirStr = pin.value("dir").toString();
         auto dir = pin.value("dir").toString() == "out" ? WiringPi::PinDir::eOutput
                                                         : WiringPi::PinDir::eInput;
 
-        auto *tag = tagList()->createTag(subsystem, name, Tag::eInt, 0, description);
+        auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , Tag::eInt, 0, description);
         if(dir == WiringPi::PinDir::eOutput)
         {
             // only create tagsocket for output pins.
