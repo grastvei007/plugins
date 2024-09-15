@@ -1,5 +1,4 @@
 #include "pigpio.h"
-#include "wiringpiwrapper.h"
 #include "pin.h"
 
 #include <QDir>
@@ -16,6 +15,7 @@ namespace plugin{
 
 bool PiGpio::initialize()
 {
+    WiringPi::setup();
     readConfigFile("pigpio.json");
     return true;
 }
@@ -58,21 +58,34 @@ void PiGpio::readConfigFile(const QString &configFile)
         auto description = pin.value("description").toString();
         int wiringPiPin = pin.value("wiringpi").toInt();
         auto dirStr = pin.value("dir").toString();
-        auto dir = pin.value("dir").toString() == "out" ? WiringPi::PinDir::eOutput
-                                                        : WiringPi::PinDir::eInput;
+        auto dir =  dirToEnum(dirStr);
+
+        if(!dir.has_value())
+            continue;
 
         auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , Tag::eInt, 0, description);
-        if(dir == WiringPi::PinDir::eOutput)
+        if(dir.value() == WiringPi::PinDir::eOutput || dir.value() == WiringPi::PinDir::ePwm)
         {
             // only create tagsocket for output pins.
             auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
             tagsocket->hookupTag(tag);
-            pins_.emplace_back(new Pin(tagsocket, tag, wiringPiPin, dir));
+            pins_.emplace_back(new Pin(tagsocket, tag, wiringPiPin, dir.value()));
         }
         else
-            pins_.emplace_back(new Pin(nullptr, tag, wiringPiPin, dir));
+            pins_.emplace_back(new Pin(nullptr, tag, wiringPiPin, dir.value()));
     }
 
+}
+
+std::optional<WiringPi::PinDir> PiGpio::dirToEnum(const QString &str)
+{
+    if(str.contains("out"))
+        return WiringPi::PinDir::eOutput;
+    else if(str.contains("in"))
+        return WiringPi::PinDir::eInput;
+    else if(str.contains("pwm"))
+        return WiringPi::PinDir::ePwm;
+    return std::nullopt;
 }
 
 }// end namespace

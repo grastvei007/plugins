@@ -26,17 +26,31 @@ Pin::Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir) :
         setupCallback();
         functions[pinNumber_] = std::bind(&Pin::digitalRead, this, std::placeholders::_1);
     }
+    else if(direction_ == WiringPi::ePwm)
+    {
+        WiringPi::softPwmCreate(pinNumber_, 0, 100);
+        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
+        WiringPi::softPwmWrite(pinNumber_, 0);
+    }
 }
 
 
 void Pin::onValueChanged(int value)
 {
+    if(direction_ == WiringPi::eOutput)
+        value = std::clamp(0, 1, value);
+    else //pwm
+        value = std::clamp(0, 100, value);
+
     auto val = static_cast<WiringPi::Value>(value);
     if( val == value_)
         return;
 
     value_ = val;
-    WiringPi::digitalWrite(pinNumber_, value_);
+    if(direction_ == WiringPi::eOutput)
+        WiringPi::digitalWrite(pinNumber_, value_);
+    else // pwm
+        WiringPi::softPwmWrite(pinNumber_, value_);
 }
 
 void Pin::digitalRead(int value)

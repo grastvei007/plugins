@@ -2,12 +2,13 @@
 #define PIGPIO_H
 
 #include <plugins/plugincore/plugin.h>
-
+#include "wiringpiwrapper.h"
 #include <QObject>
 #include <QTimer>
 #include <vector>
 
 #include <memory>
+#include <optional>
 
 class Pin;
 
@@ -28,6 +29,7 @@ private slots:
 
 private:
     void readConfigFile(const QString &configFile);
+    std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
     std::vector<std::unique_ptr<Pin>> pins_;
 };
 
