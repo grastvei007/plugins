@@ -5,15 +5,8 @@
 #include <string>
 #include <QObject>
 /**
- * To create a plugin inherit the pluginInterface,
- * and put the folowing in the new library
- *
- * extern "C" PluginInterface* createPlugin()
- * {
- *   return new MyNewPlugin(); // return pointer to the new plugin
- * }
- *
- *
+ * Public plugin interface known to applications that
+ * uses plugins.
  */
 
 class TagList;

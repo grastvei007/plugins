@@ -5,7 +5,7 @@
 #include <QString>
 #include <tagsystem/taglist.h>
 
-#include <plugins/pluginload/pluginloader.h>
+class PluginInterface;
 
 class App : public QCoreApplication
 {
@@ -21,7 +21,6 @@ private:
 
     TagList &tagList_ = TagList::sGetInstance();
 
-    PluginLoader pluginLoader_;
     PluginInterface *plugin_ = nullptr;
 };
 
