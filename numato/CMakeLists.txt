@@ -54,8 +54,10 @@ else()
     endif()
 endif()
 
-add_custom_command(TARGET Numato
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Numato> $ENV{DEV_LIBS} )
+set_target_properties(Numato
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
 
 

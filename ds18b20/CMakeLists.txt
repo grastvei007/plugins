@@ -46,8 +46,10 @@ else()
     endif()
 endif()
 
-add_custom_command(TARGET ds18b20
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ds18b20> $ENV{DEV_LIBS} )
+set_target_properties(ds18b20
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
 
 

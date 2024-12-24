@@ -33,8 +33,10 @@ else()
     target_link_libraries(runner pluginLoad)
 endif()
 
-add_custom_command(TARGET runner
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:runner> $ENV{DEV_BIN} )
+set_target_properties(runner
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
 
 

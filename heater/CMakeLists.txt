@@ -56,8 +56,10 @@ else()
     endif()
 endif()
 
-add_custom_command(TARGET heater
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:heater> $ENV{DEV_LIBS} )
+set_target_properties(heater
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
 
 

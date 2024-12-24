@@ -50,8 +50,10 @@ else()
     endif()
 endif()
 
-add_custom_command(TARGET pigpio
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pigpio> $ENV{DEV_LIBS} )
+set_target_properties(pigpio
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
 
 

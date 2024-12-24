@@ -32,6 +32,8 @@ else()
 endif()
 
 
-add_custom_command(TARGET pluginLoad
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pluginLoad> $ENV{DEV_LIBS} )
+set_target_properties(pluginLoad
+    PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/lib
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/$<CONFIG>/bin
+)
