@@ -1,24 +1,23 @@
 #ifndef DS18B20_H
 #define DS18B20_H
 
-#include <plugins/pluginload/plugininterface.h>
+#include <plugins/plugincore/plugin.h>
 
 #include <tagsystem/tag.h>
 #include <tagsystem/taglist.h>
 
 #include <map>
 
+namespace plugin{
 
-class Ds18b20 : public PluginInterface
+class Ds18b20 : public Plugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "june.plugin.ds18b20")
 public:
     Ds18b20();
 
-    void setTagSystem(TagList *taglist) override;
-    bool initialize() override;
-    void run(int deltaMs) override;
-    void stop() override;
+    bool initialize() final;
 
 private slots:
     void mainloop();
@@ -33,6 +32,6 @@ private:
     std::map<QString, QString> folderToName_;
 };
 
-
+}//end namespace
 
 #endif

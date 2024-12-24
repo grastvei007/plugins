@@ -6,20 +6,13 @@
 #include <QStringList>
 #include <QDebug>
 
-extern "C" PluginInterface* createPlugin()
-{
-  return new Ds18b20();
-}
+namespace plugin {
+
 
 Ds18b20::Ds18b20()
 {
     folderToName_.emplace("28-01203c3bc31a", "indoor");
 	folderToName_.emplace("28-01203c27b0a0", "outside");
-}
-
-void Ds18b20::setTagSystem(TagList *taglist)
-{
-    tagList_ = taglist;
 }
 
 bool Ds18b20::initialize()
@@ -50,23 +43,6 @@ bool Ds18b20::initialize()
         readSensor_ = 0;
 
     return true;
-}
-
-void Ds18b20::run(int deltaMs)
-{
-    if(mainLoopTimer_)
-        mainLoopTimer_->deleteLater();
-
-    mainLoopTimer_ = new QTimer();
-    mainLoopTimer_->setInterval(deltaMs);
-    QObject::connect(mainLoopTimer_, &QTimer::timeout, this, &Ds18b20::mainloop);
-
-    mainLoopTimer_->start();
-}
-
-void Ds18b20::stop()
-{
-
 }
 
 void Ds18b20::mainloop()
@@ -111,3 +87,4 @@ double Ds18b20::readSensorValue(const QString &filePath)
     file.close();
     return sensorValue;
 }
+} // end namespace

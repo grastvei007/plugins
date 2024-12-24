@@ -1,7 +1,7 @@
 #ifndef HEATER_H
 #define HEATER_H
 
-#include <plugins/pluginload/plugininterface.h>
+#include <plugins/plugincore/plugin.h>
 
 #include <tagsystem/tag.h>
 #include <tagsystem/tagsocket.h>
@@ -16,9 +16,12 @@
 #include "pump.h"
 #include "button.h"
 
-class Heater: public PluginInterface
+namespace plugin{
+
+class Heater: public Plugin
 {
     Q_OBJECT
+    Q_PLUGIN_METADATA(IID "june.plugin.heater")
 public:
     enum States
     {
@@ -28,12 +31,9 @@ public:
         eRunning,
         eStoping
     };
-    Heater();
+    Heater() = default;
 
-    void setTagSystem(TagList *taglist) override;
-    bool initialize() override;
-    void run(int deltaMs) override;
-    void stop() override;
+    bool initialize() final;
 
 private slots:
     void onPowerOnValueChanged(bool value);
@@ -109,5 +109,5 @@ private:
 
     int configStartingTimeSeconds_ = 120; // default 2 min.
 };
-
+} // end namespace
 #endif // HEATER_H

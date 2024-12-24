@@ -3,22 +3,8 @@
 
 #include <QDebug>
 
-extern "C" PluginInterface* createPlugin()
-{
-  WiringPi::setup();
-  return new Heater();
-}
+namespace plugin {
 
-
-Heater::Heater()
-{
-
-}
-
-void Heater::setTagSystem(TagList *taglist)
-{
-    tagList_ = taglist;
-}
 
 bool Heater::initialize()
 {
@@ -86,24 +72,6 @@ bool Heater::initialize()
     connect(&buttonPower_, &Button::buttonToggled, this, &Heater::onButtonPower);
 
     return true;
-}
-
-void Heater::run(int deltaMs)
-{
-    if(mainLoopTimer_)
-        mainLoopTimer_->deleteLater();
-    deltaMs_ = deltaMs;
-
-    mainLoopTimer_ = new QTimer();
-    mainLoopTimer_->setInterval(deltaMs);
-    QObject::connect(mainLoopTimer_, &QTimer::timeout, this, &Heater::mainloop);
-
-    mainLoopTimer_->start();
-}
-
-void Heater::stop()
-{
-
 }
 
 void Heater::onPowerOnValueChanged(bool value)
@@ -337,3 +305,4 @@ void Heater::stateStopping()
     }
 
 }
+} // end namespace
