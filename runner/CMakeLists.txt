@@ -8,7 +8,9 @@ if(NOT CMAKE_DEBUG_POSTFIX)
   set(CMAKE_DEBUG_POSTFIX d)
 endif()
 
-set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR "YES")
+set(CMAKE_AUTOMOC "YES")
+set(CMAKE_AUTOUIC "YES")
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
@@ -20,17 +22,17 @@ add_executable(runner
 )
 
 
-target_link_libraries(runner Qt6::Core)
-target_link_libraries(runner Qt6::Network)
+target_link_libraries(runner PRIVATE Qt6::Core
+    Qt6::Network)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
-    target_link_libraries(runner tagsystemd)
-    target_link_libraries(runner pluginLoadd)
+    target_link_libraries(runner PRIVATE tagsystemd)
+    target_link_libraries(runner PRIVATE pluginLoadd)
 else()
     message("Release mode")
-    target_link_libraries(runner tagsystem)
-    target_link_libraries(runner pluginLoad)
+    target_link_libraries(runner PRIVATE tagsystem)
+    target_link_libraries(runner PRIVATE pluginLoad)
 endif()
 
 set_target_properties(runner
