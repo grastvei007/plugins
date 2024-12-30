@@ -29,7 +29,6 @@ private slots:
 
 private:
     void setupTags();
-    TagList *tagList_ = nullptr;
     QNetworkAccessManager manager_;
 
     QTimer* mainLoopTimer_ = nullptr;

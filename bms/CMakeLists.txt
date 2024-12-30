@@ -28,10 +28,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
     target_link_libraries(bms tagsystemd)
     target_link_libraries(bms pluginLoadd)
+    target_link_libraries(bms pluginCored)
 else()
     message("Release mode")
     target_link_libraries(bms tagsystem)
     target_link_libraries(bms pluginLoad)
+    target_link_libraries(bms pluginCore)
 endif()
 
 set_target_properties(bms
