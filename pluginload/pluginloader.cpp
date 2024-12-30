@@ -26,4 +26,5 @@ PluginInterface* load(const QString &path, const QString &pluginName)
     return nullptr;
 }
 
-}
+
+} // end namespace

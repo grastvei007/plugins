@@ -9,6 +9,7 @@ namespace pluginloader
 {
     // Uses QPluginLoader to load as qt plugin
     PluginInterface* load(const QString &path, const QString &plugin);
+
 }
 
 #endif // PLUGINLOADER_H
