@@ -15,7 +15,8 @@ class WiringPi
 public:
     enum PinDir{
         eInput,
-        eOutput
+        eOutput,
+        ePwm
     };
 
     enum Value

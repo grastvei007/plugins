@@ -2,26 +2,26 @@
 #define PIGPIO_H
 
 #include <plugins/plugincore/plugin.h>
-#include <plugins/pluginload/plugininterface.h>
-
-#include <tagsystem/tag.h>
-#include <tagsystem/tagsocket.h>
-#include <tagsystem/taglist.h>
-
+#include "wiringpiwrapper.h"
 #include <QObject>
 #include <QTimer>
-#include <QVector>
+#include <vector>
 
-class Pin;
+#include <memory>
+#include <optional>
+
+#include "pin.h"
 
 namespace plugin{
 
+
+/* Developed for rasperry pi 3B */
 class PiGpio : public Plugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.pigpio")
 public:
-    PiGpio(QObject *parent = nullptr) : Plugin(){}
+    PiGpio() = default;
 
     bool initialize() final;
 
@@ -29,7 +29,9 @@ private slots:
     void mainloop() final;
 
 private:
-    QVector<Pin*> pins_;
+    void readConfigFile(const QString &configFile);
+    std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
+    std::vector<std::unique_ptr<Pin>> pins_;
 };
 
 } // end maespace plugin
