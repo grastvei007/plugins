@@ -12,7 +12,6 @@
 
 namespace plugin{
 
-
 bool PiGpio::initialize()
 {
     WiringPi::setup();
@@ -29,13 +28,17 @@ void PiGpio::mainloop()
 void PiGpio::readConfigFile(const QString &configFile)
 {
     auto filePath = path::fromConfigDir(configFile);
+    qDebug() << filePath;
     QFile file(filePath);
-    if (!file.exists()) {
+
+    if(!file.open(QIODevice::ReadOnly))
+    {
         qDebug() << file.errorString();
+        file.close();
         return;
     }
-    file.open(QIODevice::ReadOnly);
     auto data = file.readAll();
+    file.close();
 
     QJsonParseError *error = nullptr;
     QJsonDocument config = QJsonDocument::fromJson(data, error);
@@ -43,7 +46,7 @@ void PiGpio::readConfigFile(const QString &configFile)
         qDebug() << error->errorString();
         return;
     }
-    QJsonObject gpio = config.object();
+    QJsonObject gpio = config.object().value("gpio").toObject();
     const QJsonArray pins = gpio.value("pins").toArray();
 
     for (const auto &pinRef : pins)

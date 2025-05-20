@@ -10,9 +10,10 @@
 #include <memory>
 #include <optional>
 
-class Pin;
+#include "pin.h"
 
 namespace plugin{
+
 
 /* Developed for rasperry pi 3B */
 class PiGpio : public Plugin
