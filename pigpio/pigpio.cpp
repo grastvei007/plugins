@@ -44,9 +44,9 @@ void PiGpio::readConfigFile(const QString &configFile)
         return;
     }
     QJsonObject gpio = config.object();
-    QJsonArray pins = gpio.value("pins").toArray();
+    const QJsonArray pins = gpio.value("pins").toArray();
 
-    for (auto &pinRef : pins)
+    for (const auto &pinRef : pins)
     {
         auto pin = pinRef.toObject();
         if (!pin.value("enabled").toBool())
