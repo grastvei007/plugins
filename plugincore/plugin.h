@@ -22,6 +22,10 @@ public:
     Plugin() = default;
 
     void setTagSystem(TagList *taglist) override;
+    // optional, override if needed.
+    // it should be called when plugins are load, the
+    // default is a falltrough.
+    void createApi(QHttpServer &httpserver) override;
 
     virtual bool initialize() override;
     void run(int deltaMs = 1000) override;

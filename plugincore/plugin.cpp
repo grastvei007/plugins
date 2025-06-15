@@ -7,6 +7,12 @@ void Plugin::setTagSystem(TagList *taglist)
     tagList_ = taglist;
 }
 
+void Plugin::createApi(QHttpServer &)
+{
+    // default falltrough
+    return;
+}
+
 bool Plugin::initialize()
 {
     qDebug() << "overide to setup the plugin";
