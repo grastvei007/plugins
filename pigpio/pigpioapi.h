@@ -8,17 +8,19 @@ class QString;
 
 namespace plugin{
 
+class PiGpio;
+
 class PiGpioApi
 {
 public:
-    explicit PiGpioApi(const QString &configFileName);
+    explicit PiGpioApi(PiGpio &piGpio);
 
     void setupApi(QHttpServer &httpserver);
 
 private:
     QHttpServerResponse get(const QHttpServerRequest &request);
 
-    const QString &configileName_;
+    PiGpio &piGpio_;
 };
 
 } //end namespace

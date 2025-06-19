@@ -2,6 +2,9 @@
 
 #include <functional>
 #include <QThread>
+#include <QJsonObject>
+
+namespace plugin{
 
 std::map<int,std::function<void(int)>> functions; // gpio, level
 
@@ -11,44 +14,51 @@ Pin::Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir) :
     pinNumber_(pinNumber),
     direction_(dir)
 {
-    if(direction_ == WiringPi::eOutput)
-    {
-        WiringPi::pinMode(pinNumber_, WiringPi::eOutput);
-        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
-        WiringPi::digitalWrite(pinNumber_, value_);
-    }
-    else if(direction_ == WiringPi::eInput)
-    {
-        WiringPi::pinMode(pinNumber_, WiringPi::eInput);
-        int currentReadValue_ = WiringPi::digitalRead(pinNumber_);
-        tag_->setValue(currentReadValue_);
-        //
-        setupCallback();
-        functions[pinNumber_] = std::bind(&Pin::digitalRead, this, std::placeholders::_1);
-    }
-    else if(direction_ == WiringPi::ePwm)
-    {
-        WiringPi::softPwmCreate(pinNumber_, 0, 100);
-        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
-        WiringPi::softPwmWrite(pinNumber_, 0);
-    }
+    //disconnect(tagSocket_, nullptr, this, nullptr);
+    setupPin();
 }
 
+void Pin::setEnable(bool enable)
+{
+    if(!enable)
+        onValueChanged(0);
+    enabled_ = enable;
+}
+
+QJsonObject Pin::toJson() const
+{
+    QJsonObject object;
+
+    object.insert("enabled", enabled_);
+    object.insert("subsystem", tag_->getSubsystem());
+    object.insert("tag", tag_->getName());
+    object.insert("description", tag_->getDescription());
+    object.insert("wiringpi", pinNumber_);
+    object.insert("dir", QString::number(direction_));
+
+    return object;
+}
 
 void Pin::onValueChanged(int value)
 {
-    if(direction_ == WiringPi::eOutput)
-        value = std::clamp(0, 1, value);
-    else //pwm
-        value = std::clamp(0, 100, value);
-
-    auto val = static_cast<WiringPi::Value>(value);
-    if( val == value_)
+    if (!enabled_)
         return;
 
-    value_ = val;
     if(direction_ == WiringPi::eOutput)
-        WiringPi::digitalWrite(pinNumber_, value_);
+        value = std::clamp(0, 1, value);
+    else if(direction_ == WiringPi::ePwm)
+        value = std::clamp(0, 100, value);
+    else
+        return;
+
+    if(value == value_)
+        return;
+
+    value_ = value;
+    if(direction_ == WiringPi::eOutput)
+    {
+        WiringPi::digitalWrite(pinNumber_, static_cast<WiringPi::Value>(value_));
+    }
     else // pwm
         WiringPi::softPwmWrite(pinNumber_, value_);
 }
@@ -201,3 +211,28 @@ void Pin::setupCallback()
         WiringPi::wiringPiISR(pinNumber_, WiringPi::TriggerEdge::eINT_EDGE_RISING, isr0);
     }
 }
+
+void Pin::setupPin()
+{
+    if (direction_ == WiringPi::eOutput)
+    {
+        WiringPi::pinMode(pinNumber_, WiringPi::eOutput);
+        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
+        WiringPi::digitalWrite(pinNumber_, static_cast<WiringPi::Value>(value_));
+    } else if (direction_ == WiringPi::eInput)
+    {
+        WiringPi::pinMode(pinNumber_, WiringPi::eInput);
+        int currentReadValue_ = WiringPi::digitalRead(pinNumber_);
+        tag_->setValue(currentReadValue_);
+        //
+        setupCallback();
+        functions[pinNumber_] = std::bind(&Pin::digitalRead, this, std::placeholders::_1);
+    } else if (direction_ == WiringPi::ePwm)
+    {
+        WiringPi::softPwmCreate(pinNumber_, 0, 100);
+        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
+        WiringPi::softPwmWrite(pinNumber_, 0);
+    }
+}
+
+}//end namespace

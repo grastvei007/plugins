@@ -8,6 +8,10 @@
 
 #include "wiringpiwrapper.h"
 
+class QJsonObject;
+
+namespace plugin{
+
 /**
  *      raspberry pi 3b+ gpio pins, wiring pi pins, and physical pin
  *
@@ -39,20 +43,26 @@ class Pin : public QObject
 public:
     Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir);
 
+    void setEnable(bool enable);
+    QJsonObject toJson() const;
+
 private slots:
     void onValueChanged(int value);
 
 private:
     void digitalRead(int value);
     void setupCallback();
+    void setupPin();
 
     TagSocket *tagSocket_;
     Tag *tag_;
     int pinNumber_;
     int currentReadValue_;
     WiringPi::PinDir direction_ = WiringPi::PinDir::eOutput;
-    WiringPi::Value value_ = WiringPi::eLow;
+    int value_ = 0;
+    bool enabled_ = false;
 
 };
 
+} //end namespace
 #endif // PIN_H

@@ -13,6 +13,8 @@
 #include "pin.h"
 #include "pigpioapi.h"
 
+class QJsonArray;
+
 namespace plugin{
 
 
@@ -27,6 +29,7 @@ public:
     bool initialize() final;
     void createApi(QHttpServer &httpserver) final;
 
+    QJsonArray toJson() const;
 
 private slots:
     void mainloop() final;
@@ -36,7 +39,7 @@ private:
     void readConfigFile(const QString &configFile);
     std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
     std::vector<std::unique_ptr<Pin>> pins_;
-    PiGpioApi piGpioApi_{configFileName_};
+    PiGpioApi piGpioApi_{*this};
 };
 
 } // end maespace plugin
