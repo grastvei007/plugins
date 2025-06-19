@@ -21,17 +21,22 @@ endif()
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS HttpServer REQUIRED)
 
 add_library(pigpio SHARED
     pigpio.h
     pigpio.cpp
     pin.h
     pin.cpp
+    pigpioapi.h
+    pigpioapi.cpp
     wiringpiwrapper.h
     wiringpiwrapper.cpp
-    pigpio.json)
+    pigpio.json
+)
 
-target_link_libraries(pigpio Qt6::Core)
+target_link_libraries(pigpio Qt6::Core
+    Qt6::HttpServer)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")

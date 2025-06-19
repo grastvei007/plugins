@@ -15,10 +15,14 @@ namespace plugin{
 bool PiGpio::initialize()
 {
     WiringPi::setup();
-    readConfigFile("pigpio.json");
+    readConfigFile(configFileName_);
     return true;
 }
 
+void PiGpio::createApi(QHttpServer &httpserver)
+{
+    piGpioApi_.setupApi(httpserver);
+}
 
 void PiGpio::mainloop()
 {

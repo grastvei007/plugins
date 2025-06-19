@@ -11,6 +11,7 @@
 #include <optional>
 
 #include "pin.h"
+#include "pigpioapi.h"
 
 namespace plugin{
 
@@ -24,14 +25,18 @@ public:
     PiGpio() = default;
 
     bool initialize() final;
+    void createApi(QHttpServer &httpserver) final;
+
 
 private slots:
     void mainloop() final;
 
 private:
+    const QString configFileName_{"pigpio.json"};
     void readConfigFile(const QString &configFile);
     std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
     std::vector<std::unique_ptr<Pin>> pins_;
+    PiGpioApi piGpioApi_{configFileName_};
 };
 
 } // end maespace plugin
