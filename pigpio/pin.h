@@ -44,7 +44,10 @@ public:
     Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir);
 
     void setEnable(bool enable);
+    void setDirection(WiringPi::PinDir dir);
     QJsonObject toJson() const;
+
+    int wiringPiPin() const;
 
 private slots:
     void onValueChanged(int value);

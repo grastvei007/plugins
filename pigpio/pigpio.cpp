@@ -24,6 +24,30 @@ void PiGpio::createApi(QHttpServer &httpserver)
     piGpioApi_.setupApi(httpserver);
 }
 
+void PiGpio::updateEnable(int wiringPin, bool enable)
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPin;
+    });
+
+    if (pin == pins_.end())
+        return;
+
+    (*pin)->setEnable(enable);
+}
+
+void PiGpio::updateDirection(int wiringPin, WiringPi::PinDir dir)
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPin;
+    });
+
+    if (pin == pins_.end())
+        return;
+
+    (*pin)->setDirection(dir);
+}
+
 QJsonArray PiGpio::toJson() const
 {
     QJsonArray array;

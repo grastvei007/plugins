@@ -14,15 +14,28 @@ Pin::Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir) :
     pinNumber_(pinNumber),
     direction_(dir)
 {
-    //disconnect(tagSocket_, nullptr, this, nullptr);
     setupPin();
 }
 
 void Pin::setEnable(bool enable)
 {
+    if (enabled_ == enable)
+        return;
+
     if(!enable)
         onValueChanged(0);
     enabled_ = enable;
+}
+
+void Pin::setDirection(WiringPi::PinDir dir)
+{
+    if (direction_ == dir)
+        return;
+
+    disconnect(tagSocket_, nullptr, this, nullptr);
+    functions.erase(pinNumber_);
+    direction_ = dir;
+    setupPin();
 }
 
 QJsonObject Pin::toJson() const
@@ -37,6 +50,11 @@ QJsonObject Pin::toJson() const
     object.insert("dir", QString::number(direction_));
 
     return object;
+}
+
+int Pin::wiringPiPin() const
+{
+    return pinNumber_;
 }
 
 void Pin::onValueChanged(int value)

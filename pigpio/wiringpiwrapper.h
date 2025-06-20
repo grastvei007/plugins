@@ -1,8 +1,6 @@
 #ifndef WIRINGPIWRAPPER_H
 #define WIRINGPIWRAPPER_H
 
-#include <functional>
-
 /**
  * Wrapper for wiringPi functions.
  * This is to prevent mistakes when develop.
@@ -14,9 +12,9 @@ class WiringPi
 {
 public:
     enum PinDir{
-        eInput,
-        eOutput,
-        ePwm
+        eInput = 0,
+        eOutput = 1,
+        ePwm = 2
     };
 
     enum Value

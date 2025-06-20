@@ -19,6 +19,7 @@ public:
 
 private:
     QHttpServerResponse get(const QHttpServerRequest &request);
+    QHttpServerResponse update(const QHttpServerRequest &request);
 
     PiGpio &piGpio_;
 };

@@ -29,15 +29,18 @@ public:
     bool initialize() final;
     void createApi(QHttpServer &httpserver) final;
 
+    void updateEnable(int wiringPin, bool enable);
+    void updateDirection(int wiringPi, WiringPi::PinDir dir);
+
     QJsonArray toJson() const;
 
+    std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
 private slots:
     void mainloop() final;
 
 private:
     const QString configFileName_{"pigpio.json"};
     void readConfigFile(const QString &configFile);
-    std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
     std::vector<std::unique_ptr<Pin>> pins_;
     PiGpioApi piGpioApi_{*this};
 };
