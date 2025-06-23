@@ -10,6 +10,8 @@
 #include <plugins/plugincore/path.h>
 #include <tagsystem/taglist.h>
 
+#include <algorithm>
+
 namespace plugin{
 
 bool PiGpio::initialize()
@@ -58,6 +60,17 @@ QJsonArray PiGpio::toJson() const
     }
 
     return array;
+}
+
+QJsonObject PiGpio::pinToJson(int wiringPiPin) const
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPiPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPiPin;
+    });
+    if (pin == pins_.end())
+        return QJsonObject();
+
+    return (*pin)->toJson();
 }
 
 void PiGpio::mainloop()

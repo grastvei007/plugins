@@ -66,7 +66,7 @@ QHttpServerResponse PiGpioApi::update(const QHttpServerRequest &request)
         piGpio_.updateEnable(pinId, enabled);
     }
 
-    return QHttpServerResponse(QHttpServerResponder::StatusCode::Accepted);
+    return QHttpServerResponse(piGpio_.pinToJson(pinId));
 }
 
 } // end namespave

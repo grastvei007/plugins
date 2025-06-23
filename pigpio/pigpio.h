@@ -14,6 +14,7 @@
 #include "pigpioapi.h"
 
 class QJsonArray;
+class QJsonObject;
 
 namespace plugin{
 
@@ -33,6 +34,7 @@ public:
     void updateDirection(int wiringPi, WiringPi::PinDir dir);
 
     QJsonArray toJson() const;
+    QJsonObject pinToJson(int wiringPiPin) const;
 
     std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
 private slots:
