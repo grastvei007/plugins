@@ -47,7 +47,7 @@ QJsonObject Pin::toJson() const
     object.insert("tag", tag_->getName());
     object.insert("description", tag_->getDescription());
     object.insert("wiringpi", pinNumber_);
-    object.insert("dir", QString::number(direction_));
+    object.insert("dir", dirToJsonValue(direction_));
 
     return object;
 }
@@ -251,6 +251,22 @@ void Pin::setupPin()
         connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
         WiringPi::softPwmWrite(pinNumber_, 0);
     }
+}
+
+QString Pin::dirToJsonValue(WiringPi::PinDir dir) const
+{
+    switch (dir)
+    {
+    case WiringPi::PinDir::eInput:
+        return "in";
+    case WiringPi::PinDir::eOutput:
+        return "out";
+    case WiringPi::PinDir::ePwm:
+        return "pwm";
+    default:
+        break;
+    }
+    return QString();
 }
 
 }//end namespace

@@ -56,6 +56,7 @@ private:
     void digitalRead(int value);
     void setupCallback();
     void setupPin();
+    QString dirToJsonValue(WiringPi::PinDir dir) const;
 
     TagSocket *tagSocket_;
     Tag *tag_;
