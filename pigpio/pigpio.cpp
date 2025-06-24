@@ -10,15 +10,68 @@
 #include <plugins/plugincore/path.h>
 #include <tagsystem/taglist.h>
 
+#include <algorithm>
+
 namespace plugin{
 
 bool PiGpio::initialize()
 {
     WiringPi::setup();
-    readConfigFile("pigpio.json");
+    readConfigFile(configFileName_);
     return true;
 }
 
+void PiGpio::createApi(QHttpServer &httpserver)
+{
+    piGpioApi_.setupApi(httpserver);
+}
+
+void PiGpio::updateEnable(int wiringPin, bool enable)
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPin;
+    });
+
+    if (pin == pins_.end())
+        return;
+
+    (*pin)->setEnable(enable);
+}
+
+void PiGpio::updateDirection(int wiringPin, WiringPi::PinDir dir)
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPin;
+    });
+
+    if (pin == pins_.end())
+        return;
+
+    (*pin)->setDirection(dir);
+}
+
+QJsonArray PiGpio::toJson() const
+{
+    QJsonArray array;
+
+    for (const auto &pin : pins_)
+    {
+        array.push_back(pin->toJson());
+    }
+
+    return array;
+}
+
+QJsonObject PiGpio::pinToJson(int wiringPiPin) const
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPiPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPiPin;
+    });
+    if (pin == pins_.end())
+        return QJsonObject();
+
+    return (*pin)->toJson();
+}
 
 void PiGpio::mainloop()
 {
@@ -52,10 +105,9 @@ void PiGpio::readConfigFile(const QString &configFile)
     for (const auto &pinRef : pins)
     {
         auto pin = pinRef.toObject();
-        if (!pin.value("enabled").toBool())
-            continue;
 
         // create an enabled pin object
+        auto enabled = pin.value("enabled").toBool();
         auto subsystem = pin.value("subsystem").toString();
         auto name = pin.value("tag").toString();
         auto description = pin.value("description").toString();
@@ -67,15 +119,11 @@ void PiGpio::readConfigFile(const QString &configFile)
             continue;
 
         auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , Tag::eInt, 0, description);
-        if(dir.value() == WiringPi::PinDir::eOutput || dir.value() == WiringPi::PinDir::ePwm)
-        {
-            // only create tagsocket for output pins.
-            auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
-            tagsocket->hookupTag(tag);
-            pins_.emplace_back(new Pin(tagsocket, tag, wiringPiPin, dir.value()));
-        }
-        else
-            pins_.emplace_back(new Pin(nullptr, tag, wiringPiPin, dir.value()));
+        auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
+        tagsocket->hookupTag(tag);
+        Pin *p = new Pin(tagsocket, tag, wiringPiPin, dir.value());
+        p->setEnable(enabled);
+        pins_.emplace_back(std::move(p));
     }
 
 }
