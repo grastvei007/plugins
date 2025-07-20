@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 project(JunePlugins)
 
 set (CMAKE_CXX_STANDARD 20)
-include_directories($ENV{JUNE_ROOT})
 link_directories(${CMAKE_BINARY_DIR}/$<CONFIG>/lib)
 
 add_subdirectory(pluginload)

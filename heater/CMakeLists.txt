@@ -8,10 +8,6 @@ if(BCMHOST)
     add_definitions(-DRASPBERRY_PI)
 endif()
 
-
-include_directories($ENV{JUNE_ROOT})
-link_directories($ENV{DEV_LIBS})
-
 set(CMAKE_AUTOMOC ON)
 
 if(NOT CMAKE_DEBUG_POSTFIX)

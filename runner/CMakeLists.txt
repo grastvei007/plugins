@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(runner)
 
-include_directories($ENV{JUNE_ROOT})
 link_directories(${CMAKE_BINARY_DIR}/$<CONFIG>/lib)
 
 if(NOT CMAKE_DEBUG_POSTFIX)

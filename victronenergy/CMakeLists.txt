@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 project(victronenergy)
 
-include_directories($ENV{JUNE_ROOT})
-link_directories($ENV{DEV_LIBS})
-
 set(CMAKE_AUTOMOC ON)
 
 if(NOT CMAKE_DEBUG_POSTFIX)
@@ -26,13 +23,11 @@ target_link_libraries(victronenergy Qt6::Network)
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     message("Debug mode")
     target_link_libraries(victronenergy tagsystemd)
-#    target_link_libraries(victronenergy deviced)
     target_link_libraries(victronenergy pluginLoadd)
     target_link_libraries(victronenergy pluginCored)
 else()
     message("Release mode")
     target_link_libraries(victronenergy tagsystem)
-#    target_link_libraries(victronenergy device)
     target_link_libraries(victronenergy pluginLoad)
     target_link_libraries(victronenergy pluginCore)
 endif()
