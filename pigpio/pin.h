@@ -50,7 +50,7 @@ public:
     int wiringPiPin() const;
 
 private slots:
-    void onValueChanged(int value);
+    void onTagValueChanged(Tag *tag);
 
 private:
     void digitalRead(int value);

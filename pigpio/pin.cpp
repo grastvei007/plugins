@@ -23,7 +23,7 @@ void Pin::setEnable(bool enable)
         return;
 
     if(!enable)
-        onValueChanged(0);
+        tag_->setValue(int(0));
     enabled_ = enable;
 }
 
@@ -57,10 +57,12 @@ int Pin::wiringPiPin() const
     return pinNumber_;
 }
 
-void Pin::onValueChanged(int value)
+void Pin::onTagValueChanged(Tag *tag)
 {
     if (!enabled_)
         return;
+
+    auto value = tag->getIntValue();
 
     if(direction_ == WiringPi::eOutput)
         value = std::clamp(0, 1, value);
@@ -235,7 +237,7 @@ void Pin::setupPin()
     if (direction_ == WiringPi::eOutput)
     {
         WiringPi::pinMode(pinNumber_, WiringPi::eOutput);
-        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
+        connect(tag_, &Tag::valueChanged, this, &Pin::onTagValueChanged);
         WiringPi::digitalWrite(pinNumber_, static_cast<WiringPi::Value>(value_));
     } else if (direction_ == WiringPi::eInput)
     {
@@ -248,7 +250,7 @@ void Pin::setupPin()
     } else if (direction_ == WiringPi::ePwm)
     {
         WiringPi::softPwmCreate(pinNumber_, 0, 100);
-        connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onValueChanged);
+        connect(tag_, &Tag::valueChanged, this, &Pin::onTagValueChanged);
         WiringPi::softPwmWrite(pinNumber_, 0);
     }
 }
@@ -266,7 +268,7 @@ QString Pin::dirToJsonValue(WiringPi::PinDir dir) const
     default:
         break;
     }
-    return QString();
+    return {};
 }
 
 }//end namespace
