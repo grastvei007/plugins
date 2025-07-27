@@ -14,6 +14,7 @@ Pin::Pin(TagSocket *tagSocket, Tag *tag, int pinNumber, WiringPi::PinDir dir) :
     pinNumber_(pinNumber),
     direction_(dir)
 {
+    connect(tagSocket_, qOverload<int>(&TagSocket::valueChanged), this, &Pin::onTagSocketValueChanged);
     setupPin();
 }
 
@@ -81,6 +82,14 @@ void Pin::onTagValueChanged(Tag *tag)
     }
     else // pwm
         WiringPi::softPwmWrite(pinNumber_, value_);
+}
+
+void Pin::onTagSocketValueChanged(int value)
+{
+    if(direction_ == WiringPi::PinDir::eOutput || direction_ == WiringPi::PinDir::ePwm)
+    {
+        tag_->setValue(value);
+    }
 }
 
 void Pin::digitalRead(int value)

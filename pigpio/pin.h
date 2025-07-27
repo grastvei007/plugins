@@ -51,6 +51,7 @@ public:
 
 private slots:
     void onTagValueChanged(Tag *tag);
+    void onTagSocketValueChanged(int value);
 
 private:
     void digitalRead(int value);
