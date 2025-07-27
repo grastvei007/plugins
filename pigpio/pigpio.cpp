@@ -120,7 +120,6 @@ void PiGpio::readConfigFile(const QString &configFile)
 
         auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , Tag::eInt, 0, description);
         auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
-        tagsocket->hookupTag(tag);
         Pin *p = new Pin(tagsocket, tag, wiringPiPin, dir.value());
         p->setEnable(enabled);
         pins_.emplace_back(std::move(p));
