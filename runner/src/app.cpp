@@ -19,6 +19,10 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
     QCommandLineOption module("module", "module-name", "The module to run");
     parser.addOption(module);
 
+    QCommandLineOption clientName("client", "client-name", "The name of this instance when connected to server.");
+    clientName.setDefaultValue("runner");
+    parser.addOption(clientName);
+
     parser.process(*this);
 
     pluginName_ = parser.value(module);
@@ -28,7 +32,7 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
     TagSocketList::sGetInstance().setApplicationName("runner");
     TagSocketList::sGetInstance().loadBindingList();
 
-    tagList_.setClientName("runner");
+    tagList_.setClientName(parser.value(clientName));
     if(!TagList::sGetInstance().tryToAutoConnect())
         TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
 }
