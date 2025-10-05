@@ -3,6 +3,8 @@
 
 #include <QCoreApplication>
 #include <QString>
+#include <QHttpServer>
+#include <QTcpServer>
 #include <tagsystem/taglist.h>
 
 class PluginInterface;
@@ -17,11 +19,14 @@ private slots:
 
 private:
     void loadPlugin(const QString &name);
+    void setupHttpServer(quint16 port);
     QString pluginName_;
 
     TagList &tagList_ = TagList::sGetInstance();
 
     PluginInterface *plugin_ = nullptr;
+    QHttpServer httpServer_;
+    std::unique_ptr<QTcpServer> tcpServer_;
 };
 
 #endif // APP_H

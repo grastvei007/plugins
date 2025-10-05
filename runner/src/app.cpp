@@ -3,7 +3,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-#include <QProcessEnvironment>
+#include <QSettings>
 #include <QString>
 
 #include <plugins/pluginload/pluginloader.h>
@@ -25,6 +25,8 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     parser.process(*this);
 
+    setupHttpServer(5005);
+
     pluginName_ = parser.value(module);
 
     connect(&tagList_, &TagList::connected, this, &App::loadPlugins);
@@ -45,16 +47,43 @@ void App::loadPlugins()
 
 void App::loadPlugin(const QString &name)
 {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    const QString value = env.value("DEV_LIBS") + "/";
-    qDebug() << "DEV_LIBS " << value;
-    plugin_ = pluginloader::load(value, name);
+    QSettings settings("june", "june");
+    QString pluginPath = settings.value("global/plugindir").toString() + "/";
+
+    if(pluginPath.isEmpty())
+    {
+        qFatal() << "Error, add plugindir in section global in config file june.conf";
+        return;
+    }
+
+    plugin_ = pluginloader::load(pluginPath, name);
     if(!plugin_)
     {
-        qDebug() << "error loading plugine " << QString("%1%2").arg(value, name);
+        qDebug() << "error loading plugine " << QString("%1%2").arg(pluginPath, name);
         return;
     }
     plugin_->setTagSystem(&tagList_);
     plugin_->initialize();
+    plugin_->createApi(httpServer_);
     plugin_->run(1000);
+}
+
+void App::setupHttpServer(quint16 port)
+{
+    // setup all routes on httpserver
+    httpServer_.route("/", []() {
+        return "June rest api up an running";
+    });
+
+    httpServer_.setMissingHandler(this, [](const QHttpServerRequest& request,
+                                           QHttpServerResponder &responder) {
+        qDebug() << request.url();
+    });
+    tcpServer_ = std::make_unique<QTcpServer>();
+    if(!tcpServer_->listen(QHostAddress::Any, port))
+    {
+        qDebug() << "Http server not running";
+        return;
+    }
+    httpServer_.bind(tcpServer_.get());
 }
