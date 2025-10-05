@@ -3,7 +3,7 @@
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-#include <QProcessEnvironment>
+#include <QSettings>
 #include <QString>
 
 #include <plugins/pluginload/pluginloader.h>
@@ -45,13 +45,19 @@ void App::loadPlugins()
 
 void App::loadPlugin(const QString &name)
 {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    const QString value = env.value("DEV_LIBS") + "/";
-    qDebug() << "DEV_LIBS " << value;
-    plugin_ = pluginloader::load(value, name);
+    QSettings settings("june", "june");
+    QString pluginPath = settings.value("global/plugindir").toString() + "/";
+
+    if(pluginPath.isEmpty())
+    {
+        qFatal() << "Error, add plugindir in section global in config file june.conf";
+        return;
+    }
+
+    plugin_ = pluginloader::load(pluginPath, name);
     if(!plugin_)
     {
-        qDebug() << "error loading plugine " << QString("%1%2").arg(value, name);
+        qDebug() << "error loading plugine " << QString("%1%2").arg(pluginPath, name);
         return;
     }
     plugin_->setTagSystem(&tagList_);
