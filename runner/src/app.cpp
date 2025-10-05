@@ -25,6 +25,8 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     parser.process(*this);
 
+    setupHttpServer(5005);
+
     pluginName_ = parser.value(module);
 
     connect(&tagList_, &TagList::connected, this, &App::loadPlugins);
@@ -62,5 +64,26 @@ void App::loadPlugin(const QString &name)
     }
     plugin_->setTagSystem(&tagList_);
     plugin_->initialize();
+    plugin_->createApi(httpServer_);
     plugin_->run(1000);
+}
+
+void App::setupHttpServer(quint16 port)
+{
+    // setup all routes on httpserver
+    httpServer_.route("/", []() {
+        return "June rest api up an running";
+    });
+
+    httpServer_.setMissingHandler(this, [](const QHttpServerRequest& request,
+                                           QHttpServerResponder &responder) {
+        qDebug() << request.url();
+    });
+    tcpServer_ = std::make_unique<QTcpServer>();
+    if(!tcpServer_->listen(QHostAddress::Any, port))
+    {
+        qDebug() << "Http server not running";
+        return;
+    }
+    httpServer_.bind(tcpServer_.get());
 }

@@ -13,6 +13,7 @@ set(CMAKE_AUTOUIC "YES")
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Qt6 COMPONENTS Network REQUIRED)
+find_package(Qt6 COMPONENTS HttpServer REQUIRED)
 
 add_executable(runner
     src/main.cpp
@@ -22,6 +23,7 @@ add_executable(runner
 
 
 target_link_libraries(runner PRIVATE Qt6::Core
+    Qt6::HttpServer
     Qt6::Network)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
