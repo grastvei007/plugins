@@ -13,13 +13,14 @@ Ds18b20::Ds18b20()
 {
     folderToName_.emplace("28-01203c3bc31a", "indoor");
 	folderToName_.emplace("28-01203c27b0a0", "outside");
+    folderToName_.emplace("28-01203c2842ab", "dirt_temperature");
 }
 
 bool Ds18b20::initialize()
 {
     const QString path = "/sys/bus/w1/devices";
     QDir dir(path);
-    QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+    const QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 
     for(const QString &folder : dirs)
     {
