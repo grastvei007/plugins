@@ -66,9 +66,9 @@ void Pin::onTagValueChanged(Tag *tag)
     auto value = tag->getIntValue();
 
     if(direction_ == WiringPi::eOutput)
-        value = std::clamp(0, 1, value);
+        value = std::clamp(value, 0, 1);
     else if(direction_ == WiringPi::ePwm)
-        value = std::clamp(0, 100, value);
+        value = std::clamp(value, 0, 100);
     else
         return;
 
