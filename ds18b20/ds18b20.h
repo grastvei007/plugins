@@ -24,7 +24,6 @@ private slots:
 
 private:
     double readSensorValue(const QString &filePath);
-    QTimer* mainLoopTimer_ = nullptr;
     TagList *tagList_ = nullptr;
     std::map<QString, Tag*> temperatureSensors_;
     int readSensor_ = -1;
