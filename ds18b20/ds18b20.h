@@ -3,10 +3,9 @@
 
 #include <plugins/plugincore/plugin.h>
 
-#include <tagsystem/tag.h>
-#include <tagsystem/taglist.h>
-
 #include <map>
+
+class Tag;
 
 namespace plugin{
 
@@ -15,16 +14,16 @@ class Ds18b20 : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.ds18b20")
 public:
-    Ds18b20();
+    Ds18b20() = default;
 
     bool initialize() final;
+    void createApi(QHttpServer &httpserver) final;
 
 private slots:
     void mainloop();
 
 private:
     double readSensorValue(const QString &filePath);
-    TagList *tagList_ = nullptr;
     std::map<QString, Tag*> temperatureSensors_;
     int readSensor_ = -1;
 

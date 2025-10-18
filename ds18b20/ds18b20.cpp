@@ -6,18 +6,16 @@
 #include <QStringList>
 #include <QDebug>
 
+#include <tagsystem/taglist.h>
+
 namespace plugin {
-
-
-Ds18b20::Ds18b20()
-{
-    folderToName_.emplace("28-01203c3bc31a", "indoor");
-	folderToName_.emplace("28-01203c27b0a0", "outside");
-    folderToName_.emplace("28-01203c2842ab", "dirt_temperature");
-}
 
 bool Ds18b20::initialize()
 {
+    folderToName_.emplace("28-01203c3bc31a", "indoor");
+    folderToName_.emplace("28-01203c27b0a0", "outside");
+    folderToName_.emplace("28-01203c2842ab", "dirt_temperature");
+
     const QString path = "/sys/bus/w1/devices";
     QDir dir(path);
     const QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -35,7 +33,7 @@ bool Ds18b20::initialize()
         if(folderToName_.count(folder))
             name = folderToName_[folder];
         auto initValue = readSensorValue(str);
-        auto tag = tagList_->createTag("temperature", name, Tag::eDouble, initValue);
+        auto tag = tagList()->createTag("temperature", name, Tag::eDouble, initValue);
         temperatureSensors_.emplace(str, tag);
         qDebug() << folder;
     }
@@ -44,6 +42,11 @@ bool Ds18b20::initialize()
         readSensor_ = 0;
 
     return true;
+}
+
+void Ds18b20::createApi(QHttpServer &httpserver)
+{
+
 }
 
 void Ds18b20::mainloop()
