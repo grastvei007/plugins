@@ -19,8 +19,8 @@ public:
 
     enum Value
     {
-        eLow,
-        eHigh
+        eLow = 0,
+        eHigh = 1
     };
 
     enum PwmMode
