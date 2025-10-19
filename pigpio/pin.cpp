@@ -4,6 +4,8 @@
 #include <QThread>
 #include <QJsonObject>
 
+#include <tagsystem/util/tagutil.h>
+
 namespace plugin{
 
 std::map<int,std::function<void(int)>> functions; // gpio, level
@@ -39,6 +41,18 @@ void Pin::setDirection(WiringPi::PinDir dir)
     setupPin();
 }
 
+void Pin::hookupTagSocket(const QString &tagFullName)
+{
+    if(tagFullName.isEmpty())
+        tagSocket_->disconnectTag();
+    else
+    {
+        const auto &[subsystem, name] = util::tag::splitFullName(tagFullName);
+        tagSocket_->hookupTag(subsystem, name);
+    }
+
+}
+
 QJsonObject Pin::toJson() const
 {
     QJsonObject object;
@@ -49,6 +63,11 @@ QJsonObject Pin::toJson() const
     object.insert("description", tag_->getDescription());
     object.insert("wiringpi", pinNumber_);
     object.insert("dir", dirToJsonValue(direction_));
+    object.insert("tagsocket", tagSocket_->getFullName());
+    if(tagSocket_->isHookedUp() && tagSocket_->getTag())
+        object.insert("hookup_tag", tagSocket_->getTag()->getFullName());
+    else
+        object.insert("hookup_tag", "");
 
     return object;
 }

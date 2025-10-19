@@ -32,6 +32,7 @@ public:
 
     void updateEnable(int wiringPin, bool enable);
     void updateDirection(int wiringPi, WiringPi::PinDir dir);
+    void updateTagSocketHookUpTag(int wiringPin, const QString& tagFullName);
 
     QJsonArray toJson() const;
     QJsonObject pinToJson(int wiringPiPin) const;

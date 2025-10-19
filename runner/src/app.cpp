@@ -31,8 +31,9 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
 
     connect(&tagList_, &TagList::connected, this, &App::loadPlugins);
 
-    TagSocketList::sGetInstance().setApplicationName("runner");
+    TagSocketList::sGetInstance().setApplicationName(parser.value(clientName));
     TagSocketList::sGetInstance().loadBindingList();
+    TagSocketList::sGetInstance().setAutoSave();
 
     tagList_.setClientName(parser.value(clientName));
     if(!TagList::sGetInstance().tryToAutoConnect())
