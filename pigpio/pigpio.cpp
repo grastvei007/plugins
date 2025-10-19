@@ -50,6 +50,18 @@ void PiGpio::updateDirection(int wiringPin, WiringPi::PinDir dir)
     (*pin)->setDirection(dir);
 }
 
+void PiGpio::updateTagSocketHookUpTag(int wiringPin, const QString &tagFullName)
+{
+    auto pin = std::ranges::find_if(pins_, [&wiringPin](const auto &pin) {
+        return pin->wiringPiPin() == wiringPin;
+    });
+
+    if (pin == pins_.end())
+        return;
+
+    (*pin)->hookupTagSocket(tagFullName);
+}
+
 QJsonArray PiGpio::toJson() const
 {
     QJsonArray array;

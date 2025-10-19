@@ -38,6 +38,7 @@ QHttpServerResponse PiGpioApi::get(const QHttpServerRequest &request)
 // values that can be updated:
 // enabled: <bool>
 // dir: <in|out|pwm>
+// hookup_tag: <string> full tag name
 QHttpServerResponse PiGpioApi::update(const QHttpServerRequest &request)
 {
     auto json = util::json::byteArrayToJsonObject(request.body());
@@ -64,6 +65,11 @@ QHttpServerResponse PiGpioApi::update(const QHttpServerRequest &request)
     {
         auto enabled = object.value("enabled").toBool();
         piGpio_.updateEnable(pinId, enabled);
+    }
+    if(object.contains("hookup_tag"))
+    {
+        const auto tagFullName = object.value("hookup_tag").toString();
+        piGpio_.updateTagSocketHookUpTag(pinId, tagFullName);
     }
 
     return QHttpServerResponse(piGpio_.pinToJson(pinId));

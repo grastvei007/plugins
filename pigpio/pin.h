@@ -45,6 +45,8 @@ public:
 
     void setEnable(bool enable);
     void setDirection(WiringPi::PinDir dir);
+    void hookupTagSocket(const QString &tagFullName);
+
     QJsonObject toJson() const;
 
     int wiringPiPin() const;
