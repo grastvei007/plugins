@@ -49,6 +49,11 @@ QJsonObject Pin::toJson() const
     object.insert("description", tag_->getDescription());
     object.insert("wiringpi", pinNumber_);
     object.insert("dir", dirToJsonValue(direction_));
+    object.insert("tagsocket", tagSocket_->getFullName());
+    if(tagSocket_->isHookedUp() && tagSocket_->getTag())
+        object.insert("hookup_tag", tagSocket_->getTag()->getFullName());
+    else
+        object.insert("hookup_tag", "");
 
     return object;
 }
