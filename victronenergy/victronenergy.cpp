@@ -14,14 +14,14 @@ namespace plugin {
 bool VictronEnergy::initialize()
 {
     // create tags
-    victronTotalChargedTodayTag_.reset(tagList()->createTag("victron", "chargedToday", Tag::eInt, "dayily yield"));
-    victronTotalDiscargedTodayTag_.reset(tagList()->createTag("victron", "dischargedToday", Tag::eInt, "dayly useage"));
+    victronTotalChargedTodayTag_.reset(tagList()->createTag("victron", "chargedToday", TagType::eInt, "dayily yield"));
+    victronTotalDiscargedTodayTag_.reset(tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
 
-    battery1ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery1_ChargedToday", Tag::eInt, "dayly yield"));
-    battery1DischargedTodayTag_.reset(tagList()->createTag("victron","Battery1_DischargedToday", Tag::eInt, "dayly usage"));
+    battery1ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery1_ChargedToday", TagType::eInt, "dayly yield"));
+    battery1DischargedTodayTag_.reset(tagList()->createTag("victron","Battery1_DischargedToday", TagType::eInt, "dayly usage"));
 
-    battery2ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_ChargedToday", Tag::eInt, "dayly yield"));
-    battery2DischargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_DischargedToday", Tag::eInt, "dayly usage"));
+    battery2ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_ChargedToday", TagType::eInt, "dayly yield"));
+    battery2DischargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_DischargedToday", TagType::eInt, "dayly usage"));
 
     // listen to values
     battery1ChargedEnergyTagSocket_.reset(TagSocket::createTagSocket("victron", "battery1Charged", TagSocket::eDouble));

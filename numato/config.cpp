@@ -119,12 +119,12 @@ void Numato::initGpioPin(util::numato::Gpio gpio, QString iodir, bool value)
 
     if(dir)
     {
-        auto tag = tagList()->createTag(deviceName_, QString("gpio_%1").arg(gpioToString(gpio)), Tag::eBool, 0, "Gpio input");
+        auto tag = tagList()->createTag(deviceName_, QString("gpio_%1").arg(gpioToString(gpio)), TagType::eBool, 0, "Gpio input");
         gpioInput_[gpio] = tag;
     }
     else
     {
-        auto tag = tagList()->createTag(deviceName_, gpioToString(gpio), Tag::eBool, 0, "Gpio output");
+        auto tag = tagList()->createTag(deviceName_, gpioToString(gpio), TagType::eBool, 0, "Gpio output");
         auto *tagSocket = TagSocket::createTagSocket(deviceName_, QString("gpio_%1").arg(gpioToString(gpio)), TagSocket::eBool);
         tagSocket->hookupTag(tag);
 

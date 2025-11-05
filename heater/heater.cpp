@@ -10,16 +10,16 @@ bool Heater::initialize()
 {
     configStartingTimeTag_ = tagList_->createTag("config",
                                                  "Heater_startingTime",
-                                                 Tag::eInt, 0,
+                                                 TagType::eInt, 0,
                                                  "Maximum time in starting state");
 
-    powerOnTag_ = tagList_->createTag("heater", "powerOn", Tag::eBool, false);
-    heatLevelTag_ = tagList_->createTag("heater", "heatLevel", Tag::eInt, 50, "Burner fan speed");
-    fanLevelTag_ = tagList_->createTag("heater", "fanLevel", Tag::eInt, 50, "Air fan speed");
-    stateTag_ = tagList_->createTag("heater", "state", Tag::eString);
-    isBurningTag_ = tagList_->createTag("heater", "isBurning", Tag::eBool);
-    wakeUpTag_ = tagList_->createTag("heater", "wake up once", Tag::eBool);
-    wakeUpTimeTag_ = tagList_->createTag("heater", "wake up time", Tag::eTime);
+    powerOnTag_ = tagList_->createTag("heater", "powerOn", TagType::eBool, false);
+    heatLevelTag_ = tagList_->createTag("heater", "heatLevel", TagType::eInt, 50, "Burner fan speed");
+    fanLevelTag_ = tagList_->createTag("heater", "fanLevel", TagType::eInt, 50, "Air fan speed");
+    stateTag_ = tagList_->createTag("heater", "state", TagType::eString);
+    isBurningTag_ = tagList_->createTag("heater", "isBurning", TagType::eBool);
+    wakeUpTag_ = tagList_->createTag("heater", "wake up once", TagType::eBool);
+    wakeUpTimeTag_ = tagList_->createTag("heater", "wake up time", TagType::eTime);
 
     configStartingTimeTag_->setValue(configStartingTimeSeconds_);
     stateTag_->setValue(stateToString(state_));

@@ -33,7 +33,7 @@ bool Ds18b20::initialize()
         if(folderToName_.count(folder))
             name = folderToName_[folder];
         auto initValue = readSensorValue(str);
-        auto tag = tagList()->createTag("temperature", name, Tag::eDouble, initValue);
+        auto tag = tagList()->createTag("temperature", name, TagType::eDouble, initValue);
         temperatureSensors_.emplace(str, tag);
         qDebug() << folder;
     }

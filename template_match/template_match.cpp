@@ -76,7 +76,7 @@ cv::Mat QImageTocvMat(const QImage &image)
 
 bool TemplateMatch::initialize()
 {
-    foundTag_ = tagList()->createTag("templatematch", "found", Tag::eBool, false, "Template found");
+    foundTag_ = tagList()->createTag("templatematch", "found", TagType::eBool, false, "Template found");
 
     QSettings settings("june", "june");
     QString dir = settings.value("plugins/templatedir").toString() + QDir::separator();

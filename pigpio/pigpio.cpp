@@ -130,7 +130,7 @@ void PiGpio::readConfigFile(const QString &configFile)
         if(!dir.has_value())
             continue;
 
-        auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , Tag::eInt, 0, description);
+        auto *tag = tagList()->createTag(subsystem, QString("%1_%2").arg(name, dirStr) , TagType::eInt, 0, description);
         auto *tagsocket = TagSocket::createTagSocket(subsystem, name, TagSocket::eInt);
         Pin *p = new Pin(tagsocket, tag, wiringPiPin, dir.value());
         p->setEnable(enabled);
