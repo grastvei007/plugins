@@ -36,7 +36,8 @@ App::App(int argc, char *argv[]) : QCoreApplication(argc, argv)
     TagSocketList::sGetInstance().setAutoSave();
 
     tagList_.setClientName(parser.value(clientName));
-    if(!TagList::sGetInstance().tryToAutoConnect())
+	tagList_.setReconnectIfServerCloseConnection();
+	if(!TagList::sGetInstance().tryToAutoConnect())
         TagList::sGetInstance().connectToServer(parser.value(serverIp), 5000);
 }
 
