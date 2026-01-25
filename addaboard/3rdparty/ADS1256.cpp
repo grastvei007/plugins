@@ -28,6 +28,7 @@
 #
 ******************************************************************************/
 #include "ADS1256.h"
+#include <QDebug>
 
 UBYTE ScanMode = 0;
 
@@ -107,8 +108,8 @@ static void ADS1256_WaitDRDY(void)
             break;
     }
     if(i >= 4000000){
-       printf("Time Out ...\r\n"); 
-    }
+		qDebug() << "Time Out ...";
+	}
 }
 
 /******************************************************************************
@@ -207,11 +208,11 @@ UBYTE ADS1256_init(void)
 {
     ADS1256_reset();
     if(ADS1256_ReadChipID() == 3){
-        printf("ID Read success \r\n");
-    }
+		qDebug() << "ID Read success";
+	}
     else{
-        printf("ID Read failed \r\n");
-        return 1;
+		qDebug() << "ID Read failed";
+		return 1;
     }
     ADS1256_ConfigADC(ADS1256_GAIN_1, ADS1256_30000SPS);
     

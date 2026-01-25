@@ -30,13 +30,12 @@
 #
 ******************************************************************************/
 #include "DEV_Config.h"
-
+#include <QDebug>
 /********************************************************************************
 function:	Delay function
 note:
 	Driver_Delay_ms(xms) : Delay x ms
 ********************************************************************************/
-
 
 /******************************************************************************
 function:	Initialization pin
@@ -45,9 +44,9 @@ Info:
 ******************************************************************************/
 static void DEV_GPIOConfig(void)
 {
-    pinMode(DEV_RST_PIN, OUTPUT);
-    pinMode(DEV_CS_PIN, OUTPUT);
-    pinMode(DEV_DRDY_PIN, INPUT);
+	WiringPi::pinMode(DEV_RST_PIN, WiringPi::eOutput);
+	WiringPi::pinMode(DEV_CS_PIN, WiringPi::eOutput);
+	WiringPi::pinMode(DEV_DRDY_PIN, WiringPi::eInput);
 }
 
 /******************************************************************************
@@ -59,39 +58,30 @@ int DEV_ModuleInit(void)
 {
     //1.wiringPiSetupGpio
     //if(wiringPiSetup() < 0)//use wiringpi Pin number table
-    if(wiringPiSetupGpio() < 0) { //use BCM2835 Pin number table
-        Debug("set wiringPi lib failed	!!! \r\n");
-        return 1;
-    } else {
-        Debug("set wiringPi lib success  !!! \r\n");
-    }
+	WiringPi::setup(); //use BCM2835 Pin number table
 
+	//2.GPIO config
+	DEV_GPIOConfig();
 
-    //2.GPIO config
-    DEV_GPIOConfig();
-	
-    //3.spi init
-    //wiringPiSPISetup(0,3200000,1);
-	wiringPiSPISetupMode(0,3200000,1);
-    return 0;
+	//3.spi init
+	//wiringPiSPISetup(0,3200000,1);
+	WiringPi::wiringPiSPISetupMode(0, 3200000, 1);
+	return 0;
 }
 
 void SPI_WriteByte(uint8_t value)
 {
-    int read_data;
-    read_data = wiringPiSPIDataRW(0,&value,1);
-    if(read_data < 0)
-        perror("wiringPiSPIDataRW failed\r\n");
+	WiringPi::wiringPiSPIDataRW(0, &value, 1);
 }
 
 
 UBYTE SPI_ReadByte()
 {
     UBYTE read_data,value=0xff;
-    read_data = wiringPiSPIDataRW(0,&value,1);
-    if(read_data < 0)
-        perror("wiringPiSPIDataRW failed\r\n");
-    return value;
+	read_data = WiringPi::wiringPiSPIDataRW(0, &value, 1);
+	if (read_data < 0)
+		qDebug() << "wiringPiSPIDataRW failed";
+	return value;
 }
 
 void DEV_ModuleExit(void)

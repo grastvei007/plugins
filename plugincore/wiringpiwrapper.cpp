@@ -1,17 +1,18 @@
 #include "wiringpiwrapper.h"
 
 #ifdef RASPBERRY_PI
-#include <wiringPi.h>
-#include <softPwm.h>
 #include <iostream>
+#include <softPwm.h>
+#include <wiringPi.h>
+#include <wiringPiSPI.h>
 #else
 #include <QDebug>
 #include <QString>
 #endif
 
+namespace WiringPi {
 
-
-void WiringPi::setup()
+void setup()
 {
 #ifdef RASPBERRY_PI
 	std::cerr << __FUNCTION__ << std::endl;
@@ -21,7 +22,7 @@ void WiringPi::setup()
 #endif
 }
 
-void WiringPi::pinMode(int pin, PinDir dir)
+void pinMode(int pin, PinDir dir)
 {
 #ifdef RASPBERRY_PI
     if(dir == eInput)
@@ -35,8 +36,7 @@ void WiringPi::pinMode(int pin, PinDir dir)
 
 }
 
-
-void WiringPi::digitalWrite(int pin, Value val)
+void digitalWrite(int pin, Value val)
 {
 #ifdef RASPBERRY_PI
     if(val == eLow)
@@ -49,7 +49,7 @@ void WiringPi::digitalWrite(int pin, Value val)
 #endif
 }
 
-int WiringPi::digitalRead(int pin)
+int digitalRead(int pin)
 {
 #ifdef RASPBERRY_PI
         return ::digitalRead(pin);
@@ -59,8 +59,7 @@ int WiringPi::digitalRead(int pin)
 #endif
 }
 
-
-int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
+int softPwmCreate(int pin, int initVal, int pwmRange)
 {
 #ifdef RASPBERRY_PI
       return ::softPwmCreate(pin, initVal, pwmRange);
@@ -70,8 +69,7 @@ int WiringPi::softPwmCreate(int pin, int initVal, int pwmRange)
 #endif
 }
 
-
-void WiringPi::softPwmWrite(int pin, int value)
+void softPwmWrite(int pin, int value)
 {
 #ifdef RASPBERRY_PI
     ::softPwmWrite(pin, value);
@@ -80,8 +78,7 @@ void WiringPi::softPwmWrite(int pin, int value)
 #endif
 }
 
-
-void WiringPi::pwmSetClock(int clock)
+void pwmSetClock(int clock)
 {
 #ifdef RASPBERRY_PI
     ::pwmSetClock(clock);
@@ -90,8 +87,7 @@ void WiringPi::pwmSetClock(int clock)
 #endif
 }
 
-
-void WiringPi::pwmSetRange(int range)
+void pwmSetRange(int range)
 {
 #ifdef RASPBERRY_PI
     ::pwmSetRange(range);
@@ -100,8 +96,7 @@ void WiringPi::pwmSetRange(int range)
 #endif
 }
 
-
-void WiringPi::pwmSetMode(PwmMode pwmMode)
+void pwmSetMode(PwmMode pwmMode)
 {
 #ifdef RASPBERRY_PI
     ::pwmSetMode(pwmMode == ePwmModeMs ? 0 : 1);
@@ -110,7 +105,7 @@ void WiringPi::pwmSetMode(PwmMode pwmMode)
 #endif
 }
 
-int WiringPi::wiringPiISR(int pin, int edgeType, void (*function)())
+int wiringPiISR(int pin, int edgeType, void (*function)())
 {
 #ifdef RASPBERRY_PI
     if(edgeType == eINT_EDGE_FALLING)
@@ -124,3 +119,31 @@ int WiringPi::wiringPiISR(int pin, int edgeType, void (*function)())
     return 0;
 #endif
 }
+
+void wiringPiSPISetupMode(int spiChannel, int speed, int mode)
+{
+#ifdef RASPBERRY_PI
+	::wiringPiSPISetupMode(spiChannel, speed, mode);
+#else
+	qDebug() << __FUNCTION__;
+#endif
+}
+
+int wiringPiSPIDataRW(int spiChannel, unsigned char *buffer, int size)
+{
+#ifdef RASPBERRY_PI
+	return ::wiringPiSPIDataRW(spiChannel, buffer, size);
+#else
+	qDebug() << __FUNCTION__;
+	return 0;
+#endif
+}
+
+void delay(unsigned int ms)
+{
+#ifdef RASPBERRY_PI
+	::delay(ms);
+#endif
+}
+
+} // namespace WiringPi

@@ -32,15 +32,8 @@
 #ifndef _DEV_CONFIG_H_
 #define _DEV_CONFIG_H_
 
-
+#include <plugins/plugincore/wiringpiwrapper.h>
 #include <stdint.h>
-#include <stdio.h>
-#include "Debug.h"
-#include <wiringPi.h>
-#include <wiringPiSPI.h>
-
-
-
 
 #define UBYTE   uint8_t
 #define UWORD   uint16_t
@@ -55,10 +48,9 @@
 
 /**
  * GPIO read and write
-**/ 
-#define DEV_Digital_Write(_pin, _value)  digitalWrite(_pin, _value == 0? LOW:HIGH)
-#define DEV_Digital_Read(_pin)  digitalRead(_pin)
-
+**/
+#define DEV_Digital_Write(_pin, _value)  WiringPi::digitalWrite(_pin, _value == 0? WiringPi::eLow : WiringPi::eHigh)
+#define DEV_Digital_Read(_pin)  WiringPi::digitalRead(_pin)
 
 /**
  * SPI
@@ -69,8 +61,7 @@
 /**
  * delay x ms
 **/
-#define DEV_Delay_ms(__xms)   delay(__xms)
-
+#define DEV_Delay_ms(__xms)   WiringPi::delay(__xms)
 
 /*-----------------------------------------------------------------------------*/
 void SPI_WriteByte(uint8_t value);
