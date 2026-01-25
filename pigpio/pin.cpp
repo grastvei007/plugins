@@ -266,6 +266,7 @@ void Pin::setupPin()
     {
         WiringPi::pinMode(pinNumber_, WiringPi::eOutput);
         connect(tag_, &Tag::valueChanged, this, &Pin::onTagValueChanged);
+        tagSocket_->readValue(value_);
         WiringPi::digitalWrite(pinNumber_, static_cast<WiringPi::Value>(value_));
     } else if (direction_ == WiringPi::eInput)
     {
@@ -279,6 +280,7 @@ void Pin::setupPin()
     {
         WiringPi::softPwmCreate(pinNumber_, 0, 100);
         connect(tag_, &Tag::valueChanged, this, &Pin::onTagValueChanged);
+        tagSocket_->readValue(value_);
         WiringPi::softPwmWrite(pinNumber_, 0);
     }
 }
