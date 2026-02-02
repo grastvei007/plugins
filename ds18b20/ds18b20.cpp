@@ -51,8 +51,8 @@ void Ds18b20::createApi(QHttpServer &httpserver)
 
 void Ds18b20::mainloop()
 {
-    if(readSensor_ < -1)
-        return;
+	if (readSensor_ < 0)
+		return;
 
     auto iter = temperatureSensors_.begin();
     std::advance(iter, readSensor_);
