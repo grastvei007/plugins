@@ -42,9 +42,10 @@
 /**
  * GPIO config
 **/
-#define DEV_RST_PIN     18
-#define DEV_CS_PIN      22
-#define DEV_DRDY_PIN    17
+
+#define DEV_RST_PIN     1   //18
+#define DEV_CS_PIN      3   //22
+#define DEV_DRDY_PIN    0   //17
 
 /**
  * GPIO read and write
