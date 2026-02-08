@@ -9,6 +9,7 @@ namespace plugin {
 
 bool AddaBoard::initialize()
 {
+	qDebug() << __FUNCTION__;
 	DEV_ModuleInit();
 
 	const QString subsystem("adda_board");
