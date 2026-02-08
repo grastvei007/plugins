@@ -21,10 +21,9 @@ public:
 
     bool initialize() final;
 
-protected slots:
-    void mainloop() final;
+	void loop() final;
 
-private slots:
+  private slots:
     void onBattery1ChargedEnergyChanged(double value);
     void onBattery1DischargedEnergyChanged(double value);
     void onBattery2ChargedEnergyChanged(double value);

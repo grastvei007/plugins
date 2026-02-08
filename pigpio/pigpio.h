@@ -38,10 +38,10 @@ public:
     QJsonObject pinToJson(int wiringPiPin) const;
 
     std::optional<WiringPi::PinDir> dirToEnum(const QString &str);
-private slots:
-    void mainloop() final;
 
-private:
+	void loop() final;
+
+  private:
     const QString configFileName_{"pigpio.json"};
     void readConfigFile(const QString &configFile);
     std::vector<std::unique_ptr<Pin>> pins_;

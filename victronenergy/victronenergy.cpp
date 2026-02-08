@@ -46,7 +46,7 @@ bool VictronEnergy::initialize()
     return true;
 }
 
-void VictronEnergy::mainloop()
+void VictronEnergy::loop()
 {
     auto currentDay = QDate::currentDate().day();
 

@@ -36,6 +36,11 @@ void Plugin::stop()
     mainLoopTimer_->stop();
 }
 
+void Plugin::loop()
+{
+	qDebug() << __FUNCTION__ << " overide this to make a mainloop for your plugin";
+}
+
 TagList *Plugin::tagList() const
 {
     return tagList_;
@@ -43,5 +48,5 @@ TagList *Plugin::tagList() const
 
 void Plugin::mainloop()
 {
-    qDebug() << __FUNCTION__ << " overide this to make a mainloop for your plugin";
+	loop();
 }

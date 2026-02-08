@@ -16,8 +16,7 @@ class AddaBoard : public Plugin
 
 	bool initialize() final;
 
-  protected slots:
-	void mainloop() final;
+	void loop() final;
 
   private:
 	Tag *adc0Tag_ = nullptr;

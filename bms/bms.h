@@ -23,8 +23,8 @@ public:
 
     bool initialize() override;
 
-private slots:
-    void mainloop() final;
+	void loop() final;
+  private slots:
     void onReply(QNetworkReply *reply);
 
 private:

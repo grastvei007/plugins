@@ -85,10 +85,7 @@ QJsonObject PiGpio::pinToJson(int wiringPiPin) const
     return (*pin)->toJson();
 }
 
-void PiGpio::mainloop()
-{
-
-}
+void PiGpio::loop() {}
 
 void PiGpio::readConfigFile(const QString &configFile)
 {

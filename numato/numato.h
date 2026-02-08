@@ -37,10 +37,9 @@ public:
     void notifyOn(bool enable);
     void adcRead(util::numato::Gpio gpio); ///< gpio 0-9 can be analog input
 
-private slots:
-    void mainloop() final;
+	void loop() final;
 
-    void onDataReady(const char*, int);
+	void onDataReady(const char*, int);
 
 private:
     void loadSettings();

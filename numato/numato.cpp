@@ -86,10 +86,7 @@ void Numato::adcRead(util::numato::Gpio gpio)
     telnet_->sendData("\n");
 }
 
-void Numato::mainloop()
-{
-
-}
+void Numato::loop() {}
 
 void Numato::onDataReady(const char* buffer, int size)
 {

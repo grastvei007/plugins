@@ -31,13 +31,15 @@ public:
     void run(int deltaMs = 1000) override;
     void stop() override;
 
-protected:
-    TagList* tagList() const;
+	virtual void loop();
 
-protected slots:
-    virtual void mainloop();
+  protected:
+	TagList *tagList() const;
 
-private:
+  protected slots:
+	void mainloop();
+
+  private:
     TagList *tagList_ = nullptr;
     std::unique_ptr<QTimer> mainLoopTimer_;
 };

@@ -25,7 +25,7 @@ bool AddaBoard::initialize()
 	return true;
 }
 
-void AddaBoard::mainloop()
+void AddaBoard::loop()
 {
 	qDebug() << __FUNCTION__;
 	UDOUBLE adc[8];

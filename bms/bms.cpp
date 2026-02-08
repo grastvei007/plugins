@@ -17,7 +17,7 @@ bool Bms::initialize()
     return true;
 }
 
-void Bms::mainloop()
+void Bms::loop()
 {
 
     manager_.get(QNetworkRequest(QUrl("http://192.168.0.100/bcc.xml")));
