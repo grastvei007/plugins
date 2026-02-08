@@ -32,6 +32,7 @@ void AddaBoard::mainloop()
 
 	adc0Tag_->setValue(adc[0] * 5.0 / 0x7fffff);
 	adc1Tag_->setValue(adc[1] * 5.0 / 0x7fffff);
+	qDebug() << "1: " << adc[1] * 5.0 / 0x7fffff;
 	adc2Tag_->setValue(adc[2] * 5.0 / 0x7fffff);
 	adc3Tag_->setValue(adc[3] * 5.0 / 0x7fffff);
 	adc4Tag_->setValue(adc[4] * 5.0 / 0x7fffff);
