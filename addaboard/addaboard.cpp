@@ -27,6 +27,7 @@ bool AddaBoard::initialize()
 
 void AddaBoard::mainloop()
 {
+	qDebug() << __FUNCTION__;
 	UDOUBLE adc[8];
 	ADS1256_GetAll(adc);
 
