@@ -58,7 +58,7 @@ int DEV_ModuleInit(void)
 {
     //1.wiringPiSetupGpio
     //if(wiringPiSetup() < 0)//use wiringpi Pin number table
-	WiringPi::setup(); //use BCM2835 Pin number table
+	WiringPi::setup();
 
 	//2.GPIO config
 	DEV_GPIOConfig();
@@ -71,7 +71,8 @@ int DEV_ModuleInit(void)
 
 void SPI_WriteByte(uint8_t value)
 {
-	WiringPi::wiringPiSPIDataRW(0, &value, 1);
+	if (WiringPi::wiringPiSPIDataRW(0, &value, 1) < 0)
+		qDebug() << "wiringPiSPIDataRW writing byte failed";
 }
 
 
@@ -80,7 +81,7 @@ UBYTE SPI_ReadByte()
     UBYTE read_data,value=0xff;
 	read_data = WiringPi::wiringPiSPIDataRW(0, &value, 1);
 	if (read_data < 0)
-		qDebug() << "wiringPiSPIDataRW failed";
+		qDebug() << "wiringPiSPIDataRW read byte failed";
 	return value;
 }
 
