@@ -12,11 +12,19 @@
 
 namespace WiringPi {
 
+#ifdef RASPBERRY_PI
+static bool sWiringPiSetep = false;
+#endif
+
 void setup()
 {
 #ifdef RASPBERRY_PI
 	std::cerr << __FUNCTION__ << std::endl;
-    wiringPiSetup();
+	if (!sWiringPiSetep)
+	{
+		wiringPiSetup();
+		sWiringPiSetep = true;
+	}
 #else
     qDebug() << __FUNCTION__;
 #endif
