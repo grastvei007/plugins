@@ -23,6 +23,8 @@ bool AddaBoard::initialize()
 	adc6Tag_ = tagList()->createTag(subsystem, "adc6", TagType::eDouble, 0.0, "Analog read [0-5]v");
 	adc7Tag_ = tagList()->createTag(subsystem, "adc7", TagType::eDouble, 0.0, "Analog read [0-5]v");
 
+	ADS1256_init();
+
 	return true;
 }
 
