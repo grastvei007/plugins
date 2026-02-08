@@ -16,7 +16,7 @@ class AddaBoard : public Plugin
 
 	bool initialize() final;
 
-  private slots:
+  protected slots:
 	void mainloop() final;
 
   private:
