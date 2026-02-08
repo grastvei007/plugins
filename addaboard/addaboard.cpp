@@ -12,6 +12,8 @@ bool AddaBoard::initialize()
 	qDebug() << __FUNCTION__;
 	DEV_ModuleInit();
 
+	WiringPi::digitalWrite(DEV_CS_PIN, WiringPi::eHigh);
+
 	const QString subsystem("adda_board");
 
 	adc0Tag_ = tagList()->createTag(subsystem, "adc0", TagType::eDouble, 0.0, "Analog read [0-5]v");
