@@ -1,10 +1,11 @@
 #include "ds18b20.h"
 
-#include <QTimer>
+#include <QDebug>
 #include <QDir>
+#include <QSettings>
 #include <QString>
 #include <QStringList>
-#include <QDebug>
+#include <QTimer>
 
 #include <tagsystem/taglist.h>
 
@@ -12,13 +13,16 @@ namespace plugin {
 
 bool Ds18b20::initialize()
 {
-    folderToName_.emplace("28-01203c3bc31a", "indoor");
-    folderToName_.emplace("28-01203c27b0a0", "outside");
-    folderToName_.emplace("28-01203c2842ab", "dirt_temperature");
+	QSettings settings("june", "june");
+	settings.beginGroup("ds18b20");
+	for (const auto &folderName : settings.childKeys())
+	{
+		folderToName_.emplace(folderName, settings.value(folderName).toString());
+	}
 
-    const QString path = "/sys/bus/w1/devices";
-    QDir dir(path);
-    const QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
+	const QString path = "/sys/bus/w1/devices";
+	QDir dir(path);
+	const QStringList dirs = dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 
     for(const QString &folder : dirs)
     {
