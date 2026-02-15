@@ -30,6 +30,8 @@ protected slots:
 private slots:
   void updateDaylyChaged();
   void updateDaylyDischarged();
+  void onBatteryAmphereChanged();
+  void onBatteryPowerChanged();
 
 private:
   void updateDailyEnergyUse();
@@ -38,6 +40,9 @@ private:
   std::shared_ptr<Tag> victronTotalChargedTodayTag_;
   std::shared_ptr<Tag> victronTotalDiscargedTodayTag_;
   std::shared_ptr<Tag> victronTotalEneryUseToday_;
+
+  std::shared_ptr<Tag> combineAmphereTag_;
+  std::shared_ptr<Tag> compinePowerTag_;
 
   std::vector<std::unique_ptr<Battery>> batteries_;
 

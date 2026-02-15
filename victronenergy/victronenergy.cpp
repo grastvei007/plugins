@@ -19,6 +19,13 @@ bool VictronEnergy::initialize()
 	victronTotalEneryUseToday_.reset(
 		tagList()->createTag("victron", "energy_use_today", TagType::eInt, "daily ussage"));
 
+	combineAmphereTag_.reset(tagList()->createTag(subsystem,
+												  "combined_I",
+												  TagType::eDouble,
+												  "Total I from all batteries"));
+	compinePowerTag_.reset(
+		tagList()->createTag(subsystem, "combined_P", TagType::eInt, "Total P from all batteries"));
+
 	QSettings settings("june", "june");
 	settings.beginGroup("batteries");
 	for (const auto &batteryConfig : settings.childKeys())
@@ -36,6 +43,14 @@ bool VictronEnergy::initialize()
 				&Battery::dischargedEnergyChanged,
 				this,
 				&VictronEnergy::updateDaylyDischarged);
+		connect(batteries_.back().get(),
+				&Battery::amphereChanged,
+				this,
+				&VictronEnergy::onBatteryAmphereChanged);
+		connect(batteries_.back().get(),
+				&Battery::powerChanged,
+				this,
+				&VictronEnergy::onBatteryPowerChanged);
 	}
 
 	connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
@@ -73,6 +88,26 @@ void VictronEnergy::updateDaylyDischarged()
 
 	victronTotalDiscargedTodayTag_->setValue(sum);
 	updateDailyEnergyUse();
+}
+
+void VictronEnergy::onBatteryAmphereChanged()
+{
+	double sum = 0.0;
+	for (const auto &battery : batteries_)
+	{
+		sum += battery->amphere();
+	}
+	combineAmphereTag_->setValue(sum);
+}
+
+void VictronEnergy::onBatteryPowerChanged()
+{
+	int sum = 0;
+	for (const auto &battery : batteries_)
+	{
+		sum += battery->power();
+	}
+	compinePowerTag_->setValue(sum);
 }
 
 void VictronEnergy::updateDailyEnergyUse()
