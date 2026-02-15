@@ -8,8 +8,47 @@
 
 #include <QObject>
 #include <memory>
+#include <vector>
 
 namespace plugin{
+
+class Battery : public QObject
+{
+	Q_OBJECT
+  public:
+	Battery(TagList *taglist,
+			const QString &subsystem,
+			const QString &name,
+			const QString &batteyName,
+			QObject *parent = nullptr);
+
+	void resetValues();
+
+	int chargedEnergy() const { return chargedEnergy_; }
+	int dischargedEnergy() const { return dischargedEnergy_; }
+
+  signals:
+	void chargedEnergyChanged();
+	void dischargedEnergyChanged();
+
+  private slots:
+	void onChargedEnergyChanged(double value);
+	void onDischargedEnergyChanged(double value);
+
+  private:
+	std::shared_ptr<Tag> chargedTodayTag_;
+	std::shared_ptr<Tag> dischargedTodayTag_;
+
+	std::shared_ptr<TagSocket> chargedEnergyTagSocket_;
+	std::shared_ptr<TagSocket> dischargedEnergyTagSocket_;
+
+	// total updated at midnight
+	int totalChargedEnergy_ = -1;
+	int totalDischargedEnergy_ = -1;
+	// dayly
+	int chargedEnergy_ = 0;
+	int dischargedEnergy_ = 0;
+};
 
 class VictronEnergy : public Plugin
 {
@@ -25,44 +64,20 @@ protected slots:
     void mainloop() final;
 
 private slots:
-    void onBattery1ChargedEnergyChanged(double value);
-    void onBattery1DischargedEnergyChanged(double value);
-    void onBattery2ChargedEnergyChanged(double value);
-    void onBattery2DischargedEnergyChanged(double value);
+  void updateDaylyChaged();
+  void updateDaylyDischarged();
 
 private:
-    void updateDaylyChaged();
-    void updateDaylyDischarged();
-    void resetValues();
+  void updateDailyEnergyUse();
+  void resetValues();
 
-    std::shared_ptr<TagSocket> battery1ChargedEnergyTagSocket_;
-    std::shared_ptr<TagSocket> battery1DischargedEnergyTagSocket_;
-    std::shared_ptr<TagSocket> battery2ChargedEnergyTagSocket_;
-    std::shared_ptr<TagSocket> battery2DischargedEnergyTagSocket_;
+  std::shared_ptr<Tag> victronTotalChargedTodayTag_;
+  std::shared_ptr<Tag> victronTotalDiscargedTodayTag_;
+  std::shared_ptr<Tag> victronTotalEneryUseToday_;
 
-    std::shared_ptr<Tag> victronTotalChargedTodayTag_;
-    std::shared_ptr<Tag> victronTotalDiscargedTodayTag_;
+  std::vector<std::unique_ptr<Battery>> batteries_;
 
-    std::shared_ptr<Tag> battery1ChargedTodayTag_;
-    std::shared_ptr<Tag> battery1DischargedTodayTag_;
-
-    std::shared_ptr<Tag> battery2ChargedTodayTag_;
-    std::shared_ptr<Tag> battery2DischargedTodayTag_;
-
-
-    // total updated ot midnight
-    int battery1TotalChargedEnergy_ = -1;
-    int battery1TotalDischargedEnergy_ = -1;
-    int battery2TotalChargedEnergy_ = -1;
-    int battery2TotalDischargedEnergy_ = -1;
-
-    // dayly
-    int battery1ChargedEnergy_ = 0;
-    int battery1DischargedEnergy_ = 0;
-    int battery2ChargedEnergy_ = 0;
-    int battery2DischargedEnergy_ = 0;
-
-    int currentDay_ = -1;
+  int currentDay_ = -1;
 };
 
 }

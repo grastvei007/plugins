@@ -3,47 +3,44 @@
 #include <tagsystem/taglist.h>
 
 #include <QDate>
-
-extern "C" PluginInterface* createPlugin()
-{
-    return new plugin::VictronEnergy();
-}
+#include <QSettings>
 
 namespace plugin {
 
 bool VictronEnergy::initialize()
 {
-    // create tags
-    victronTotalChargedTodayTag_.reset(tagList()->createTag("victron", "chargedToday", TagType::eInt, "dayily yield"));
-    victronTotalDiscargedTodayTag_.reset(tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
+	const QString subsystem("victron");
 
-    battery1ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery1_ChargedToday", TagType::eInt, "dayly yield"));
-    battery1DischargedTodayTag_.reset(tagList()->createTag("victron","Battery1_DischargedToday", TagType::eInt, "dayly usage"));
+	// create tags
+	victronTotalChargedTodayTag_.reset(
+		tagList()->createTag("victron", "chargedToday", TagType::eInt, "dayily yield"));
+	victronTotalDiscargedTodayTag_.reset(
+		tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
+	victronTotalEneryUseToday_.reset(
+		tagList()->createTag("victron", "energy_use_today", TagType::eInt, "daily ussage"));
 
-    battery2ChargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_ChargedToday", TagType::eInt, "dayly yield"));
-    battery2DischargedTodayTag_.reset(tagList()->createTag("victron", "Battery2_DischargedToday", TagType::eInt, "dayly usage"));
+	QSettings settings("june", "june");
+	settings.beginGroup("batteries");
+	for (const auto &batteryConfig : settings.childKeys())
+	{
+		QString name = settings.value(batteryConfig).toString();
 
-    // listen to values
-    battery1ChargedEnergyTagSocket_.reset(TagSocket::createTagSocket("victron", "battery1Charged", TagSocket::eDouble));
-    battery1DischargedEnergyTagSocket_.reset(TagSocket::createTagSocket("victron", "battery1Discharged", TagSocket::eDouble));
-    battery2ChargedEnergyTagSocket_.reset(TagSocket::createTagSocket("victron", "battery2Charged", TagSocket::eDouble));
-    battery2DischargedEnergyTagSocket_.reset(TagSocket::createTagSocket("victron", "battery2Discharged", TagSocket::eDouble));
+		batteries_.emplace_back(
+			std::make_unique<Battery>(tagList(), subsystem, name, batteryConfig));
 
+		connect(batteries_.back().get(),
+				&Battery::chargedEnergyChanged,
+				this,
+				&VictronEnergy::updateDaylyChaged);
+		connect(batteries_.back().get(),
+				&Battery::dischargedEnergyChanged,
+				this,
+				&VictronEnergy::updateDaylyDischarged);
+	}
 
-    connect(battery1ChargedEnergyTagSocket_.get(), qOverload<double>(&TagSocket::valueChanged), this, &VictronEnergy::onBattery1ChargedEnergyChanged);
-    connect(battery1DischargedEnergyTagSocket_.get(), qOverload<double>(&TagSocket::valueChanged), this, &VictronEnergy::onBattery1DischargedEnergyChanged);
-    connect(battery2ChargedEnergyTagSocket_.get(), qOverload<double>(&TagSocket::valueChanged), this, &VictronEnergy::onBattery2ChargedEnergyChanged);
-    connect(battery2DischargedEnergyTagSocket_.get(), qOverload<double>(&TagSocket::valueChanged), this, &VictronEnergy::onBattery2DischargedEnergyChanged);
+	connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
 
-    battery1ChargedEnergyTagSocket_->hookupTag("BMV700", "H18");
-    battery1DischargedEnergyTagSocket_->hookupTag("BMV700", "H17");
-
-    battery2ChargedEnergyTagSocket_->hookupTag("BMV702", "H18");
-    battery2DischargedEnergyTagSocket_->hookupTag("BMV702", "H17");
-
-    connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
-
-    return true;
+	return true;
 }
 
 void VictronEnergy::mainloop()
@@ -57,72 +54,107 @@ void VictronEnergy::mainloop()
     resetValues();
 }
 
-void VictronEnergy::onBattery1ChargedEnergyChanged(double value)
-{
-    if(battery1TotalChargedEnergy_ < 0)
-        battery1TotalChargedEnergy_ = value;
-
-    battery1ChargedEnergy_ = value - battery1TotalChargedEnergy_;
-    updateDaylyChaged();
-}
-
-void VictronEnergy::onBattery1DischargedEnergyChanged(double value)
-{
-    if(battery1TotalDischargedEnergy_ < 0)
-        battery1TotalDischargedEnergy_ = value;
-
-    battery1DischargedEnergy_ = value - battery1TotalDischargedEnergy_;
-    updateDaylyDischarged();
-}
-
-void VictronEnergy::onBattery2ChargedEnergyChanged(double value)
-{
-    if(battery2TotalChargedEnergy_ < 0)
-        battery2TotalChargedEnergy_ = value;
-
-    battery2ChargedEnergy_ = value - battery2TotalChargedEnergy_;
-    updateDaylyChaged();
-}
-
-void VictronEnergy::onBattery2DischargedEnergyChanged(double value)
-{
-    if(battery2TotalDischargedEnergy_ < 0)
-        battery2TotalDischargedEnergy_ = value;
-
-    battery2DischargedEnergy_ = value - battery2TotalDischargedEnergy_;
-    updateDaylyDischarged();
-}
-
 void VictronEnergy::updateDaylyChaged()
 {
-    victronTotalChargedTodayTag_->setValue(battery1ChargedEnergy_ + battery2ChargedEnergy_);
-    battery1ChargedTodayTag_->setValue(battery1ChargedEnergy_);
-    battery2ChargedTodayTag_->setValue(battery2ChargedEnergy_);
+	int sum = 0;
+	for (const auto &battery : batteries_)
+		sum += battery->chargedEnergy();
+
+	victronTotalChargedTodayTag_->setValue(sum);
+	updateDailyEnergyUse();
 }
 
 
 void VictronEnergy::updateDaylyDischarged()
 {
-    victronTotalDiscargedTodayTag_->setValue(battery1DischargedEnergy_ + battery2DischargedEnergy_);
-    battery1DischargedTodayTag_->setValue(battery1DischargedEnergy_);
-    battery2DischargedTodayTag_->setValue(battery2DischargedEnergy_);
+	int sum = 0;
+	for (const auto &battery : batteries_)
+		sum += battery->dischargedEnergy();
+
+	victronTotalDiscargedTodayTag_->setValue(sum);
+	updateDailyEnergyUse();
+}
+
+void VictronEnergy::updateDailyEnergyUse()
+{
+	int sumDischarge = 0;
+	int sumCharge = 0;
+	for (const auto &battery : batteries_)
+	{
+		sumDischarge += battery->dischargedEnergy();
+		sumCharge += battery->chargedEnergy();
+	}
+	victronTotalEneryUseToday_->setValue(sumCharge - sumDischarge);
 }
 
 void VictronEnergy::resetValues()
 {
-    // reset dayly values
-    battery1ChargedEnergy_ = 0;
-    battery1DischargedEnergy_ = 0;
-    battery2ChargedEnergy_ = 0;
-    battery2DischargedEnergy_ = 0;
+	// reset dayly values
+	for (auto &battery : batteries_)
+		battery->resetValues();
 
-    battery1TotalChargedEnergy_ = -1;
-    battery1TotalDischargedEnergy_ = -1;
-    battery2TotalChargedEnergy_ = -1;
-    battery2TotalDischargedEnergy_ = -1;
+	updateDaylyChaged();
+	updateDaylyDischarged();
+}
 
-    updateDaylyChaged();
-    updateDaylyDischarged();
+Battery::Battery(TagList *tagList,
+				 const QString &subsystem,
+				 const QString &name,
+				 const QString &batteyName,
+				 QObject *parent)
+	: QObject(parent)
+{
+	chargedTodayTag_.reset(
+		tagList->createTag(subsystem, name + "_charged_today", TagType::eInt, "dayly yield"));
+	dischargedTodayTag_.reset(
+		tagList->createTag(subsystem, name + "_discharged_today", TagType::eInt, "dayly usage"));
+	chargedEnergyTagSocket_.reset(
+		TagSocket::createTagSocket(subsystem, name + "Charged", TagSocket::eDouble));
+	dischargedEnergyTagSocket_.reset(
+		TagSocket::createTagSocket(subsystem, name + "Discharged", TagSocket::eDouble));
+
+	connect(chargedEnergyTagSocket_.get(),
+			qOverload<double>(&TagSocket::valueChanged),
+			this,
+			&Battery::onChargedEnergyChanged);
+
+	connect(dischargedEnergyTagSocket_.get(),
+			qOverload<double>(&TagSocket::valueChanged),
+			this,
+			&Battery::onDischargedEnergyChanged);
+
+	chargedEnergyTagSocket_->hookupTag(batteyName, "H18");
+	dischargedEnergyTagSocket_->hookupTag(batteyName, "H17");
+}
+
+void Battery::resetValues()
+{
+	// total updated at midnight
+	totalChargedEnergy_ = -1;
+	totalDischargedEnergy_ = -1;
+	// dayly
+	chargedEnergy_ = 0;
+	dischargedEnergy_ = 0;
+}
+
+void Battery::onChargedEnergyChanged(double value)
+{
+	if (totalChargedEnergy_ < 0)
+		totalChargedEnergy_ = value;
+
+	chargedEnergy_ = value - totalChargedEnergy_;
+	chargedTodayTag_->setValue(chargedEnergy_);
+	emit chargedEnergyChanged();
+}
+
+void Battery::onDischargedEnergyChanged(double value)
+{
+	if (totalDischargedEnergy_ < 0)
+		totalDischargedEnergy_ = value;
+
+	dischargedEnergy_ = value - totalDischargedEnergy_;
+	dischargedTodayTag_->setValue(dischargedEnergy_);
+	emit dischargedEnergyChanged();
 }
 
 }//end namespace
