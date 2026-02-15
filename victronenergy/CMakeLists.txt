@@ -14,7 +14,9 @@ add_library(victronenergy SHARED
     ../plugincore/plugin.h
     ../pluginload/plugininterface.h
     victronenergy.h
-    victronenergy.cpp)
+    victronenergy.cpp
+    battery.h
+    battery.cpp)
 
 
 target_link_libraries(victronenergy Qt6::Core)
