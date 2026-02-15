@@ -22,14 +22,20 @@ class Battery : public QObject
 
 	int chargedEnergy() const { return chargedEnergy_; }
 	int dischargedEnergy() const { return dischargedEnergy_; }
+	double amphere() const { return amphere_; }
+	int power() const { return power_; }
 
   signals:
 	void chargedEnergyChanged();
 	void dischargedEnergyChanged();
+	void amphereChanged();
+	void powerChanged();
 
   private slots:
 	void onChargedEnergyChanged(double value);
 	void onDischargedEnergyChanged(double value);
+	void onAmphereChanged(double value);
+	void onPowerChanged(int value);
 
   private:
 	std::shared_ptr<Tag> chargedTodayTag_;
@@ -37,6 +43,8 @@ class Battery : public QObject
 
 	std::shared_ptr<TagSocket> chargedEnergyTagSocket_;
 	std::shared_ptr<TagSocket> dischargedEnergyTagSocket_;
+	std::shared_ptr<TagSocket> amphereTagSocket_;
+	std::shared_ptr<TagSocket> powerTagSocket_;
 
 	// total updated at midnight
 	int totalChargedEnergy_ = -1;
@@ -44,6 +52,8 @@ class Battery : public QObject
 	// dayly
 	int chargedEnergy_ = 0;
 	int dischargedEnergy_ = 0;
+	double amphere_ = 0.0;
+	int power_ = 0;
 };
 
 } // namespace plugin

@@ -18,6 +18,9 @@ Battery::Battery(TagList *tagList,
 	dischargedEnergyTagSocket_.reset(
 		TagSocket::createTagSocket(subsystem, name + "Discharged", TagSocket::eDouble));
 
+	amphereTagSocket_.reset(TagSocket::createTagSocket(subsystem, name + "_I,", TagSocket::eDouble));
+	powerTagSocket_.reset(TagSocket::createTagSocket(subsystem, name + "_P", TagSocket::eInt));
+
 	connect(chargedEnergyTagSocket_.get(),
 			qOverload<double>(&TagSocket::valueChanged),
 			this,
@@ -28,8 +31,20 @@ Battery::Battery(TagList *tagList,
 			this,
 			&Battery::onDischargedEnergyChanged);
 
+	connect(amphereTagSocket_.get(),
+			qOverload<double>(&TagSocket::valueChanged),
+			this,
+			&Battery::onAmphereChanged);
+
+	connect(powerTagSocket_.get(),
+			qOverload<int>(&TagSocket::valueChanged),
+			this,
+			&Battery::onPowerChanged);
+
 	chargedEnergyTagSocket_->hookupTag(batteyName, "H18");
 	dischargedEnergyTagSocket_->hookupTag(batteyName, "H17");
+	amphereTagSocket_->hookupTag(batteyName, "I");
+	powerTagSocket_->hookupTag(batteyName, "P");
 }
 
 void Battery::resetValues()
@@ -60,6 +75,18 @@ void Battery::onDischargedEnergyChanged(double value)
 	dischargedEnergy_ = value - totalDischargedEnergy_;
 	dischargedTodayTag_->setValue(dischargedEnergy_);
 	emit dischargedEnergyChanged();
+}
+
+void Battery::onAmphereChanged(double value)
+{
+	amphere_ = value;
+	emit amphereChanged();
+}
+
+void Battery::onPowerChanged(int value)
+{
+	power_ = value;
+	emit powerChanged();
 }
 
 } // namespace plugin
