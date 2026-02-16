@@ -16,7 +16,8 @@ add_library(victronenergy SHARED
     victronenergy.h
     victronenergy.cpp
     battery.h
-    battery.cpp)
+    battery.cpp
+    mppt.h mppt.cpp)
 
 
 target_link_libraries(victronenergy Qt6::Core)

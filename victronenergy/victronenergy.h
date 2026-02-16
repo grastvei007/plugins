@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "battery.h"
+#include "mppt.h"
 
 namespace plugin{
 
@@ -40,11 +41,13 @@ private:
   std::shared_ptr<Tag> victronTotalChargedTodayTag_;
   std::shared_ptr<Tag> victronTotalDiscargedTodayTag_;
   std::shared_ptr<Tag> victronTotalEneryUseToday_;
+  std::shared_ptr<Tag> victronMpptsTotalYield_;
 
   std::shared_ptr<Tag> combineAmphereTag_;
   std::shared_ptr<Tag> compinePowerTag_;
 
   std::vector<std::unique_ptr<Battery>> batteries_;
+  std::vector<std::unique_ptr<Mppt>> mppts_;
 
   int currentDay_ = -1;
 };

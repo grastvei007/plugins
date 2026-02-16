@@ -18,6 +18,8 @@ bool VictronEnergy::initialize()
 		tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
 	victronTotalEneryUseToday_.reset(
 		tagList()->createTag("victron", "energy_use_today", TagType::eInt, "daily ussage"));
+	victronMpptsTotalYield_.reset(
+		tagList()->createTag(subsystem, "totoal_yield", TagType::eInt, "dayily yield from mppts"));
 
 	combineAmphereTag_.reset(tagList()->createTag(subsystem,
 												  "combined_I",
@@ -53,6 +55,14 @@ bool VictronEnergy::initialize()
 				&VictronEnergy::onBatteryPowerChanged);
 	}
 
+	settings.beginGroup("mppt");
+	for (const auto &mpptConfig : settings.childKeys())
+	{
+		QString serialNumber = settings.value(mpptConfig).toString();
+
+		mppts_.emplace_back(std::make_unique<Mppt>(tagList(), serialNumber));
+	}
+
 	connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
 
 	return true;
@@ -67,6 +77,14 @@ void VictronEnergy::mainloop()
 
     currentDay_ = currentDay;
     resetValues();
+
+	int sum = 0;
+	for (auto &mppt : mppts_)
+	{
+		sum += mppt->yield();
+		mppt->reset();
+	}
+	victronMpptsTotalYield_->setValue(sum);
 }
 
 void VictronEnergy::updateDaylyChaged()
