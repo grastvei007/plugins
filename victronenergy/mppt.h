@@ -17,15 +17,15 @@ class Mppt : public QObject
 	Mppt(TagList *taglist, const QString &serialNumber);
 
 	void reset();
-	int yield() const { return daylyYield_; }
+	double yield() const { return daylyYield_; }
 
   private slots:
-	void onYieldChanged(int value);
+	void onYieldChanged(double value);
 
   private:
 	std::shared_ptr<TagSocket> yieldTagSocket_;
 
-	int daylyYield_ = 0;
+	double daylyYield_ = 0;
 };
 
 } // namespace plugin

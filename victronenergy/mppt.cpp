@@ -7,10 +7,10 @@ namespace plugin {
 
 Mppt::Mppt(TagList *taglist, const QString &serialNumber)
 {
-	yieldTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber, TagSocket::eInt));
+	yieldTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber, TagSocket::eDouble));
 
 	connect(yieldTagSocket_.get(),
-			qOverload<int>(&TagSocket::valueChanged),
+			qOverload<double>(&TagSocket::valueChanged),
 			this,
 			&Mppt::onYieldChanged);
 
@@ -22,7 +22,7 @@ void Mppt::reset()
 	daylyYield_ = 0;
 }
 
-void Mppt::onYieldChanged(int value)
+void Mppt::onYieldChanged(double value)
 {
 	if (value > daylyYield_)
 		daylyYield_ = value;

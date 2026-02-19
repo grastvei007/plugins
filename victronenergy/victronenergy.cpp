@@ -18,8 +18,10 @@ bool VictronEnergy::initialize()
 		tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
 	victronTotalEneryUseToday_.reset(
 		tagList()->createTag("victron", "energy_use_today", TagType::eInt, "daily ussage"));
-	victronMpptsTotalYield_.reset(
-		tagList()->createTag(subsystem, "totoal_yield", TagType::eInt, "dayily yield from mppts"));
+	victronMpptsTotalYield_.reset(tagList()->createTag(subsystem,
+													   "totoal_yield",
+													   TagType::eDouble,
+													   "dayily yield from mppts"));
 
 	combineAmphereTag_.reset(tagList()->createTag(subsystem,
 												  "combined_I",
@@ -78,7 +80,7 @@ void VictronEnergy::mainloop()
     currentDay_ = currentDay;
     resetValues();
 
-	int sum = 0;
+	double sum = 0.0;
 	for (auto &mppt : mppts_)
 	{
 		sum += mppt->yield();
