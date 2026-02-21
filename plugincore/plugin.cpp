@@ -24,9 +24,10 @@ void Plugin::run(int deltaMs)
     if(mainLoopTimer_)
         mainLoopTimer_.release();
 
-    mainLoopTimer_ = std::make_unique<QTimer>(this);
-    mainLoopTimer_->setInterval(deltaMs);
-    QObject::connect(mainLoopTimer_.get(), &QTimer::timeout, this, &Plugin::mainloop);
+	deltaMs_ = deltaMs;
+	mainLoopTimer_ = std::make_unique<QTimer>(this);
+	mainLoopTimer_->setInterval(deltaMs);
+	QObject::connect(mainLoopTimer_.get(), &QTimer::timeout, this, &Plugin::mainloop);
 
     mainLoopTimer_->start();
 }
@@ -39,6 +40,11 @@ void Plugin::stop()
 TagList *Plugin::tagList() const
 {
     return tagList_;
+}
+
+int Plugin::runTimeStep() const
+{
+	return deltaMs_;
 }
 
 void Plugin::mainloop()
