@@ -28,18 +28,20 @@ public:
     void createApi(QHttpServer &httpserver) override;
 
     virtual bool initialize() override;
-    void run(int deltaMs = 1000) override;
-    void stop() override;
+	void run(int deltaMs = 1000) final;
+	void stop() override;
 
 protected:
     TagList* tagList() const;
+	int runTimeStep() const;
 
-protected slots:
-    virtual void mainloop();
+  protected slots:
+	virtual void mainloop();
 
 private:
     TagList *tagList_ = nullptr;
     std::unique_ptr<QTimer> mainLoopTimer_;
+	int deltaMs_ = 0;
 };
 
 #endif // PLUGIN_H
