@@ -48,8 +48,6 @@ private:
 
   std::vector<std::unique_ptr<Battery>> batteries_;
   std::vector<std::unique_ptr<Mppt>> mppts_;
-
-  int currentDay_ = -1;
 };
 
 }
