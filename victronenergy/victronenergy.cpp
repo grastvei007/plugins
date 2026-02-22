@@ -1,9 +1,10 @@
 #include "victronenergy.h"
 
 #include <tagsystem/taglist.h>
+#include <tagsystem/util/time.h>
 
-#include <QDate>
 #include <QSettings>
+#include <QTime>
 
 namespace plugin {
 
@@ -72,13 +73,13 @@ bool VictronEnergy::initialize()
 
 void VictronEnergy::mainloop()
 {
-    auto currentDay = QDate::currentDate().day();
+	auto currentTime = QTime::currentTime().msecsSinceStartOfDay();
 
-    if(currentDay == currentDay_)
-        return;
+	// only reset valued once a day at time 23:55
+	if (!util::time::isInTimeSlot(23, 55, runTimeStep(), currentTime))
+		return;
 
-    currentDay_ = currentDay;
-    resetValues();
+	resetValues();
 
 	double sum = 0.0;
 	for (auto &mppt : mppts_)
