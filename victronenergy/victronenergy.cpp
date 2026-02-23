@@ -61,9 +61,7 @@ bool VictronEnergy::initialize()
 	settings.beginGroup("mppt");
 	for (const auto &mpptConfig : settings.childKeys())
 	{
-		QString serialNumber = settings.value(mpptConfig).toString();
-
-		mppts_.emplace_back(std::make_unique<Mppt>(tagList(), serialNumber));
+		mppts_.emplace_back(std::make_unique<Mppt>(tagList(), mpptConfig));
 	}
 
 	connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
