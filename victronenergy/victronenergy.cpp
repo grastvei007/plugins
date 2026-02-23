@@ -57,12 +57,15 @@ bool VictronEnergy::initialize()
 				this,
 				&VictronEnergy::onBatteryPowerChanged);
 	}
+	settings.endGroup();
 
 	settings.beginGroup("mppt");
 	for (const auto &mpptConfig : settings.childKeys())
 	{
+		qDebug() << mpptConfig;
 		mppts_.emplace_back(std::make_unique<Mppt>(tagList(), mpptConfig));
 	}
+	settings.endGroup();
 
 	connect(tagList(), &TagList::initialTagBurst, this, &VictronEnergy::resetValues);
 
