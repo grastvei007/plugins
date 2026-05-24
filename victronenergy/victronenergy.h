@@ -21,7 +21,7 @@ class VictronEnergy : public Plugin
     //
     Q_PLUGIN_METADATA(IID "june.plugin.victronenergy")
 public:
-    VictronEnergy(QObject *parent = nullptr) : Plugin(){}
+    VictronEnergy(QObject *parent = nullptr) : Plugin("victron"){}
 
     bool initialize() final;
 

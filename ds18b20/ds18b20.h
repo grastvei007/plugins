@@ -14,7 +14,7 @@ class Ds18b20 : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.ds18b20")
 public:
-    Ds18b20() = default;
+    Ds18b20() : Plugin("temperature"){};
 
     bool initialize() final;
     void createApi(QHttpServer &httpserver) final;

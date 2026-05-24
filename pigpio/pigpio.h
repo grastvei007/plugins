@@ -25,7 +25,7 @@ class PiGpio : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.pigpio")
 public:
-    PiGpio() = default;
+    PiGpio() : Plugin("pigpio"){};
 
     bool initialize() final;
     void createApi(QHttpServer &httpserver) final;

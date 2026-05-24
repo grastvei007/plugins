@@ -31,7 +31,7 @@ public:
         eRunning,
         eStoping
     };
-    Heater() = default;
+    Heater();
 
     bool initialize() final;
 

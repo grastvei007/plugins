@@ -24,7 +24,9 @@ class Numato : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.numato")
 public:
-    Numato() = default;
+    Numato()
+        : Plugin("numato")
+    {}
 
     bool initialize() final;
 

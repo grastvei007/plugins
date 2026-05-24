@@ -5,6 +5,8 @@
 
 namespace plugin {
 
+Heater::Heater() : Plugin("heater")
+{}
 
 bool Heater::initialize()
 {
