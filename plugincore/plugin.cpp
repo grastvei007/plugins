@@ -2,6 +2,12 @@
 
 #include <QDebug>
 
+Plugin::Plugin(const QString &subsystem) :
+    subsystem_(subsystem)
+{
+
+}
+
 void Plugin::setTagSystem(TagList *taglist)
 {
     tagList_ = taglist;
@@ -45,6 +51,11 @@ TagList *Plugin::tagList() const
 int Plugin::runTimeStep() const
 {
 	return deltaMs_;
+}
+
+QString Plugin::subsystem() const
+{
+    return subsystem_;
 }
 
 void Plugin::mainloop()
