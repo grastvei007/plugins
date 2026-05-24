@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+#include <tagsystem/tag.h>
+#include <tagsystem/taglist.h>
+
 Plugin::Plugin(const QString &subsystem) :
     subsystem_(subsystem)
 {
@@ -11,6 +14,10 @@ Plugin::Plugin(const QString &subsystem) :
 void Plugin::setTagSystem(TagList *taglist)
 {
     tagList_ = taglist;
+
+    // create state tag for the plugin
+    stateTag_ = tagList_->createTag(subsystem(), "state", TagType::eString);
+    setState(PluginState::eStopped);
 }
 
 void Plugin::createApi(QHttpServer &)
@@ -36,6 +43,7 @@ void Plugin::run(int deltaMs)
 	QObject::connect(mainLoopTimer_.get(), &QTimer::timeout, this, &Plugin::mainloop);
 
     mainLoopTimer_->start();
+    setState(PluginState::eRunning);
 }
 
 void Plugin::stop()
@@ -56,6 +64,17 @@ int Plugin::runTimeStep() const
 QString Plugin::subsystem() const
 {
     return subsystem_;
+}
+
+void Plugin::setState(PluginState state)
+{
+    if (stateTag_)
+    {
+        if (state == PluginState::eStopped)
+            stateTag_->setValue("stopped");
+        else if (state == PluginState::eRunning)
+            stateTag_->setValue("running");
+    }
 }
 
 void Plugin::mainloop()

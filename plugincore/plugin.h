@@ -9,6 +9,14 @@
 
 #include <memory>
 
+class Tag;
+
+enum class PluginState
+{
+    eStopped = 1,
+    eRunning
+};
+
 /**
  * @brief The Plugin class
  *
@@ -36,6 +44,7 @@ protected:
     TagList* tagList() const;
 	int runTimeStep() const;
     QString subsystem() const;
+    void setState(PluginState state);
 
   protected slots:
 	virtual void mainloop();
@@ -44,6 +53,7 @@ private:
     TagList *tagList_ = nullptr;
     std::unique_ptr<QTimer> mainLoopTimer_;
 	int deltaMs_ = 0;
+    Tag *stateTag_ = nullptr;
 
     QString subsystem_;
 };
