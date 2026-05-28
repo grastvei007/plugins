@@ -48,12 +48,16 @@ protected:
 
   protected slots:
 	virtual void mainloop();
+    void onStopTagValueChanged(Tag *tag);
+    void onStartTagValueChanged(Tag *tag);
 
 private:
     TagList *tagList_ = nullptr;
     std::unique_ptr<QTimer> mainLoopTimer_;
 	int deltaMs_ = 0;
     Tag *stateTag_ = nullptr;
+    Tag *startTag_ = nullptr;
+    Tag *stopTag_ = nullptr;
 
     QString subsystem_;
 };

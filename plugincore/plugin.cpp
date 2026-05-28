@@ -18,6 +18,12 @@ void Plugin::setTagSystem(TagList *taglist)
     // create state tag for the plugin
     stateTag_ = tagList_->createTag(subsystem(), "state", TagType::eString);
     setState(PluginState::eStopped);
+
+    startTag_ = tagList_->createTag(subsystem(), "start", TagType::eBool, false);
+    stopTag_ = tagList_->createTag(subsystem(), "stop", TagType::eBool, false);
+
+    connect(startTag_, &Tag::valueChanged, this, &Plugin::onStartTagValueChanged);
+    connect(stopTag_, &Tag::valueChanged, this, &Plugin::onStopTagValueChanged);
 }
 
 void Plugin::createApi(QHttpServer &)
@@ -80,4 +86,37 @@ void Plugin::setState(PluginState state)
 void Plugin::mainloop()
 {
     qDebug() << __FUNCTION__ << " overide this to make a mainloop for your plugin";
+}
+
+void Plugin::onStartTagValueChanged(Tag *tag)
+{
+    bool value = tag->getBoolValue();
+    if (!value)
+        return;
+
+    if (mainLoopTimer_.get())
+    {
+        mainLoopTimer_->start();
+        setState(PluginState::eRunning);
+
+    } else
+    {
+        run();
+    }
+
+    QTimer::singleShot(3000, this, [&]() { startTag_->setValue(false); });
+}
+
+void Plugin::onStopTagValueChanged(Tag *tag)
+{
+    bool value = tag->getBoolValue();
+    if (!value)
+        return;
+
+    if (mainLoopTimer_.get())
+    {
+        mainLoopTimer_->stop();
+        setState(PluginState::eStopped);
+        QTimer::singleShot(3000, this, [&]() { stopTag_->setValue(false); });
+    }
 }
