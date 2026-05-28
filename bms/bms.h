@@ -19,7 +19,7 @@ class Bms : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.bms")
 public:
-    Bms() = default;
+    Bms() : Plugin("bms"){};
 
     bool initialize() override;
 

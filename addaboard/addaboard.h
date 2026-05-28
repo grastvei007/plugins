@@ -12,7 +12,7 @@ class AddaBoard : public Plugin
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "june.plugin.addaboard")
   public:
-	AddaBoard() = default;
+    AddaBoard() : Plugin("adda_board"){}
 
 	bool initialize() final;
 

@@ -15,7 +15,9 @@ class TemplateMatch : public Plugin
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "june.plugin.templatematch")
 public:
-    TemplateMatch() = default;
+    TemplateMatch()
+        : Plugin("templatematch")
+    {}
 
     bool initialize() final;
 

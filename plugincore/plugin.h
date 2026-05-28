@@ -4,9 +4,18 @@
 #include "plugins/pluginload/plugininterface.h"
 
 #include <QObject>
+#include <QString>
 #include <QTimer>
 
 #include <memory>
+
+class Tag;
+
+enum class PluginState
+{
+    eStopped = 1,
+    eRunning
+};
 
 /**
  * @brief The Plugin class
@@ -19,7 +28,7 @@ class Plugin : public PluginInterface
 {
     Q_OBJECT
 public:
-    Plugin() = default;
+    Plugin(const QString& subsystem);
 
     void setTagSystem(TagList *taglist) override;
     // optional, override if needed.
@@ -34,14 +43,23 @@ public:
 protected:
     TagList* tagList() const;
 	int runTimeStep() const;
+    QString subsystem() const;
+    void setState(PluginState state);
 
   protected slots:
 	virtual void mainloop();
+    void onStopTagValueChanged(Tag *tag);
+    void onStartTagValueChanged(Tag *tag);
 
 private:
     TagList *tagList_ = nullptr;
     std::unique_ptr<QTimer> mainLoopTimer_;
 	int deltaMs_ = 0;
+    Tag *stateTag_ = nullptr;
+    Tag *startTag_ = nullptr;
+    Tag *stopTag_ = nullptr;
+
+    QString subsystem_;
 };
 
 #endif // PLUGIN_H
