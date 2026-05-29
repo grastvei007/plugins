@@ -55,6 +55,7 @@ void Plugin::run(int deltaMs)
 void Plugin::stop()
 {
     mainLoopTimer_->stop();
+    stateTag_->setValue("stopped");
 }
 
 TagList *Plugin::tagList() const
