@@ -10,6 +10,7 @@
 #include <optional>
 
 #include <tagsystem/taglist.h>
+#include <tagsystem/util/path.h>
 
 namespace plugin{
 
@@ -54,12 +55,7 @@ std::optional<util::numato::Gpio> intToGpio(int gpio)
 
 void Numato::loadSettings()
 {
-#ifdef __linux__
-    QString path = QDir::homePath() + QDir::separator() + ".config" + QDir::separator() + "june";
-#else
-    QString path = qApp->applicationDirPath();
-#endif
-    path.append(QDir::separator() + configFile_);
+    QString path = util::path::configFile(configFile_);
 
     QFile file(path);
     if(!file.exists())
