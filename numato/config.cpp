@@ -75,7 +75,10 @@ void Numato::loadSettings()
 
     QJsonObject obj = QJsonDocument::fromJson(data, &parseError).object();
     if(parseError.error != QJsonParseError::NoError)
+    {
         qDebug() << parseError.errorString();
+        return;
+    }
 
     QJsonArray devicesArray = obj["devices"].toArray();
 
