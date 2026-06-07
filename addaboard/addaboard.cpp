@@ -11,16 +11,14 @@ bool AddaBoard::initialize()
 {
 	DEV_ModuleInit();
 
-	const QString subsystem("adda_board");
-
-	adc0Tag_ = tagList()->createTag(subsystem, "adc0", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc1Tag_ = tagList()->createTag(subsystem, "adc1", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc2Tag_ = tagList()->createTag(subsystem, "adc2", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc3Tag_ = tagList()->createTag(subsystem, "adc3", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc4Tag_ = tagList()->createTag(subsystem, "adc4", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc5Tag_ = tagList()->createTag(subsystem, "adc5", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc6Tag_ = tagList()->createTag(subsystem, "adc6", TagType::eDouble, 0.0, "Analog read [0-5]v");
-	adc7Tag_ = tagList()->createTag(subsystem, "adc7", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc0Tag_ = tagList()->createTag(subSystem(), "adc0", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc1Tag_ = tagList()->createTag(subSystem(), "adc1", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc2Tag_ = tagList()->createTag(subSystem(), "adc2", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc3Tag_ = tagList()->createTag(subSystem(), "adc3", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc4Tag_ = tagList()->createTag(subSystem(), "adc4", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc5Tag_ = tagList()->createTag(subSystem(), "adc5", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc6Tag_ = tagList()->createTag(subSystem(), "adc6", TagType::eDouble, 0.0, "Analog read [0-5]v");
+    adc7Tag_ = tagList()->createTag(subSystem(), "adc7", TagType::eDouble, 0.0, "Analog read [0-5]v");
 
 	return true;
 }

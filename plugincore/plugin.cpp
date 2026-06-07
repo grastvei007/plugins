@@ -16,11 +16,11 @@ void Plugin::setTagSystem(TagList *taglist)
     tagList_ = taglist;
 
     // create state tag for the plugin
-    stateTag_ = tagList_->createTag(subsystem(), "state", TagType::eString);
+    stateTag_ = tagList_->createTag(subSystem(), "state", TagType::eString);
     setState(PluginState::eStopped);
 
-    startTag_ = tagList_->createTag(subsystem(), "start", TagType::eBool, false);
-    stopTag_ = tagList_->createTag(subsystem(), "stop", TagType::eBool, false);
+    startTag_ = tagList_->createTag(subSystem(), "start", TagType::eBool, false);
+    stopTag_ = tagList_->createTag(subSystem(), "stop", TagType::eBool, false);
 
     connect(startTag_, &Tag::valueChanged, this, &Plugin::onStartTagValueChanged);
     connect(stopTag_, &Tag::valueChanged, this, &Plugin::onStopTagValueChanged);
@@ -68,7 +68,7 @@ int Plugin::runTimeStep() const
 	return deltaMs_;
 }
 
-QString Plugin::subsystem() const
+const QString& Plugin::subSystem() const
 {
     return subsystem_;
 }

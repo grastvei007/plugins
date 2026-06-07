@@ -43,7 +43,7 @@ public:
 protected:
     TagList* tagList() const;
 	int runTimeStep() const;
-    QString subsystem() const;
+    const QString& subSystem() const;
     void setState(PluginState state);
 
   protected slots:

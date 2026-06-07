@@ -15,13 +15,13 @@ bool Heater::initialize()
                                                  TagType::eInt, 0,
                                                  "Maximum time in starting state");
 
-    powerOnTag_ = tagList_->createTag("heater", "powerOn", TagType::eBool, false);
-    heatLevelTag_ = tagList_->createTag("heater", "heatLevel", TagType::eInt, 50, "Burner fan speed");
-    fanLevelTag_ = tagList_->createTag("heater", "fanLevel", TagType::eInt, 50, "Air fan speed");
-    stateTag_ = tagList_->createTag("heater", "state", TagType::eString);
-    isBurningTag_ = tagList_->createTag("heater", "isBurning", TagType::eBool);
-    wakeUpTag_ = tagList_->createTag("heater", "wake up once", TagType::eBool);
-    wakeUpTimeTag_ = tagList_->createTag("heater", "wake up time", TagType::eTime);
+    powerOnTag_ = tagList_->createTag(subSystem(), "powerOn", TagType::eBool, false);
+    heatLevelTag_ = tagList_->createTag(subSystem(), "heatLevel", TagType::eInt, 50, "Burner fan speed");
+    fanLevelTag_ = tagList_->createTag(subSystem(), "fanLevel", TagType::eInt, 50, "Air fan speed");
+    stateTag_ = tagList_->createTag(subSystem(), "state", TagType::eString);
+    isBurningTag_ = tagList_->createTag(subSystem(), "isBurning", TagType::eBool);
+    wakeUpTag_ = tagList_->createTag(subSystem(), "wake up once", TagType::eBool);
+    wakeUpTimeTag_ = tagList_->createTag(subSystem(), "wake up time", TagType::eTime);
 
     configStartingTimeTag_->setValue(configStartingTimeSeconds_);
     stateTag_->setValue(stateToString(state_));
@@ -32,12 +32,12 @@ bool Heater::initialize()
     wakeUpTag_->setValue(wakeUp_);
     wakeUpTimeTag_->setValue(wakeUpTime_);
 
-    powerOnTagSocket_ = TagSocket::createTagSocket("heater", "powerOn", TagSocket::eBool);
-    heatLevelTagSocket_ = TagSocket::createTagSocket("heater", "heatLevel", TagSocket::eInt);
-    fanLevelTagSocket_ = TagSocket::createTagSocket("heater", "fanLevel", TagSocket::eInt);
-    isBurningTagSocket_ = TagSocket::createTagSocket("heater", "isBurning", TagSocket::eBool);
-    wakeUpTagSocket_ = TagSocket::createTagSocket("heater", "wake up", TagSocket::eBool);
-    wakeUpTimeTagSocket_ = TagSocket::createTagSocket("heater", "wake up time", TagSocket::eTime);
+    powerOnTagSocket_ = TagSocket::createTagSocket(subSystem(), "powerOn", TagSocket::eBool);
+    heatLevelTagSocket_ = TagSocket::createTagSocket(subSystem(), "heatLevel", TagSocket::eInt);
+    fanLevelTagSocket_ = TagSocket::createTagSocket(subSystem(), "fanLevel", TagSocket::eInt);
+    isBurningTagSocket_ = TagSocket::createTagSocket(subSystem(), "isBurning", TagSocket::eBool);
+    wakeUpTagSocket_ = TagSocket::createTagSocket(subSystem(), "wake up", TagSocket::eBool);
+    wakeUpTimeTagSocket_ = TagSocket::createTagSocket(subSystem(), "wake up time", TagSocket::eTime);
     configStartingTimeTagSocket_ = TagSocket::createTagSocket("config",
                                                               "heater_startingTime",
                                                               TagSocket::eInt);

@@ -10,26 +10,24 @@ namespace plugin {
 
 bool VictronEnergy::initialize()
 {
-	const QString subsystem("victron");
-
 	// create tags
 	victronTotalChargedTodayTag_.reset(
-		tagList()->createTag("victron", "chargedToday", TagType::eInt, "dayily yield"));
+        tagList()->createTag(subSystem(), "chargedToday", TagType::eInt, "dayily yield"));
 	victronTotalDiscargedTodayTag_.reset(
-		tagList()->createTag("victron", "dischargedToday", TagType::eInt, "dayly useage"));
+        tagList()->createTag(subSystem(), "dischargedToday", TagType::eInt, "dayly useage"));
 	victronTotalEneryUseToday_.reset(
-		tagList()->createTag("victron", "energy_use_today", TagType::eInt, "daily ussage"));
-	victronMpptsTotalYield_.reset(tagList()->createTag(subsystem,
+        tagList()->createTag(subSystem(), "energy_use_today", TagType::eInt, "daily ussage"));
+    victronMpptsTotalYield_.reset(tagList()->createTag(subSystem(),
 													   "totoal_yield",
 													   TagType::eDouble,
 													   "dayily yield from mppts"));
 
-	combineAmphereTag_.reset(tagList()->createTag(subsystem,
+    combineAmphereTag_.reset(tagList()->createTag(subSystem(),
 												  "combined_I",
 												  TagType::eDouble,
 												  "Total I from all batteries"));
 	compinePowerTag_.reset(
-		tagList()->createTag(subsystem, "combined_P", TagType::eInt, "Total P from all batteries"));
+        tagList()->createTag(subSystem(), "combined_P", TagType::eInt, "Total P from all batteries"));
 
 	QSettings settings("june", "june");
 	settings.beginGroup("batteries");
@@ -38,7 +36,7 @@ bool VictronEnergy::initialize()
 		QString name = settings.value(batteryConfig).toString();
 
 		batteries_.emplace_back(
-			std::make_unique<Battery>(tagList(), subsystem, name, batteryConfig));
+            std::make_unique<Battery>(tagList(), subSystem(), name, batteryConfig));
 
 		connect(batteries_.back().get(),
 				&Battery::chargedEnergyChanged,
