@@ -1,6 +1,7 @@
 #include "motor.h"
 
 #include "wiringpiwrapper.h"
+#include <algorithm>
 
 Motor::Motor(int wireingPiPin) : wireingPiPin_(wireingPiPin)
 {
