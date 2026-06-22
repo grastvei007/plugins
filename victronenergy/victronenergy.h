@@ -41,7 +41,11 @@ private:
   std::shared_ptr<Tag> victronTotalChargedTodayTag_;
   std::shared_ptr<Tag> victronTotalDiscargedTodayTag_;
   std::shared_ptr<Tag> victronTotalEneryUseToday_;
+
   std::shared_ptr<Tag> victronMpptsTotalYield_;
+  std::shared_ptr<Tag> victronMpptsTotalBulk_;
+  std::shared_ptr<Tag> victronMpptsTotalAbsoption_;
+  std::shared_ptr<Tag> victronMpptsTotalFloat_;
 
   std::shared_ptr<Tag> combineAmphereTag_;
   std::shared_ptr<Tag> compinePowerTag_;

@@ -21,6 +21,9 @@ bool VictronEnergy::initialize()
 													   "totoal_yield",
 													   TagType::eDouble,
 													   "dayily yield from mppts"));
+	victronMpptsTotalBulk_.reset(tagList()->createTag(subSystem(), "total_bulk", TagType::eDouble, "Daily bulk from mppts"));
+	victronMpptsTotalAbsoption_.reset(tagList()->createTag(subSystem(), "total_absorption", TagType::eDouble, "Dayly absorption from mppts"));
+	victronMpptsTotalFloat_.reset(tagList()->createTag(subSystem(), "total_float", TagType::eDouble, "Dayly float from mppts"));
 
     combineAmphereTag_.reset(tagList()->createTag(subSystem(),
 												  "combined_I",
@@ -81,12 +84,21 @@ void VictronEnergy::mainloop()
 	resetValues();
 
 	double sum = 0.0;
+	double stateBulk = 0.0;
+	double stateAbsorption = 0.0;
+	double stateFloat = 0.0;
 	for (auto &mppt : mppts_)
 	{
 		sum += mppt->yield();
+		stateBulk += mppt->dayilyBulk();
+		stateAbsorption += mppt->daylyAbsorption();
+		stateFloat += mppt->daylyFloat();
 		mppt->reset();
 	}
 	victronMpptsTotalYield_->setValue(sum);
+	victronMpptsTotalBulk_->setValue(stateBulk);
+	victronMpptsTotalAbsoption_->setValue(stateAbsorption);
+	victronMpptsTotalFloat_->setValue(stateFloat);
 }
 
 void VictronEnergy::updateDaylyChaged()
