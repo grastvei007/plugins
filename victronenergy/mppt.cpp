@@ -7,8 +7,8 @@ namespace plugin {
 
 Mppt::Mppt(TagList *taglist, const QString &serialNumber)
 {
-	yieldTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber, TagSocket::eDouble));
-	stateOfOperationTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber, TagSocket::eInt));
+	yieldTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber + "_yield", TagSocket::eDouble));
+	stateOfOperationTagSocket_.reset(TagSocket::createTagSocket("victron", serialNumber + "_cs", TagSocket::eInt));
 
 	connect(yieldTagSocket_.get(),
 			qOverload<double>(&TagSocket::valueChanged),
