@@ -12,25 +12,25 @@ bool VictronEnergy::initialize()
 {
 	// create tags
 	victronTotalChargedTodayTag_.reset(
-        tagList()->createTag(subSystem(), "chargedToday", TagType::eInt, "dayily yield"));
+		tagList()->createTag(subSystem(), "chargedToday", TagType::eInt, "dayily yield", false));
 	victronTotalDiscargedTodayTag_.reset(
-        tagList()->createTag(subSystem(), "dischargedToday", TagType::eInt, "dayly useage"));
+		tagList()->createTag(subSystem(), "dischargedToday", TagType::eInt, "dayly useage", false));
 	victronTotalEneryUseToday_.reset(
-        tagList()->createTag(subSystem(), "energy_use_today", TagType::eInt, "daily ussage"));
+		tagList()->createTag(subSystem(), "energy_use_today", TagType::eInt, "daily ussage", false));
     victronMpptsTotalYield_.reset(tagList()->createTag(subSystem(),
 													   "totoal_yield",
 													   TagType::eDouble,
-													   "dayily yield from mppts"));
-	victronMpptsTotalBulk_.reset(tagList()->createTag(subSystem(), "total_bulk", TagType::eDouble, "Daily bulk from mppts"));
-	victronMpptsTotalAbsoption_.reset(tagList()->createTag(subSystem(), "total_absorption", TagType::eDouble, "Dayly absorption from mppts"));
-	victronMpptsTotalFloat_.reset(tagList()->createTag(subSystem(), "total_float", TagType::eDouble, "Dayly float from mppts"));
+													   "dayily yield from mppts", false));
+	victronMpptsTotalBulk_.reset(tagList()->createTag(subSystem(), "total_bulk", TagType::eDouble, "Daily bulk from mppts", false));
+	victronMpptsTotalAbsoption_.reset(tagList()->createTag(subSystem(), "total_absorption", TagType::eDouble, "Dayly absorption from mppts", false));
+	victronMpptsTotalFloat_.reset(tagList()->createTag(subSystem(), "total_float", TagType::eDouble, "Dayly float from mppts", false));
 
     combineAmphereTag_.reset(tagList()->createTag(subSystem(),
 												  "combined_I",
 												  TagType::eDouble,
-												  "Total I from all batteries"));
+												  "Total I from all batteries", false));
 	compinePowerTag_.reset(
-        tagList()->createTag(subSystem(), "combined_P", TagType::eInt, "Total P from all batteries"));
+		tagList()->createTag(subSystem(), "combined_P", TagType::eInt, "Total P from all batteries", false));
 
 	QSettings settings("june", "june");
 	settings.beginGroup("batteries");

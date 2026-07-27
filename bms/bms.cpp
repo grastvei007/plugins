@@ -46,7 +46,7 @@ void Bms::onReply(QNetworkReply *reply)
                     voltageTag_->setValue(value);
                 else
                 {
-                    voltageTag_ = tagList()->createTag(subSystem(), "voltage", TagType::eDouble, value);
+					voltageTag_ = tagList()->createTag(subSystem(), "voltage", TagType::eDouble, value, false);
                 }
             }
             else if(stream.name() == QString("ucell1")) //>3.28</ucell1>
@@ -60,7 +60,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell1_->setValue(v);
                 else
                 {
-                    cell1_ = tagList()->createTag(subSystem(), "cell 1", TagType::eDouble, v);
+					cell1_ = tagList()->createTag(subSystem(), "cell 1", TagType::eDouble, v, false);
                 }
             }
             else if(stream.name() == QString("ucell2")) //>3.29</ucell2>
@@ -73,7 +73,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell2_->setValue(v);
                 else
                 {
-                    cell2_ = tagList()->createTag(subSystem(), "cell 2", TagType::eDouble, v);
+					cell2_ = tagList()->createTag(subSystem(), "cell 2", TagType::eDouble, v, false);
                 }
 
             }
@@ -87,7 +87,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell3_->setValue(v);
                 else
                 {
-                    cell3_ = tagList()->createTag(subSystem(), "cell 3", TagType::eDouble, v);
+					cell3_ = tagList()->createTag(subSystem(), "cell 3", TagType::eDouble, v, false);
                 }
 
             }
@@ -101,7 +101,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell4_->setValue(v);
                 else
                 {
-                    cell4_ = tagList()->createTag(subSystem(), "cell 4", TagType::eDouble, v);
+					cell4_ = tagList()->createTag(subSystem(), "cell 4", TagType::eDouble, v, false);
                 }
 
             }
@@ -115,7 +115,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell5_->setValue(v);
                 else
                 {
-                    cell5_ = tagList()->createTag(subSystem(), "cell 5", TagType::eDouble, v);
+					cell5_ = tagList()->createTag(subSystem(), "cell 5", TagType::eDouble, v, false);
                 }
 
             }
@@ -129,7 +129,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell6_->setValue(v);
                 else
                 {
-                    cell6_ = tagList()->createTag(subSystem(), "cell 6", TagType::eDouble, v);
+					cell6_ = tagList()->createTag(subSystem(), "cell 6", TagType::eDouble, v, false);
                 }
 
             }
@@ -143,7 +143,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell7_->setValue(v);
                 else
                 {
-                    cell7_ = tagList()->createTag(subSystem(), "cell 7", TagType::eDouble, v);
+					cell7_ = tagList()->createTag(subSystem(), "cell 7", TagType::eDouble, v, false);
                 }
 
             }
@@ -157,7 +157,7 @@ void Bms::onReply(QNetworkReply *reply)
                     cell8_->setValue(v);
                 else
                 {
-                    cell8_ = tagList()->createTag(subSystem(), "cell 8", TagType::eDouble, v);
+					cell8_ = tagList()->createTag(subSystem(), "cell 8", TagType::eDouble, v, false);
                 }
 
             }
@@ -226,7 +226,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(trimmer0_)
                     trimmer0_->setValue(v);
                 else
-                    trimmer0_ = tagList()->createTag(subSystem(), "trimmer 0", TagType::eDouble, v);
+					trimmer0_ = tagList()->createTag(subSystem(), "trimmer 0", TagType::eDouble, v, false);
 
             }
             else if(stream.name() == QString("trimmer-1")) // >3.60</trimmer-1>
@@ -238,7 +238,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(trimmer1_)
                     trimmer1_->setValue(v);
                 else
-                    trimmer1_ = tagList()->createTag(subSystem(), "trimmer 1", TagType::eDouble, v);
+					trimmer1_ = tagList()->createTag(subSystem(), "trimmer 1", TagType::eDouble, v, false);
 
             }
             else if(stream.name() == QString("UMINset")) //>2800</UMINset>
@@ -250,7 +250,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(uMinCell_)
                     uMinCell_->setValue(v);
                 else
-                    uMinCell_ = tagList()->createTag(subSystem(), "uMinCell", TagType::eDouble, v);
+					uMinCell_ = tagList()->createTag(subSystem(), "uMinCell", TagType::eDouble, v, false);
             }
             else if(stream.name() == QString("UMAXset")) //>3600</UMAXset>
             {
@@ -261,7 +261,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(uMaxCell_)
                     uMaxCell_->setValue(v);
                 else
-                    uMaxCell_ = tagList()->createTag(subSystem(), "uMaxCell", TagType::eDouble, v);
+					uMaxCell_ = tagList()->createTag(subSystem(), "uMaxCell", TagType::eDouble, v, false);
 
             }
             else if(stream.name() == QString("Umincell")) //>3.28</Umincell>
@@ -283,7 +283,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(uMinCellId_)
                     uMinCellId_->setValue(v);
                 else
-                    uMinCellId_ = tagList()->createTag(subSystem(), "min voltage cell id", TagType::eInt, v);
+					uMinCellId_ = tagList()->createTag(subSystem(), "min voltage cell id", TagType::eInt, v, false);
             }
             else if(stream.name() == QString("UmaxcellID")) //>3</UmaxcellID>
             {
@@ -294,7 +294,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(uMaxCellId_)
                     uMaxCellId_->setValue(v);
                 else
-                    uMaxCellId_ = tagList()->createTag(subSystem(), "max voltage cell id", TagType::eInt);
+					uMaxCellId_ = tagList()->createTag(subSystem(), "max voltage cell id", TagType::eInt, false);
             }
             else if(stream.name() == QString("Udiff")) //>0.01</Udiff>
             {
@@ -305,7 +305,7 @@ void Bms::onReply(QNetworkReply *reply)
                 if(uDiff_)
                     uDiff_->setValue(v);
                 else
-                    uDiff_ = tagList()->createTag(subSystem(), "difference min max cell", TagType::eDouble, v);
+					uDiff_ = tagList()->createTag(subSystem(), "difference min max cell", TagType::eDouble, v, false);
             }
             else if(stream.name() == QString("lastcellevent")) //>N/A</lastcellevent>
             {
@@ -351,8 +351,8 @@ void Bms::onReply(QNetworkReply *reply)
 
 void Bms::setupTags()
 {
-    cellMinSet_ = tagList()->createTag(subSystem(), "configUMinCell", TagType::eDouble);
-    cellMaxSet_ = tagList()->createTag(subSystem(), "configUMaxCell", TagType::eDouble);
+	cellMinSet_ = tagList()->createTag(subSystem(), "configUMinCell", TagType::eDouble, false);
+	cellMaxSet_ = tagList()->createTag(subSystem(), "configUMaxCell", TagType::eDouble, false);
 }
 
 

@@ -15,13 +15,13 @@ bool Heater::initialize()
                                                  TagType::eInt, 0,
                                                  "Maximum time in starting state");
 
-    powerOnTag_ = tagList_->createTag(subSystem(), "powerOn", TagType::eBool, false);
-    heatLevelTag_ = tagList_->createTag(subSystem(), "heatLevel", TagType::eInt, 50, "Burner fan speed");
-    fanLevelTag_ = tagList_->createTag(subSystem(), "fanLevel", TagType::eInt, 50, "Air fan speed");
-    stateTag_ = tagList_->createTag(subSystem(), "state", TagType::eString);
-    isBurningTag_ = tagList_->createTag(subSystem(), "isBurning", TagType::eBool);
-    wakeUpTag_ = tagList_->createTag(subSystem(), "wake up once", TagType::eBool);
-    wakeUpTimeTag_ = tagList_->createTag(subSystem(), "wake up time", TagType::eTime);
+	powerOnTag_ = tagList_->createTag(subSystem(), "powerOn", TagType::eBool, false);
+	heatLevelTag_ = tagList_->createTag(subSystem(), "heatLevel", TagType::eInt, 50, "Burner fan speed", false);
+	fanLevelTag_ = tagList_->createTag(subSystem(), "fanLevel", TagType::eInt, 50, "Air fan speed", false);
+	stateTag_ = tagList_->createTag(subSystem(), "state", TagType::eString, false);
+	isBurningTag_ = tagList_->createTag(subSystem(), "isBurning", TagType::eBool, false);
+	wakeUpTag_ = tagList_->createTag(subSystem(), "wake up once", TagType::eBool, false);
+	wakeUpTimeTag_ = tagList_->createTag(subSystem(), "wake up time", TagType::eTime, false);
 
     configStartingTimeTag_->setValue(configStartingTimeSeconds_);
     stateTag_->setValue(stateToString(state_));

@@ -10,9 +10,9 @@ Battery::Battery(TagList *tagList,
 	: QObject(parent)
 {
 	chargedTodayTag_.reset(
-		tagList->createTag(subsystem, name + "_charged_today", TagType::eInt, "dayly yield"));
+		tagList->createTag(subsystem, name + "_charged_today", TagType::eInt, "dayly yield", false));
 	dischargedTodayTag_.reset(
-		tagList->createTag(subsystem, name + "_discharged_today", TagType::eInt, "dayly usage"));
+		tagList->createTag(subsystem, name + "_discharged_today", TagType::eInt, "dayly usage", false));
 	chargedEnergyTagSocket_.reset(
 		TagSocket::createTagSocket(subsystem, name + "Charged", TagSocket::eDouble));
 	dischargedEnergyTagSocket_.reset(
