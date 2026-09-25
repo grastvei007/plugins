@@ -56,6 +56,8 @@ private:
     Tag* uMaxCellId_ = nullptr;
     Tag* uDiff_ = nullptr;
 
+	int isReadyToRequestCounter_ = 0;
+
 /*    <lastcellevent>N/A</lastcellevent>
     <lastcellno>N/A</lastcellno>
     <lastcellU>N/A</lastcellU>

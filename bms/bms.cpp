@@ -19,16 +19,29 @@ bool Bms::initialize()
 
 void Bms::mainloop()
 {
+	if(isReadyToRequestCounter_ > 0)
+		isReadyToRequestCounter_ -= 1;
 
-    manager_.get(QNetworkRequest(QUrl("http://192.168.0.100/bcc.xml")));
-  //  qDebug() << __FUNCTION__;
+	if(isReadyToRequestCounter_ <= 0)
+	{
+		manager_.get(QNetworkRequest(QUrl("http://192.168.1.100/bcc.xml")));
+	}
 }
 
 
 void Bms::onReply(QNetworkReply *reply)
 {
+	if(reply->error())
+	{
+		qDebug() << reply->errorString();
+		isReadyToRequestCounter_ += 30;
+		reply->deleteLater();
+		return;
+	}
+
     auto xmlDocument = reply->readAll();
     QXmlStreamReader stream(xmlDocument);
+	reply->deleteLater();
 
     while(!stream.atEnd() && !stream.hasError())
     {
